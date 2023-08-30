@@ -1,0 +1,26 @@
+{
+    "id": "5425963B",
+    "path": "~/projects/inc1001/demo29aug2023/add_page_header.R",
+    "project_path": "add_page_header.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": true,
+    "created": 1693382127849.0,
+    "source_on_save": false,
+    "relative_order": 7,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "52,57",
+        "scrollLine": "36"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1693326644,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1693398213236,
+    "read_only": false,
+    "read_only_alternatives": []
+}
