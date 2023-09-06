@@ -1,0 +1,66 @@
+#'The function to calculate widths of data columns given the label column(-s) width(-s).
+#'
+#'get_col_widths(df, lbl_width = 4, num_data_cols = 4) - this will calculate the widths for each of four data columns (equally), given the label column has 4 in width.
+#'
+#'
+#' @param x Dataframe under analysis.
+#' @param lbl_width Width of the label column(s).  Default is c(2,)
+#' @param num_data_cols Number of data columns in resulting table. Default is 3
+#' @param page_width Expected page width. Default is 11.42 inch
+#' @param left_margin Expected page left margin. Default is 0.56 inch
+#' @param right_margin Expected page right margin. Default is 1.06
+#' @export
+#' @return Size of resulting data columns (all equal) in inches.
+#'
+#' @examples
+#' get_col_widths(df, lbl_width = 4, num_data_cols = 4)
+
+get_col_widths <- function(x, lbl_width = 2, num_data_cols = 3, page_width = 11.42, left_margin = 0.56, right_margin = 1.06){
+  total_page_width = page_width - left_margin - right_margin
+  reserved_width = sum(lbl_width)
+  other_col_width = (total_page_width - reserved_width) / (ncol(x) - length(lbl_width))
+  other_col_width
+}
+
+
+
+#' The function to get row numbers of same page groups
+#'
+#' The function to get row numbers of groups that should be kept on the same page
+#' if we need rows 2-5 to be on the same page, this function will return c(2,3,4)
+#' 'keep_with_next' attribute will be applied to those rows in Word.
+#' Currently, groups are determined by a tab. If next row has a tab in rowlbl,
+#' then it is considered part of the current group. When a row without tab is encountered,
+#' the group starts anew.
+#'
+#' @param df Dataframe under analysis.
+#' @param row_label_no Order number of rowlabel column.
+#'
+#' @return Vector of the row numbers of groups that should be kept on the same page
+#' @export
+
+get_groups_from_df <- function(df, row_label_no=1){
+  groups_result <- c()
+  group.start <- 1
+
+  for(i in 1:nrow(df)) {
+    next_indent <- if (i<nrow(df)) grepl("\t", df[[i+1,row_label_no]], fixed=TRUE) else FALSE
+    if (next_indent){groups_result <- c(groups_result, i)}
+  }
+  return (groups_result)
+}
+
+
+#' The function to get all group-starting rows from rowlabel column
+#'
+#' @param df Dataframe under analysis.
+#' @param row_label_no Order number of rowlabel column.
+#'
+#' @return Vector of the strings that are group-starting rows from rowlabel column
+#' @export
+get_group_starts_from_df <- function(df, row_label_no=1){
+  return (sapply(df[[row_label_no]],
+                 function(x) !grepl("\t", x, fixed=TRUE)) %>%
+            unname() %>%
+            which())
+}

@@ -1,0 +1,23 @@
+Package: stylestest
+Type: Package
+Title: Genereal styling functions for flextable baed Clinical outputs
+Version: 0.1.0
+Authors@R: c(
+    person("Ross", "Didenko", email = "rostyslav.didenko@atorusresearch.com", role = "cre"),
+    person("Yevhenii", "Boiko", role = "aut"),
+    person("Marat", "Zakirov", role = "aut"),
+    person("Roman", "Rogoza", role = "ctb"))
+Author: Ross Didenko [cre],
+  Yevhenii Boiko [aut],
+  Marat Zakirov [aut],
+  Roman Rogoza [ctb],
+Maintainer: Roman Rogoza <roman.rogoza@atorusresearch.com>
+Depends: R (>= 4.3.0), dplyr, flextable, magrittr, officer
+Suggests: testthat (>= 3.0.0)
+Description: Can set default stylings to flextable headers, footers and body.
+    Can add new headers and footers from the provided data.
+    Can calculate appropriate column sizes and row groupings.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.3
