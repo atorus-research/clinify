@@ -2,15 +2,7 @@
 % Please edit documentation in R/styles.R
 \name{footer_style_default}
 \alias{footer_style_default}
-\title{The function to apply default footer styling
-Next styling is applied:
--- font colour - black
--- page footer should have single black top border over the top row that is
-   width of 1
--- all borders are removed
--- font style - Courier New, 9pt, not bold, not italic
--- interval between rows - 1 space
--- padding - bottom = 0, top = 0}
+\title{The function to apply default footer styling}
 \usage{
 footer_style_default(x, ...)
 }
@@ -23,6 +15,16 @@ footer_style_default(x, ...)
 None
 }
 \description{
+Next styling is applied:
+-- font colour - black \cr
+-- page footer should have single black top border over the top row that is
+   width of 1 \cr
+-- all borders are removed \cr
+-- font style - Courier New, 9pt, not bold, not italic \cr
+-- interval between rows - 1 space \cr
+-- padding - bottom = 0, top = 0 \cr
+}
+\details{
 One has to specify the width of the page header "table", which in this case
 is landscape page width (11.42 in) minus two times 1 in margin.
 ALL headers would have 3 columns underneath the hood (for left, center and

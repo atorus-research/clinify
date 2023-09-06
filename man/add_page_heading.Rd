@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_page_header.R
 \name{add_page_heading}
 \alias{add_page_heading}
-\title{FUNCTION to add page heading rows.}
+\title{clinify::add_page_heading}
 \usage{
 add_page_heading(list_of_lists)
 }

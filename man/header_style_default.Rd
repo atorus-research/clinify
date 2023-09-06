@@ -16,11 +16,11 @@ None
 }
 \description{
 Next styling is applied:
--- font colour - black
--- all borders are removed
--- font style - Courier New, 9pt, not bold, not italic
--- interval between rows - 1 space
--- padding - bottom = 0, top = 0
+-- font colour - black \cr
+-- all borders are removed \cr
+-- font style - Courier New, 9pt, not bold, not italic \cr
+-- interval between rows - 1 space \cr
+-- padding - bottom = 0, top = 0 \cr
 }
 \details{
 One has to specify the width of the page header "table", which in this case

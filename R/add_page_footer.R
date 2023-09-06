@@ -1,4 +1,4 @@
-#' FUNCTION to add page footer row.
+#' clinify::add_page_footer
 #'
 #' Creates footers in the empty flextable object from the list of footers encoded as triplets/pairs/singles each
 #' based on alignment: singles are centered, doubles are aligned to l/r corners and triplets are l/c/r divided

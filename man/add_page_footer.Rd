@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_page_footer.R
 \name{add_page_footer}
 \alias{add_page_footer}
-\title{FUNCTION to add page footer row.}
+\title{clinify::add_page_footer}
 \usage{
 add_page_footer(list_of_lists)
 }

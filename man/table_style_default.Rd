@@ -2,15 +2,7 @@
 % Please edit documentation in R/styles.R
 \name{table_style_default}
 \alias{table_style_default}
-\title{The function to apply default table styling
-Headers with the same value are merged both horizontally and vertically
-All borders are clear except for the header (bleck, solid, 0.2pt)
-As well as top horizontal line for the table header.
-font style - Courier New, 9pt, not bold, not italic
-padding for table body - bottom = 0.1, top = 0.1
-padding for table first header - top = 9
-padding for table last header - bottom = 9
-table's layout is set to be fixed.}
+\title{The function to apply default table styling}
 \usage{
 table_style_default(x, ...)
 }
@@ -23,7 +15,6 @@ table_style_default(x, ...)
 None
 }
 \description{
-The function to apply default table styling
 Headers with the same value are merged both horizontally and vertically
 All borders are clear except for the header (bleck, solid, 0.2pt)
 As well as top horizontal line for the table header.

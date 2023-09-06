@@ -45,14 +45,15 @@ header_style_default <- function(x, ...) {
 
 
 #' The function to apply default footer styling
+#' 
 #' Next styling is applied:
-#' -- font colour - black
+#' -- font colour - black \cr
 #' -- page footer should have single black top border over the top row that is
-#'    width of 1
-#' -- all borders are removed
-#' -- font style - Courier New, 9pt, not bold, not italic
-#' -- interval between rows - 1 space
-#' -- padding - bottom = 0, top = 0
+#'    width of 1 \cr
+#' -- all borders are removed \cr
+#' -- font style - Courier New, 9pt, not bold, not italic \cr
+#' -- interval between rows - 1 space \cr
+#' -- padding - bottom = 0, top = 0 \cr
 #'
 #' One has to specify the width of the page header "table", which in this case
 #' is landscape page width (11.42 in) minus two times 1 in margin.
@@ -90,6 +91,7 @@ footer_style_default <- function(x, ...) {
 }
 
 #' The function to apply default table styling
+#' 
 #' Headers with the same value are merged both horizontally and vertically
 #' All borders are clear except for the header (bleck, solid, 0.2pt)
 #' As well as top horizontal line for the table header.
