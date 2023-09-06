@@ -1,7 +1,9 @@
-#' clinify::add_page_footer
+#' Add page footer
 #'
-#' Creates footers in the empty flextable object from the list of footers encoded as triplets/pairs/singles each
-#' based on alignment: singles are centered, doubles are aligned to l/r corners and triplets are l/c/r divided
+#' This function adds a text, passed as argument, into .docx bottom colontitle (page footer). As a
+#' result, the text is repeated on each page of the document. Takes a list of lists as an input parameter, 
+#' where each sublist represents a separate line (or row) of text. There is also a possibility to add a row
+#' with both left- and right-aligned text. To do so - simply pass two items to a sublist instead of one.
 #' @import flextable
 #' @import dplyr
 #' @importFrom utils tail
@@ -14,7 +16,7 @@
 #' add_page_footer(c(c("left aligned", "centered", "right aligned"),
 #'                   c("left aligned", "right aligned")))
 #' add_page_footer(NA)
-#' add_page_footer(c(c("centered")))
+#' add_page_footer(c(c("right aligned")))
 #' try(add_page_footer(c(c("i", "like", "programming", 'NA'))))
 add_page_footer <- function(list_of_lists) {
   # Check if all lists have length <=3

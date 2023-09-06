@@ -1,4 +1,4 @@
-#' clinify::add_page_heading
+#' Add page header
 #'
 #' Creates headers in the empty flextable object from the list of headers encoded as triplets/pairs/singles each
 #' based on alignment: singles are centered, doubles are aligned to l/r corners and triplets are l/c/r divided

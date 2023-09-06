@@ -146,10 +146,6 @@ table_style_default <- function(x, ...) {
   # Set fontsize for both table header and table body.
   x <- flextable::fontsize(x, part = "all", size=9)
 
-  # -----> !!! <-----
-  # This one requires more in-depth exploration. This ensures i.e. AEDECODES
-  # can break onto next page if the table is big.
-  #x <- keep_with_next(x, part = "body", value = FALSE)
 
   # Set table's layout.
   x <- flextable::set_table_properties(
