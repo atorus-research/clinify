@@ -29,25 +29,33 @@ get_col_widths <- function(x, lbl_width = 2, num_data_cols = 3, page_width = 11.
 #' The function to get row numbers of groups that should be kept on the same page
 #' if we need rows 2-5 to be on the same page, this function will return c(2,3,4)
 #' 'keep_with_next' attribute will be applied to those rows in Word.
-#' Currently, groups are determined by a tab. If next row has a tab in rowlbl,
-#' then it is considered part of the current group. When a row without tab is encountered,
+#' Currently, groups are determined by a vector of possible different beginnings.
+#'  If next row has a one of the specified strings in rowlbl,  then it is considered
+#'  part of the current group. When a row without tab is encountered,
 #' the group starts anew.
 #'
 #' @param df Dataframe under analysis.
+#' @param indents a vector of indentation characters used in data frame
 #' @param row_label_no Order number of rowlabel column.
 #'
-#' @return Vector of the row numbers of groups that should be kept on the same page
+#' @return An integer vector of the row numbers of groups that should be kept on the same page
 #' @export
+#' @examples
+#' t_1_1 <- data.frame(list(c('Age', '\t<18', '\t18<=65', 'Weight', '\t<150', '\t150<=250')))
+#' group_starts <- get_groups_from_df(t_1_1, row_label_no=1)
+get_groups_from_df <- function(df, indents=c("\t"), row_label_no=1){
+    groups_result <- c()
 
-get_groups_from_df <- function(df, row_label_no=1){
-  groups_result <- c()
-  group.start <- 1
-
-  for(i in 1:nrow(df)) {
-    next_indent <- if (i<nrow(df)) grepl("\t", df[[i+1,row_label_no]], fixed=TRUE) else FALSE
-    if (next_indent){groups_result <- c(groups_result, i)}
-  }
-  return (groups_result)
+    for(i in 1:(nrow(df)-1)) {
+        next_indent <- FALSE
+        for(j in 1:length(indents)){
+            if(is.na(indents[[j]])){ next_indent <- is.na(df[[i+1,row_label_no]]) else
+                next_indent <- grepl(paste0("^", indents[[j]]), df[[i+1,row_label_no]]) | next_indent
+            }
+        }
+        if (next_indent){groups_result <- c(groups_result, i)}
+    }
+    return (groups_result)
 }
 
 
