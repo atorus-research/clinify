@@ -1,4 +1,4 @@
-#'The function to calculate widths of data columns given the label column(-s) width(-s).
+#'Calculate widths of data columns given the label column(-s) width(-s).
 #'
 #'get_col_widths(df, lbl_width = 4, num_data_cols = 4) - this will calculate the widths for each of four data columns (equally), given the label column has 4 in width.
 #'
@@ -24,9 +24,9 @@ get_col_widths <- function(x, lbl_width = 2, num_data_cols = 3, page_width = 11.
 
 
 
-#' The function to get row numbers of same page groups
+#' Get row numbers of some page groups.
 #'
-#' The function to get row numbers of groups that should be kept on the same page
+#'Get row numbers of groups that should be kept on the same page.
 #' if we need rows 2-5 to be on the same page, this function will return c(2,3,4)
 #' 'keep_with_next' attribute will be applied to those rows in Word.
 #' Currently, groups are determined by a vector of possible different beginnings.
