@@ -43,6 +43,9 @@ get_col_widths <- function(x, lbl_width = 2, num_data_cols = 3, page_width = 11.
 #' @examples
 #' t_1_1 <- data.frame(list(c('Age', '\t<18', '\t18<=65', 'Weight', '\t<150', '\t150<=250')))
 #' group_starts <- get_groups_from_df(t_1_1, row_label_no=1)
+#' t_1_2 <- data.frame(list(c(rep('Drug A', 6), rep('Drug B', 6)),
+#'                          rep(c('Age', '\t<18', '\t18<=65', 'Weight', '\t<150', '\t150<=250'), 2)))
+#' group_starts_2 <- get_groups_from_df(t_1_2, indents=c("\t"), row_label_no=2)
 get_groups_from_df <- function(df, indents=c("\t"), row_label_no=1){
     groups_result <- c()
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/helpers.R
 \name{get_col_widths}
 \alias{get_col_widths}
-\title{The function to calculate widths of data columns given the label column(-s) width(-s).}
+\title{Calculate widths of data columns given the label column(-s) width(-s).}
 \usage{
 get_col_widths(
   x,
