@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(stylestest)
+library(clinify)
 
-test_check("stylestest")
+test_check("clinify")

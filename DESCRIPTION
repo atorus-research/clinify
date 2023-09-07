@@ -1,22 +1,23 @@
-Package: stylestest
+Package: clinify
 Type: Package
-Title: Genereal styling functions for flextable baed Clinical outputs
+Title: Styling for Clinical Outputs
 Version: 0.1.0
 Authors@R: c(
-    person("Ross", "Didenko", email = "rostyslav.didenko@atorusresearch.com", role = "cre"),
-    person("Yevhenii", "Boiko", role = "aut"),
-    person("Marat", "Zakirov", role = "aut"),
-    person("Roman", "Rogoza", role = "ctb"))
-Author: Ross Didenko [cre],
-  Yevhenii Boiko [aut],
-  Marat Zakirov [aut],
-  Roman Rogoza [ctb],
-Maintainer: Roman Rogoza <roman.rogoza@atorusresearch.com>
-Depends: R (>= 4.3.0), dplyr, flextable, magrittr, officer
+    person("Ross", "Didenko", email = "rostyslav.didenko@atorusresearch.com", role = c("aut")),
+    person("Yevhenii", "Boiko", email = "yevhenii.boiko@atorusresearch.com", role = c("aut")),
+    person("Marat", "Zakirov", email = "marat.zakirov@atorusresearch.com", role = "ctb"),
+    person("Roman", "Rogoza", email = "roman.rogoza@atorusresearch.com", role = "cre"))
+Depends:R (>= 4.2)
+Imports:dplyr,
+    flextable,
+    magrittr,
+    officer
 Suggests: testthat (>= 3.0.0)
-Description: Can set default stylings to flextable headers, footers and body.
+Description: Develop custom styling for the clinical outputs and apply them in .docx.
+    Can set default stylings to flextable headers, footers and body.
     Can add new headers and footers from the provided data.
-    Can calculate appropriate column sizes and row groupings.
+    Can calculate appropriate column sizes and row groupings as well as wrap blocks
+    of data so the rows that should come together unwrapped stays together.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
