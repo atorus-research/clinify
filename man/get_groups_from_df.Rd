@@ -2,7 +2,7 @@
 % Please edit documentation in R/helpers.R
 \name{get_groups_from_df}
 \alias{get_groups_from_df}
-\title{Get row numbers of some page groups.}
+\title{Get row numbers of groups that should stay on the same page.}
 \usage{
 get_groups_from_df(df, indents = c("\\t"), row_label_no = 1)
 }

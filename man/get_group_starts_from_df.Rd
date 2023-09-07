@@ -2,7 +2,7 @@
 % Please edit documentation in R/helpers.R
 \name{get_group_starts_from_df}
 \alias{get_group_starts_from_df}
-\title{The function to get all group-starting rows from rowlabel column}
+\title{The function to get all group-starting rows from rowlabel column.}
 \usage{
 get_group_starts_from_df(df, group_starts = c("\\t"), row_label_no = 1)
 }

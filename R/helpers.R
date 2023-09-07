@@ -24,7 +24,7 @@ get_col_widths <- function(x, lbl_width = 2, num_data_cols = 3, page_width = 11.
 
 
 
-#' Get row numbers of some page groups.
+#' Get row numbers of groups that should stay on the same page.
 #'
 #'Get row numbers of groups that should be kept on the same page.
 #' if we need rows 2-5 to be on the same page, this function will return c(2,3,4)
@@ -61,7 +61,7 @@ get_groups_from_df <- function(df, indents=c("\t"), row_label_no=1){
 }
 
 
-#' The function to get all group-starting rows from rowlabel column
+#' The function to get all group-starting rows from rowlabel column.
 #'
 #' Row is considered a group start if one of the specified indents is detected
 #' at its beginning, and the previous row has a different indent.
