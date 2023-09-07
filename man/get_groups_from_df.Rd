@@ -2,23 +2,33 @@
 % Please edit documentation in R/helpers.R
 \name{get_groups_from_df}
 \alias{get_groups_from_df}
-\title{The function to get row numbers of same page groups}
+\title{Get row numbers of groups that should stay on the same page.}
 \usage{
-get_groups_from_df(df, row_label_no = 1)
+get_groups_from_df(df, indents = c("\\t"), row_label_no = 1)
 }
 \arguments{
 \item{df}{Dataframe under analysis.}
 
+\item{indents}{a vector of indentation characters used in data frame}
+
 \item{row_label_no}{Order number of rowlabel column.}
 }
 \value{
-Vector of the row numbers of groups that should be kept on the same page
+An integer vector of the row numbers of groups that should be kept on the same page
 }
 \description{
-The function to get row numbers of groups that should be kept on the same page
+Get row numbers of groups that should be kept on the same page.
 if we need rows 2-5 to be on the same page, this function will return c(2,3,4)
 'keep_with_next' attribute will be applied to those rows in Word.
-Currently, groups are determined by a tab. If next row has a tab in rowlbl,
-then it is considered part of the current group. When a row without tab is encountered,
+Currently, groups are determined by a vector of possible different beginnings.
+ If next row has a one of the specified strings in rowlbl,  then it is considered
+ part of the current group. When a row without tab is encountered,
 the group starts anew.
+}
+\examples{
+t_1_1 <- data.frame(list(c('Age', '\t<18', '\t18<=65', 'Weight', '\t<150', '\t150<=250')))
+group_starts <- get_groups_from_df(t_1_1, row_label_no=1)
+t_1_2 <- data.frame(list(c(rep('Drug A', 6), rep('Drug B', 6)),
+                         rep(c('Age', '\t<18', '\t18<=65', 'Weight', '\t<150', '\t150<=250'), 2)))
+group_starts_2 <- get_groups_from_df(t_1_2, indents=c("\t"), row_label_no=2)
 }
