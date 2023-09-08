@@ -8,15 +8,20 @@
 #' @param list_of_lists Encoded headers.
 #' @return Empty flextable object with headers assigned based on list_of_lists
 #'
+#' @family add_page_*
+#'
 #' @export
 #'
 #' @examples
-#' add_page_heading(c(c("left aligned", "centered", "right aligned"),
+#' add_page_header(list(c("left aligned", "centered", "right aligned"),
 #'                    c("left aligned", "right aligned")))
-#' add_page_heading(NA)
-#' add_page_heading(c(c("centered")))
-#' try(add_page_heading(c(c("i", "like", "programming", 'NA'))))
-add_page_heading <- function(list_of_lists) {
+#' add_page_header(list(c("centered")))
+#' try(add_page_header(list(c("i", "like", "programming", 'NA'))))
+add_page_header <- function(list_of_lists) {
+  # Check if passed argument is of type 'list'
+  if (typeof(list_of_lists) != 'list') {
+    stop("You should pass an argument of type 'list'.")
+  }
   # Check if all lists have length <=3
   if (any(sapply(list_of_lists, length) > 3)) {
     stop("All sublists must have length <= 3")

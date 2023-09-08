@@ -1,7 +1,7 @@
 #' Add page footer
 #'
 #' This function adds a text, passed as argument, into .docx bottom colontitle (page footer). As a
-#' result, the text is repeated on each page of the document. Takes a list of lists as an input parameter, 
+#' result, the text is repeated on each page of the document. Takes a list of lists as an input parameter,
 #' where each sublist represents a separate line (or row) of text. There is also a possibility to add a row
 #' with both left- and right-aligned text. To do so - simply pass two items to a sublist instead of one.
 #' @import flextable
@@ -9,6 +9,8 @@
 #' @importFrom utils tail
 #' @param list_of_lists Encoded footers.
 #' @return Empty flextable object with footers assigned based on list_of_lists
+#'
+#' @family add_page_*
 #'
 #' @export
 #'

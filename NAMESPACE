@@ -2,7 +2,7 @@
 
 export("%>%")
 export(add_page_footer)
-export(add_page_heading)
+export(add_page_header)
 export(footer_style_default)
 export(get_col_widths)
 export(get_group_starts_from_df)
