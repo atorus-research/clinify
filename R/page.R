@@ -47,7 +47,7 @@ clin_page <- function(target,
                       footnote_style=NULL) {
 
     new_clin_page(target,
-                  headers=colnames(target),
+                  headers=headers,
                   titles=titles,
                   footnotes=footnotes,
                   internal_footnotes=internal_footnotes,

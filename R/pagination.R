@@ -48,7 +48,10 @@ build.clin_page <- function(x){
     #TODO: complete the function by dealing with titles, footnotes, styles
 
     # create flextable object for the main table that will be displayed on the page
-    x$output <- flextable::as_flextable(x$target) %>% x$table_style()
+    x$output <- flextable::as_flextable(x$target) %>%
+        flextable::set_header_df(mapping=x$headers) %>%
+        x$table_style() %>%
+        delete_part(part="footer")
 
     # create flextable objects for titles and footnotes and apply appropriate styles to them
     if (!is.null(x$titles)){x$titles_rendered <- add_page_header(x$titles) %>% x$title_style()}
