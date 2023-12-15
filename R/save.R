@@ -2,13 +2,14 @@
 
 #' save the \code{clin_document} to specified location
 #'
-#' @description
+#' @description \code{save} saves the \code{clin_document} and returns it invisibly.
 #'
-#' @details
+#' @details By default, \code{save} method saves the document to the current folder
+#' with the name of 'my_doc.docx'
 #'
 #' @param x A \code{clin_document} object
 #'
-#' @return
+#' \item{target - a full path to the document}
 #' @export
 #'
 #' @examples
@@ -19,7 +20,7 @@
 #' save(doc)
 #'
 #' @seealso clin_document
-save <- function(x) {
+save <- function(x, ...) {
     UseMethod("save")
 }
 
@@ -33,7 +34,7 @@ save.clin_document <- function(x, target=NULL) {
 
     doc <- read_docx() %>%
         # Add body table
-        body_add_flextable(value = x$pages[[1]]) %>%
+        body_add_flextable(value = x$pages[[1]]$output) %>%
 
         # Below part probably can be abstracted as well. Or can be left as is...
         body_add(
@@ -52,5 +53,7 @@ save.clin_document <- function(x, target=NULL) {
 
         # Save docs file.
         print(target = target)
+
+    invisible(x)
 }
 

@@ -4,13 +4,19 @@
 \alias{save}
 \title{save the \code{clin_document} to specified location}
 \usage{
-save(x)
+save(x, ...)
 }
 \arguments{
-\item{x}{A \code{clin_document} object}
+\item{x}{A \code{clin_document} object
+
+\item{target - a full path to the document}}
 }
 \description{
-save the \code{clin_document} to specified location
+\code{save} saves the \code{clin_document} and returns it invisibly.
+}
+\details{
+By default, \code{save} method saves the document to the current folder
+with the name of 'my_doc.docx'
 }
 \examples{
 # Load in Pipe
