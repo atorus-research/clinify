@@ -7,11 +7,13 @@
 clin_page(
   target,
   headers = colnames(target),
-  titles = NA,
-  footnotes = NA,
-  internal_footnotes = NA,
+  titles = NULL,
+  footnotes = NULL,
+  internal_footnotes = NULL,
   group_cols = NULL,
-  style = NA
+  title_style = NULL,
+  table_style = NULL,
+  footnote_style = NULL
 )
 }
 \arguments{

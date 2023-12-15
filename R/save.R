@@ -33,22 +33,20 @@ save.clin_document <- function(x, target=NULL) {
     if (is.null(target)) {target = file.path(getwd(), "my_doc.docx")}
 
     doc <- read_docx() %>%
-        # Add body table
+        # Add all pages to the document
         body_add_flextable(value = x$pages[[1]]$output) %>%
 
         # Below part probably can be abstracted as well. Or can be left as is...
-        body_add(
-            block_section(
+        body_set_default_section(
                 prop_section(
-                    page_size = page_size(orient = "landscape"),
+                    page_size = page_size(width=11, height = 8.5, orient = "landscape"),
                     page_margins = page_mar(top=0.5, bottom=1, left=1, right=1),
                     type = "continuous",
                     # here we should pass built flextable objects, but
                     # clin_document.titles/footnotes are regular lists
-                    footer_default = block_list(x$footnotes),
-                    header_default = block_list(x$titles)
-                )
-            )
+                    footer_default = block_list(x$footnotes_rendered),
+                    header_default = block_list(x$titles_rendered)
+                    )
         ) %>%
 
         # Save docs file.

@@ -7,7 +7,16 @@ paginate.clin_document <- function(document) {
     pagination_mode <- determine_pagination_method(document)
     #TODO: implement pagination logic based on pagination mode
     if(pagination_mode=='simple'){
-        pages <- list(clin_page(document$target))
+        pages <- list(clin_page(document$target,
+                                headers=document$headers,
+                                titles=document$titles,
+                                footnotes=document$footnotes,
+                                internal_footnotes=NULL,
+                                group_cols=document$group_cols,
+                                title_style=document$title_style,
+                                table_style=document$table_style,
+                                footnote_style=document$footnote_style)
+                      )
         document$pages <- pages
     }
     document
@@ -30,23 +39,20 @@ determine_pagination_method <- function(document) {
     'simple'
 }
 
-#' Build pages
-#'
-#' @noRd
-#' @export
-build_pages.clin_document <- function(document) {
-
-    sapply(document$pages, build)
-    document
-}
-
 #' Build individual page
 #'
 #' @noRd
 #' @export
-build.clin_page <- function(clin_page){
-    #TODO: complete the function by dealing with titles, footnotes, styles
-    clin_page$output <- flextable::as_flextable(clin_page$target)
-    clin_page
-}
+build.clin_page <- function(x){
 
+    #TODO: complete the function by dealing with titles, footnotes, styles
+
+    # create flextable object for the main table that will be displayed on the page
+    x$output <- flextable::as_flextable(x$target) %>% x$table_style()
+
+    # create flextable objects for titles and footnotes and apply appropriate styles to them
+    if (!is.null(x$titles)){x$titles_rendered <- add_page_header(x$titles) %>% x$title_style()}
+    if (!is.null(x$footnotes)){x$footnotes_rendered <- add_page_footer(x$footnotes) %>% x$footnote_style()}
+
+    x
+}
