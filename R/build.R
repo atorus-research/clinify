@@ -37,9 +37,15 @@ build <- function(x) {
 #' @export
 build.clin_document <- function(x) {
 
+    # this creates 'pages' attribute for the document, separating the initial
+    # dataframe into one or more pages depending on selected method of pagination
     x <- paginate(x)
-
+    x <- build_titles_footnotes(x)
+    # now that data for pages has been prepared, create flextable objects for each
+    # clin_page and save it as 'output' attribute of clin_page
     x$pages <- lapply(x$pages, build)
+
+    # return the document with built out pages
     x
 }
 
@@ -54,4 +60,15 @@ build.clin_document <- function(x) {
 #' @keywords internal
 paginate <- function(x, ...) {
     UseMethod("paginate")
+}
+
+# a helper function to create  flextable objects for titles/footnotes
+#' @noRd
+build_titles_footnotes<- function(x){
+
+    # create flextable objects for titles and footnotes and apply appropriate styles to them
+    if (!is.null(x$titles)){x$titles_rendered <- add_page_header(x$titles) %>% x$title_style()}
+    if (!is.null(x$footnotes)){x$footnotes_rendered <- add_page_footer(x$footnotes) %>% x$footnote_style()}
+
+    x
 }

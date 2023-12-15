@@ -12,7 +12,9 @@ clin_document(
   maxrows = NULL,
   group_cols = NULL,
   pagination_strategy = NULL,
-  style = "default"
+  title_style = header_style_default,
+  table_style = table_style_default,
+  footnote_style = footer_style_default
 )
 }
 \arguments{
@@ -30,7 +32,11 @@ clin_document(
 
 \item{pagination_strategy}{Matrix that shows how target should be split to fit on pages}
 
-\item{style}{Style that will be applied to the output document}
+\item{title_style}{Style that will be applied to the output document`s titles}
+
+\item{table_style}{Style that will be applied to the output document` body(table)}
+
+\item{footnote_style}{Style that will be applied to the output document`s footnotes}
 }
 \value{
 A \code{clin_document} object
@@ -49,7 +55,9 @@ When a \code{clin_document} is created, it will contain the following bindings:
 \item{maxrows - Maximum amount of rows that would be put on 1 page of the document}
 \item{group_cols - List of column names that indicates which rows should be displayed on the same page}
 \item{pagination_strategy - Matrix that describes how a target should be paginated both vertically and horizontally}
-\item{style - A style that will be applied to the output document}
+\item{style - A style that will be applied to the output document`s titles}
+\item{style - A style that will be applied to the output document`s body(table)}
+\item{style - A style that will be applied to the output document`s footnotes}
 }
 
 \code{clin_document} allows you a basic interface to instantiate the object. Modifier functions are available to change

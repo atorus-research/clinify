@@ -38,18 +38,23 @@
 #'
 clin_page <- function(target,
                       headers=colnames(target),
-                      titles=NA,
-                      footnotes=NA,
-                      internal_footnotes=NA,
+                      titles=NULL,
+                      footnotes=NULL,
+                      internal_footnotes=NULL,
                       group_cols=NULL,
-                      style=NA) {
+                      title_style=NULL,
+                      table_style=NULL,
+                      footnote_style=NULL) {
 
     new_clin_page(target,
                   headers=colnames(target),
                   titles=titles,
                   footnotes=footnotes,
+                  internal_footnotes=internal_footnotes,
                   group_cols=group_cols,
-                  style=style)
+                  title_style=title_style,
+                  table_style=table_style,
+                  footnote_style=footnote_style)
 }
 
 #' Construct new clin_page
@@ -61,9 +66,19 @@ new_clin_page <- function(target,
                           titles=NULL,
                           footnotes=NULL,
                           group_cols=NULL,
-                          style='default') {
+                          internal_footnotes=NULL,
+                          title_style=NULL,
+                          table_style=NULL,
+                          footnote_style=NULL) {
 
-    validate_clin_document(target, headers, titles, footnotes, group_cols, style)
+    # styles are functions that are applied to flextable objects to alter it's appearance
+    # default to built-in styles in case nothing has been supplied at the init stage
+    if (is.null(title_style)) {title_style <- header_style_default}
+    if (is.null(table_style)) {table_style <- table_style_default}
+    if (is.null(footnote_style)) {footnote_style <- footer_style_default}
+
+    validate_clin_page(target, headers, titles, footnotes, group_cols,
+                       title_style, table_style, footnote_style)
 
     # Create `clin_page` object
     page_ <- structure(list(
@@ -71,8 +86,11 @@ new_clin_page <- function(target,
         headers = headers,
         titles = titles,
         footnotes = footnotes,
+        internal_footnotes=internal_footnotes,
         group_cols = group_cols,
-        style = style
+        title_style=title_style,
+        table_style=table_style,
+        footnote_style=footnote_style
     ), class = c("clin_page", "list"))
 
     page_
@@ -87,11 +105,13 @@ new_clin_page <- function(target,
 #' @param titles List of strings that will be displayed on top of each page
 #' @param footnotes List of strings that will be displayed at the bottom of each page
 #' @param group_cols List of column names that indicates which rows should be displayed on the same page
-#' @param style Style that will be applied to the output document
+#' @param style Style that will be applied to the output page
 #'
 #' @noRd
-validate_clin_document <- function(target, headers, titles, footnotes, group_cols, style) {
+validate_clin_page <- function(target, headers, titles, footnotes, group_cols,
+                               title_style, table_style, footnote_style) {
 
+    #TODO: valudate all the clin_page arguments
     # table should be a data.frame
     assertthat::assert_that(inherits(target, "data.frame"),
                             msg = paste0("'target' argument passed to clin_page must be a data.frame,",

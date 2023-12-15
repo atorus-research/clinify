@@ -16,7 +16,9 @@
 #' \item{maxrows - Maximum amount of rows that would be put on 1 page of the document}
 #' \item{group_cols - List of column names that indicates which rows should be displayed on the same page}
 #' \item{pagination_strategy - Matrix that describes how a target should be paginated both vertically and horizontally}
-#' \item{style - A style that will be applied to the output document}
+#' \item{style - A style that will be applied to the output document`s titles}
+#' \item{style - A style that will be applied to the output document`s body(table)}
+#' \item{style - A style that will be applied to the output document`s footnotes}
 #' }
 #'
 #' \code{clin_document} allows you a basic interface to instantiate the object. Modifier functions are available to change
@@ -29,7 +31,9 @@
 #' @param maxrows Maximum amount of rows that would be put on 1 page of the document
 #' @param group_cols List of column names that indicates which rows should be displayed on the same page
 #' @param pagination_strategy Matrix that shows how target should be split to fit on pages
-#' @param style Style that will be applied to the output document
+#' @param title_style Style that will be applied to the output document`s titles
+#' @param table_style Style that will be applied to the output document` body(table)
+#' @param footnote_style Style that will be applied to the output document`s footnotes
 #'
 #' @return A \code{clin_document} object
 #' @export
@@ -45,7 +49,9 @@ clin_document <- function(target,
                           maxrows=NULL,
                           group_cols=NULL,
                           pagination_strategy=NULL,
-                          style='default') {
+                          title_style=header_style_default,
+                          table_style=table_style_default,
+                          footnote_style=footer_style_default) {
 
     new_clin_document(target,
                       headers=colnames(target),
@@ -54,8 +60,10 @@ clin_document <- function(target,
                       maxrows=maxrows,
                       group_cols=group_cols,
                       pagination_strategy=pagination_strategy,
-                      style=style)
-}
+                      title_style=title_style,
+                      table_style=table_style,
+                      footnote_style=footnote_style)
+    }
 
 #' Construct new clin_document
 #'
@@ -68,13 +76,15 @@ new_clin_document <- function(target,
                               maxrows=NULL,
                               group_cols=NULL,
                               pagination_strategy=NULL,
-                              style='default') {
+                              title_style=header_style_default,
+                              table_style=table_style_default,
+                              footnote_style=footer_style_default) {
 
     validate_clin_document(target, headers, titles, footnotes, maxrows, group_cols,
-                           pagination_strategy, style)
+                           pagination_strategy, title_style, table_style, footnote_style)
 
     # Create `clin_document` object
-    table_ <- structure(list(
+    document_ <- structure(list(
         target = target,
         pages = list(),
         headers = headers,
@@ -83,10 +93,12 @@ new_clin_document <- function(target,
         maxrows = maxrows,
         group_cols = group_cols,
         pagination_strategy = pagination_strategy,
-        style = style
+        title_style=title_style,
+        table_style=table_style,
+        footnote_style=footnote_style
     ), class = c("clin_document", "list"))
 
-    table_
+    document_
 }
 
 #' Validate clin_document input parameters
@@ -100,11 +112,13 @@ new_clin_document <- function(target,
 #' @param maxrows Maximum amount of rows that would be put on 1 page of the document
 #' @param group_cols List of column names that indicates which rows should be displayed on the same page
 #' @param pagination_strategy Matrix that shows how target should be split to fit on pages
-#' @param style Style that will be applied to the output document
+#' @param title_style Style that will be applied to the output document`s titles
+#' @param table_style Style that will be applied to the output document` body(table)
+#' @param footnote_style Style that will be applied to the output document`s footnotes
 #'
 #' @noRd
 validate_clin_document <- function(target, headers, titles, footnotes, maxrows, group_cols,
-                                   pagination_strategy, style) {
+                                   pagination_strategy, title_style, table_style, footnote_style) {
 
     # table should be a data.frame
     assertthat::assert_that(inherits(target, "data.frame"),
