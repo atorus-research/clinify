@@ -54,7 +54,7 @@ clin_document <- function(target,
                           footnote_style=footer_style_default) {
 
     new_clin_document(target,
-                      headers=colnames(target),
+                      headers=headers,
                       titles=titles,
                       footnotes=footnotes,
                       maxrows=maxrows,
@@ -70,7 +70,7 @@ clin_document <- function(target,
 #' @inheritParams clin_document
 #' @noRd
 new_clin_document <- function(target,
-                              headers=colnames(target),
+                              headers=NULL,
                               titles=NULL,
                               footnotes=NULL,
                               maxrows=NULL,
