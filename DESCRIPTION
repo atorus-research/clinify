@@ -8,10 +8,12 @@ Authors@R: c(
     person("Marat", "Zakirov", email = "marat.zakirov@atorusresearch.com", role = "ctb"),
     person("Roman", "Rogoza", email = "roman.rogoza@atorusresearch.com", role = "cre"))
 Depends: R (>= 4.2)
-Imports: dplyr,
+Imports: 
+    dplyr,
     flextable,
     magrittr,
-    officer
+    officer,
+    rlang
 Suggests: testthat (>= 3.0.0)
 Description: Develop custom styling for the clinical outputs and apply them in .docx.
     Can set default stylings to flextable headers, footers and body.
