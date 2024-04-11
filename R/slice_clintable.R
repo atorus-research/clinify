@@ -50,6 +50,7 @@ slice_complex_tabpart <- function(x, rows, columns) {
 
     # Styles
     styles <- list(cells=NULL, pars=NULL, text=NULL)
+    # I'll want to preserve classes here
     styles$cells <- lapply(x$styles$cells,
                            slice_fpstruct,
                            rows=rows,
@@ -93,10 +94,8 @@ slice_fpstruct <- function(x, rows, columns) {
 slice_chunkset_struct <- function(x, rows, columns) {
     out <- x
     out$data <- out$data[rows, columns]
-    out$keys <- out$content$keys[columns]
+    out$keys <- out$keys[columns]
     out$nrow <- length(rows)
     out$ncol <- length(columns)
     out
 }
-
-y <- slice_clintable(t_1, 1:5, c(1, 3:4))
