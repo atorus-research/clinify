@@ -13,10 +13,10 @@ t <- tplyr_table(tplyr_adae, TRTA) %>%
             set_nest_count(TRUE)
     )
 
-example_df <- t %>% build() #%>%
-# mutate(
-#     across(where(is.character), ~ replace_leading_whitespace(.x))
-# )
+example_df <- t %>% build() %>%
+mutate(
+    across(where(is.character), ~ replace_leading_whitespace(.x))
+)
 example_df <- example_df[1:4]
 
 
@@ -74,3 +74,13 @@ names(base_table)
 
 testthat::expect_equal(base_table$header, comp_table$header)
 
+
+t_1
+slice_clintable(t_1, 1:5, c(1, 3:4))
+
+library(htmltools)
+
+## This will let you print with &nbsp; values
+x <- htmltools_value(x = t_1)
+x[[3]] <- gsub("&amp;nbsp;", "&nbsp;", x[[3]], fixed=TRUE)
+browsable(x)
