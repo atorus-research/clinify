@@ -1,17 +1,3 @@
-new_clintable <- function() {
-    structure(
-        list(
-            header = NULL,
-            body = NULL,
-            footer = NULL,
-            col_keys = NULL,
-            caption = NULL,
-            blanks = NULL,
-            properties = NULL
-        ),
-        class = c("clintable", "flextable")
-    )
-}
 
 
 #' Slice a clintable object
