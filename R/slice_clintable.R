@@ -7,11 +7,11 @@
 #' subset a flextable object that has already had styling applied, chunking it
 #' as desired.
 #'
-#' @param x A flextable object
+#' @param x A clintable or flextable object
 #' @param rows Subset of rows to extract
 #' @param columns Subset of columns to extract
 #'
-#' @return A clintable object
+#' @return A clinpage object
 #' @export
 #'
 #' @examples
@@ -19,7 +19,7 @@
 #' y <- slice_clintable(x, 20:32, c(1:3, 5:8))
 #' z <- flextable(mtcars[20:32, c(1:3, 5:8)])
 slice_clintable <- function(x, rows, columns) {
-    out <- new_clintable()
+    out <- new_clinpage()
     out$header <- slice_complex_tabpart(x$header, 1:nrow(x$header$dataset), columns)
     out$footer <- slice_complex_tabpart(x$footer, 1:nrow(x$footer$dataset), columns)
     # out$footer <- x$footer
@@ -47,7 +47,7 @@ slice_clintable <- function(x, rows, columns) {
 #' @param rows Subset of rows
 #' @param columns Subset of cols
 #'
-#' @return A clintable object
+#' @return A clinpage object
 #' @noRd
 slice_complex_tabpart <- function(x, rows, columns) {
 
@@ -115,7 +115,7 @@ slice_complex_tabpart <- function(x, rows, columns) {
 #' @param rows Subset of rows
 #' @param columns Subset of cols
 #'
-#' @return clintable object
+#' @return clinpage object
 #' @noRd
 slice_fpstruct <- function(x, rows, columns) {
     out <- x
@@ -136,7 +136,7 @@ slice_fpstruct <- function(x, rows, columns) {
 #' @param rows Subset of rows
 #' @param columns Subset of cols
 #'
-#' @return clintable object
+#' @return clinpage object
 #' @noRd
 slice_chunkset_struct <- function(x, rows, columns) {
     out <- x
