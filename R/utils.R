@@ -24,6 +24,7 @@ get_pagination_method <- function(x) {
 #' @param x A clintable object
 #'
 #' @noRd
-set_pagination_method <- function(x, nethod) {
+set_pagination_method <- function(x, method) {
   x$clinify_config$pagination_method <- method
+  x
 }
