@@ -7,14 +7,14 @@
 slice_clintable(x, rows, columns)
 }
 \arguments{
-\item{x}{A flextable object}
+\item{x}{A clintable or flextable object}
 
 \item{rows}{Subset of rows to extract}
 
 \item{columns}{Subset of columns to extract}
 }
 \value{
-A clintable object
+A clinpage object
 }
 \description{
 This function takes in a clintable (or a flextable) object and slices the
