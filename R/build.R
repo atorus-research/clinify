@@ -1,13 +1,13 @@
 ### Build Functions
 
-#' Trigger the build of the \code{clin_document}
+#' Trigger the build of the `clin_document`
 #'
-#' @description The functions used to assemble a \code{clin_document} object
+#' @description The functions used to assemble a `clin_document` object
 #' do not trigger the processing of any data. Rather, a lazy execution style
 #' is used to allow you to construct your table and then explicitly state when
-#' the data processing should happen. \code{build} triggers this event.
+#' the data processing should happen. `build` triggers this event.
 #'
-#' @details When the \code{build} command is executed, all of the data
+#' @details When the `build` command is executed, all of the data
 #' processing commences. Any pre-processing necessary within the table
 #' environment takes place first. Next, each of the layers begins executing.
 #' Once the layers complete executing, the output of each layer is stacked into
@@ -16,9 +16,9 @@
 #' Once this process is complete, any post-processing necessary within the table
 #' environment takes place, and the final output can be delivered.
 #'
-#' @param x A \code{clin_document} object
+#' @param x A `clin_document` object
 #'
-#' @return An executed \code{clin_document}
+#' @return An executed `clin_document`
 #' @export
 #'
 #' @examples

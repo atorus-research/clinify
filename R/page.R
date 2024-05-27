@@ -3,13 +3,13 @@
 
 #' Create a Clinify page object
 #'
-#' The \code{clin_page} object is the building block of Clinify clin_document. Page contains titles,
+#' The `clin_page` object is the building block of Clinify clin_document. Page contains titles,
 #' footnotes, data in the form of the data.frame, as well as page and table attributes.
 #' Upon building the page, a flextable object will be created that can then be saved as
 #' .docx file.
 #'
 #' @details
-#' When a \code{clin_page} is created, it will contain the following attributes:
+#' When a `clin_page` is created, it will contain the following attributes:
 #' \itemize{
 #' \item{target - Dataset that will be formatted}
 #' \item{headers - Vector containing table headers. This defaults to the target dataset's column names}
@@ -19,7 +19,7 @@
 #' \item{style - A style that will be applied to the output document}
 #' }
 #'
-#' \code{clin_page} allows you a basic interface to instantiate the object. Modifier functions are available to change
+#' `clin_page` allows you a basic interface to instantiate the object. Modifier functions are available to change
 #' individual parameters.
 #'
 #' @param target Dataset that will be placed on a page
@@ -29,7 +29,7 @@
 #' @param internal_footnotes List of strings that will be displayed at the bottom of the table, above footnotes
 #' @param style Style that will be applied to the page contents
 #'
-#' @return A \code{clin_page} object
+#' @return A `clin_page` object
 #' @export
 #'
 #' @examples

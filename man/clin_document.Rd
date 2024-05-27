@@ -55,8 +55,7 @@ When a \code{clin_document} is created, it will contain the following bindings:
 \item{maxrows - Maximum amount of rows that would be put on 1 page of the document}
 \item{group_cols - List of column names that indicates which rows should be displayed on the same page}
 \item{pagination_strategy - Matrix that describes how a target should be paginated both vertically and horizontally}
-\item{style - A style that will be applied to the output document`s titles}
-\item{style - A style that will be applied to the output document`s body(table)}
+\item{style - A style that will be applied to the output document\verb{s titles\} \\item\{style - A style that will be applied to the output document}s body(table)}
 \item{style - A style that will be applied to the output document`s footnotes}
 }
 

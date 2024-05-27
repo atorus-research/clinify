@@ -1,13 +1,13 @@
 ### Save Functions
 
-#' save the \code{clin_document} to specified location
+#' save the `clin_document` to specified location
 #'
-#' @description \code{save} saves the \code{clin_document} and returns it invisibly.
+#' @description `save` saves the `clin_document` and returns it invisibly.
 #'
-#' @details By default, \code{save} method saves the document to the current folder
+#' @details By default, `save` method saves the document to the current folder
 #' with the name of 'my_doc.docx'
 #'
-#' @param x A \code{clin_document} object
+#' @param x A `clin_document` object
 #'
 #' \item{target - a full path to the document}
 #' @export

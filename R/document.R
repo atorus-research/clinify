@@ -3,11 +3,11 @@
 
 #' Create a Clinify document object
 #'
-#' The \code{clin_document} object is the main container from which  is constructed. Clinify tables are made up of
+#' The `clin_document` object is the main container from which  is constructed. Clinify tables are made up of
 #' one or more pages. Document contains titles, footnotes, original data in the form of the data.frame, as well as page and table attributes.
 #'
 #' @details
-#' When a \code{clin_document} is created, it will contain the following bindings:
+#' When a `clin_document` is created, it will contain the following bindings:
 #' \itemize{
 #' \item{target - Dataset that will be formatted}
 #' \item{headers - Vector containing table headers. This defaults to the target dataset's column names}
@@ -21,7 +21,7 @@
 #' \item{style - A style that will be applied to the output document`s footnotes}
 #' }
 #'
-#' \code{clin_document} allows you a basic interface to instantiate the object. Modifier functions are available to change
+#' `clin_document` allows you a basic interface to instantiate the object. Modifier functions are available to change
 #' individual parameters.
 #'
 #' @param target Dataset that will be formatted and saved as .docx
@@ -35,7 +35,7 @@
 #' @param table_style Style that will be applied to the output document` body(table)
 #' @param footnote_style Style that will be applied to the output document`s footnotes
 #'
-#' @return A \code{clin_document} object
+#' @return A `clin_document` object
 #' @export
 #'
 #' @examples

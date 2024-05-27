@@ -21,8 +21,8 @@ Get row numbers of groups that should be kept on the same page.
 if we need rows 2-5 to be on the same page, this function will return c(2,3,4)
 'keep_with_next' attribute will be applied to those rows in Word.
 Currently, groups are determined by a vector of possible different beginnings.
- If next row has a one of the specified strings in rowlbl,  then it is considered
- part of the current group. When a row without tab is encountered,
+If next row has a one of the specified strings in rowlbl,  then it is considered
+part of the current group. When a row without tab is encountered,
 the group starts anew.
 }
 \examples{
