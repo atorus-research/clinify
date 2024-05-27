@@ -4,14 +4,18 @@
 \alias{print.clintable}
 \title{Clintable print method}
 \usage{
-\method{print}{clintable}(x, n = 3, ...)
+\method{print}{clintable}(x, n = 3, nrows = 15, ...)
 }
 \arguments{
 \item{x}{a clintable object}
 
-\item{n}{number of pages within the clintable to print}
+\item{n}{number of pages within the clintable to print. Only used when
+pagination is configured}
 
-\item{...}{further arguments to be passed to or from other methods. They are ignored in this function.}
+\item{nrows}{number of rows to print. Only used when rows aren't configured
+within the pagination method}
+
+\item{...}{Additional parameters passed to flextable print method}
 }
 \value{
 Invisible
@@ -19,4 +23,24 @@ Invisible
 \description{
 Extraction of flextable print method with special handling of clintable pages
 and
+}
+\examples{
+
+ct <- clintable(mtcars)
+
+print(ct)
+
+ct <- clin_alt_pages(
+  ct,
+  key_cols = c('mpg', 'cyl', 'hp'),
+  col_groups = list(
+    c('disp', 'drat', 'wt'),
+    c('qsec', 'vs', 'am'),
+    c('gear', 'carb')
+  ),
+  max_rows = 10
+)
+
+print(ct)
+
 }

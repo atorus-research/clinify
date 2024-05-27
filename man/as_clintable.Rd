@@ -4,7 +4,7 @@
 \alias{as_clintable}
 \title{Convert a flextable into a clintable object}
 \usage{
-as_clintable(ft)
+as_clintable(x)
 }
 \arguments{
 \item{ft}{A flextable object}
