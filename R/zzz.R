@@ -3,6 +3,7 @@
 #' @importFrom htmltools browsable
 #' @importFrom dplyr bind_rows
 #' @importFrom magrittr `%>%`
+#' @importFrom tidyselect eval_select
 NULL
 
 .onLoad <- function(libname, pkgname) {
