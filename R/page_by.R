@@ -23,7 +23,6 @@
 #'   max_rows = 10
 #' )
 clin_alt_pages <- function(x, key_cols, col_groups, max_rows = 10) {
-
     refdat <- x$body$dataset
     x <- set_pagination_method(x, 'alternating')
 
