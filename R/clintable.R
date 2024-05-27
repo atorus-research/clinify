@@ -26,9 +26,16 @@ clintable <- function(data, ...) {
 #' @examples
 #' ft <- flextable(mtcars)
 #' as_clintable(ft)
-as_clintable <- function(ft) {
-    stopifnot(inherits(ft, "flextable"))
-    class(ft) <- c("clintable", "flextable")
+as_clintable <- function(x) {
+    stopifnot(inherits(x, "flextable"))
+
+    # Tack in clinify configurations
+    x$clinify_config <- list(
+        pagination_method = "default"
+    )
+
+    class(x) <- c("clintable", "flextable")
+    x
 }
 
 #' Blank object creator for a clintable object
