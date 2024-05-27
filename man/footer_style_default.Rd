@@ -18,7 +18,7 @@ None
 Next styling is applied:
 -- font colour - black \cr
 -- page footer should have single black top border over the top row that is
-   width of 1 \cr
+width of 1 \cr
 -- all borders are removed \cr
 -- font style - Courier New, 9pt, not bold, not italic \cr
 -- interval between rows - 1 space \cr
