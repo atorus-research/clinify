@@ -36,10 +36,13 @@ print.clintable <- function(x, n=3, nrows = 15, ...) {
   refdat <- x$body$dataset
   pg_method <- get_pagination_method(x)
 
+  titles <- x$clinify_config$titles
+  footnotes <- x$clinify_config$footnotes
+
   if (pg_method == "default") {
     nrows <- min(c(nrows, nrow(refdat)))
     pg <- slice_clintable(x, 1:nrows, eval_select(x$col_keys, refdat))
-    print_clinpage(pg)
+    print_clinpage(pg, titles, footnotes)
   } else if (pg_method == "alternating") {
     print_alternating(x, n=n)
   }
@@ -53,11 +56,27 @@ print.clintable <- function(x, n=3, nrows = 15, ...) {
 #' @return Invisible
 #'
 #' @noRd
-print_clinpage <- function(x) {
-  x <- flextable::htmltools_value(x = x)
-  x[[3]] <- gsub("(?<!th)  ", "&nbsp; ", x[[3]], perl=TRUE)
-  x[[3]] <- gsub('(<span\\b[^>]*>) ', '\\1&nbsp;', x[[3]], perl=TRUE)
-  htmltools::browsable(x)
+print_clinpage <- function(x, titles = NULL, footnotes = NULL) {
+
+  body <- flextable::htmltools_value(x = x)
+  body[[3]] <- gsub("(?<!th)  ", "&nbsp; ", body[[3]], perl=TRUE)
+  body[[3]] <- gsub('(<span\\b[^>]*>) ', '\\1&nbsp;', body[[3]], perl=TRUE)
+
+  if (!is.null(titles)) {
+    titles <- width(titles, width = flextable_dim(x)$widths)
+    hdr <- flextable::htmltools_value(x = titles)[[3]]
+    body[[3]] <- htmltools::HTML(paste0(hdr, body[[3]]))
+  }
+
+  if (!is.null(footnotes)) {
+    footnotes <- width(footnotes, width = flextable_dim(x)$widths)
+    ftr <- flextable::htmltools_value(x = footnotes)[[3]]
+    body[[3]] <- htmltools::HTML(paste0(body[[3]], ftr))
+  }
+
+  out <- htmltools::browsable(body)
+  print(out)
+  invisible(out)
 }
 
 #' Method for printing alternating pages
