@@ -63,13 +63,14 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL) {
   body[[3]] <- gsub('(<span\\b[^>]*>) ', '\\1&nbsp;', body[[3]], perl=TRUE)
 
   if (!is.null(titles)) {
-    titles <- width(titles, width = flextable_dim(x)$widths)
+    # TODO: This should take into consideration how many cells are merged within the header
+    titles <- width(titles, width = flextable_dim(x)$widths / 2)
     hdr <- flextable::htmltools_value(x = titles)[[3]]
     body[[3]] <- htmltools::HTML(paste0(hdr, body[[3]]))
   }
 
   if (!is.null(footnotes)) {
-    footnotes <- width(footnotes, width = flextable_dim(x)$widths)
+    footnotes <- width(footnotes, width = flextable_dim(x)$widths / 2)
     ftr <- flextable::htmltools_value(x = footnotes)[[3]]
     body[[3]] <- htmltools::HTML(paste0(body[[3]], ftr))
   }
