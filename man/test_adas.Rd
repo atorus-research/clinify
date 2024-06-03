@@ -17,6 +17,6 @@ test_adas
 A subset of the PHUSE Test Data Factory ADAS data set.
 }
 \seealso{
-[get_data_labels()]
+\code{\link[=get_data_labels]{get_data_labels()}}
 }
 \keyword{datasets}

@@ -14,7 +14,10 @@ Imports:
     magrittr,
     officer,
     rlang
-Suggests: testthat (>= 3.0.0)
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
 Description: Develop custom styling for the clinical outputs and apply them in .docx.
     Can set default stylings to flextable headers, footers and body.
     Can add new headers and footers from the provided data.
@@ -26,3 +29,4 @@ LazyData: true
 RoxygenNote: 7.3.1
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
+VignetteBuilder: knitr
