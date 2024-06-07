@@ -36,16 +36,20 @@ header_style_default <- function(x, ...) {
   # ALL headers would have 3 columns underneath the hood (for left, center and
   # right-aligned text). Hence we divide by 3 to specify the width of a single
   # column.
-  x <- flextable::width(x, width = 9.92/3)
+  x <- flextable::width(x, width = 9.8/3)
   # Setup the interval between rows.
   x <- flextable::line_spacing(x, space = 1, part = "all")
   # Setup the cell padding.
   x <- flextable::padding(x, part = "all", padding.bottom = 0, padding.top = 0)
+  x <- flextable::set_table_properties(
+    x,
+    layout = "fixed"
+  )
 }
 
 
 #' The function to apply default footer styling
-#' 
+#'
 #' Next styling is applied:
 #' -- font colour - black \cr
 #' -- page footer should have single black top border over the top row that is
@@ -83,15 +87,20 @@ footer_style_default <- function(x, ...) {
   x <- flextable::italic(x, italic = FALSE)
   # One has to specify the width of the page header "table", which in this case
   # is landscape page width (11.42 in) minus two times 1 in margin.
-  x <- flextable::width(x, width = 9.92/3)
+  x <- flextable::width(x, width = 9.8/3)
   # Setup the interval between rows.
   x <- flextable::line_spacing(x, space = 1, part = "all")
   # Setup the cell padding.
   x <- flextable::padding(x, part = "all", padding.bottom = 0, padding.top = 0)
+
+  x <- flextable::set_table_properties(
+    x,
+    layout = "fixed"
+  )
 }
 
 #' The function to apply default table styling
-#' 
+#'
 #' Headers with the same value are merged both horizontally and vertically
 #' All borders are clear except for the header (bleck, solid, 0.2pt)
 #' As well as top horizontal line for the table header.
@@ -110,8 +119,9 @@ table_style_default <- function(x, ...) {
 
   # Merge cells with same name
   # (merge occurs both horizontally and vertically)
-  x <- flextable::merge_h(x, part="header")
   x <- flextable::merge_v(x, part="header")
+  x <- flextable::merge_h(x, part="header")
+
 
   # You can center-align all table headers but first, for example like this:
   # x <- align(x, align = "center", part = "header", j = 2:ncol(df))
