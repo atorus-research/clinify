@@ -18,7 +18,7 @@ You can install the development version of **clinify** like so:
 
 ``` r
 # Install the development version:
-devtools::install_github("https://github.com/atorus-research/Tplyr.git", ref="devel")
+devtools::install_github("https://github.com/atorus-research/clinify.git", ref="development")
 ```
 
 ## Motivation
