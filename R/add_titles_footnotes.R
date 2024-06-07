@@ -27,6 +27,7 @@ clin_add_titles <- function(x, ls = NULL, ft = NULL) {
 
 #' @family add_titles_footnotes
 #' @rdname add_titles_footnotes
+#' @export
 clin_add_footnotes <- function(x, ls = NULL, ft = NULL) {
   x <- add_titles_footnotes_(x, "footnotes", ls, ft)
 }

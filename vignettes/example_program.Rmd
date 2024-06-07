@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 # CLinify will auto-load Flextable and Officer
 library(clinify)
 library(Tplyr)
+library(dplyr)
 
 tplyr_adsl <- tplyr_adsl %>% 
   mutate(
