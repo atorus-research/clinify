@@ -3,6 +3,7 @@
 S3method(print,clintable)
 S3method(save,clin_document)
 export(as_clintable)
+export(clin_add_footnotes)
 export(clin_add_titles)
 export(clin_alt_pages)
 export(clin_document)
