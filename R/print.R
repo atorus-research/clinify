@@ -61,6 +61,7 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL) {
   body <- flextable::htmltools_value(x = x)
   body[[3]] <- gsub("(?<!th)  ", "&nbsp; ", body[[3]], perl=TRUE)
   body[[3]] <- gsub('(<span\\b[^>]*>) ', '\\1&nbsp;', body[[3]], perl=TRUE)
+  body[[3]] <- gsub("&nbsp;  ", "&nbsp;&nbsp; ", body[[3]], perl=TRUE)
 
   if (!is.null(titles)) {
     # TODO: This should take into consideration how many cells are merged within the header
