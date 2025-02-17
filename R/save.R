@@ -4,10 +4,6 @@
 #' and
 #'
 #' @param x a clintable object
-#' @param n number of pages within the clintable to print. Only used when
-#'   pagination is configured
-#' @param nrows number of rows to print. Only used when rows aren't configured
-#'   within the pagination method
 #' @param ... Additional parameters passed to flextable print method
 #'
 #' @return Invisible
@@ -32,13 +28,36 @@
 #'
 #' print(ct)
 #'
-print.clintable <- function(x, n=3, nrows = 15, ...) {
+write_clintable <- function(x, settings = getOption('clin_doc_settings'), ...) {
   refdat <- x$body$dataset
   pg_method <- get_pagination_method(x)
 
-  titles <- x$clinify_config$titles
-  footnotes <- x$clinify_config$footnotes
+  doc <- read_docx()
 
+  # Settings from options
+  settings_ <- list(
+    page_size = page_size(width=11.7, height = 8.3, orient = "landscape"),
+    page_margins = page_mar(top=1, bottom=1, left=0.5, right=1),
+    type = "continuous"
+  )
+
+  if (!is.null(settings) {
+    for (n in names(settings)) {
+      settings_[[n]] <- settings[[n]]
+    }
+  })
+
+  if (!is.null(x$clinify_config$titles)) {
+    settings_$header_default <- block_list(x$clinify_config$titles)
+  }
+  if (!is.null(x$clinify_config$footnotes)) {
+    settings_$footer_default <- block_list(x$clinify_config$footnotes)
+  }
+
+  # apply settings to doc
+  doc <- body_set_default_section(doc, do.call(prop_section, settings_))
+
+  # This point down from print method directly ----
   if (pg_method == "default") {
     nrows <- min(c(nrows, nrow(refdat)))
     pg <- slice_clintable(x, 1:nrows, eval_select(x$col_keys, refdat))
@@ -56,7 +75,7 @@ print.clintable <- function(x, n=3, nrows = 15, ...) {
 #' @return Invisible
 #'
 #' @noRd
-print_clinpage <- function(x, titles = NULL, footnotes = NULL) {
+write_clinpage <- function(x, titles = NULL, footnotes = NULL) {
 
   body <- flextable::htmltools_value(x = x)
   # Two different type of leading spaces that appear in the HTML
@@ -86,15 +105,15 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL) {
 #' Method for printing alternating pages
 #'
 #' @param x a clintable object
-#' @param n number of pages within the clintable to print
-print_alternating <- function(x, n) {
+#' @noRd
+write_alternating <- function(x, n) {
   refdat <- x$body$dataset
 
   pag_idx <- x$clinify_config$pagination_idx
 
   out <- lapply(pag_idx[1:n], \(p) {
     print_clinpage(slice_clintable(x, p$rows, p$cols))
-    })
+  })
 
   for (p in out) {
     print(p)
