@@ -88,7 +88,6 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL) {
 #' @param x a clintable object
 #' @param n number of pages within the clintable to print
 print_alternating <- function(x, n) {
-  refdat <- x$body$dataset
 
   pag_idx <- x$clinify_config$pagination_idx
 

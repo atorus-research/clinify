@@ -28,8 +28,7 @@
 #'
 #' print(ct)
 #'
-write_clintable <- function(x, settings = getOption('clin_doc_settings'), ...) {
-  refdat <- x$body$dataset
+write_clintable <- function(x, file, settings = getOption('clin_doc_settings'), ...) {
   pg_method <- get_pagination_method(x)
 
   doc <- read_docx()
@@ -41,11 +40,11 @@ write_clintable <- function(x, settings = getOption('clin_doc_settings'), ...) {
     type = "continuous"
   )
 
-  if (!is.null(settings) {
+  if (!is.null(settings)) {
     for (n in names(settings)) {
       settings_[[n]] <- settings[[n]]
     }
-  })
+  }
 
   if (!is.null(x$clinify_config$titles)) {
     settings_$header_default <- block_list(x$clinify_config$titles)
@@ -59,13 +58,12 @@ write_clintable <- function(x, settings = getOption('clin_doc_settings'), ...) {
 
   # This point down from print method directly ----
   if (pg_method == "default") {
-    nrows <- min(c(nrows, nrow(refdat)))
-    pg <- slice_clintable(x, 1:nrows, eval_select(x$col_keys, refdat))
-    print_clinpage(pg, titles, footnotes)
+    doc <- body_add_flextable(doc, x)
   } else if (pg_method == "alternating") {
-    print_alternating(x, n=n)
+    write_alternating(doc, x)
   }
 
+  print(doc, target=file)
 }
 
 #' Print a clinpage object
@@ -75,49 +73,28 @@ write_clintable <- function(x, settings = getOption('clin_doc_settings'), ...) {
 #' @return Invisible
 #'
 #' @noRd
-write_clinpage <- function(x, titles = NULL, footnotes = NULL) {
-
-  body <- flextable::htmltools_value(x = x)
-  # Two different type of leading spaces that appear in the HTML
-  body[[3]] <- gsub("(?<!th)  ", "&nbsp; ", body[[3]], perl=TRUE)
-  body[[3]] <- gsub('(<span\\b[^>]*>) ', '\\1&nbsp;', body[[3]], perl=TRUE)
-  # Concurrent spaces
-  body[[3]] <- gsub("&nbsp;  ", "&nbsp;&nbsp; ", body[[3]], perl=TRUE)
-
-  if (!is.null(titles)) {
-    # TODO: This should take into consideration how many cells are merged within the header
-    titles <- width(titles, width = flextable_dim(x)$widths / 2)
-    hdr <- flextable::htmltools_value(x = titles)[[3]]
-    body[[3]] <- htmltools::HTML(paste0(hdr, body[[3]]))
-  }
-
-  if (!is.null(footnotes)) {
-    footnotes <- width(footnotes, width = flextable_dim(x)$widths / 2)
-    ftr <- flextable::htmltools_value(x = footnotes)[[3]]
-    body[[3]] <- htmltools::HTML(paste0(body[[3]], ftr))
-  }
-
-  out <- htmltools::browsable(body)
-  print(out)
-  invisible(out)
-}
+# write_clinpage <- function(doc, x) {
+#   body_add_flextable(doc, x)
+# }
 
 #' Method for printing alternating pages
 #'
 #' @param x a clintable object
 #' @noRd
-write_alternating <- function(x, n) {
-  refdat <- x$body$dataset
+write_alternating <- function(doc, x) {
 
   pag_idx <- x$clinify_config$pagination_idx
+  n <- length(pag_idx)
 
-  out <- lapply(pag_idx[1:n], \(p) {
-    print_clinpage(slice_clintable(x, p$rows, p$cols))
-  })
-
-  for (p in out) {
-    print(p)
+  # Page breaks up to last page
+  for (p in pag_idx[1:n-1]) {
+    doc <- body_add_flextable(doc, slice_clintable(x, p$rows, p$cols))
+    doc <- body_add_break(doc)
   }
-
-  invisible(out)
+  # Write last page
+  doc <- body_add_flextable(
+    doc, 
+    slice_clintable(x, pag_idx[[n]]$rows, pag_idx[[n]]$cols)
+  )
+  doc
 }
