@@ -4,7 +4,10 @@
 #' will pass all necessary parameters `flextable::flextable()` and conver the
 #' object to a `clintable`
 #'
-#' @param data A data frame
+#' @param x A data frame
+#' @param page_by A variable in the input dataframe to use for pagination
+#' @param group_by A variable which will be used for grouping and attached 
+#'   as a label above the table headers
 #' @param ... Parameters to pass to `flextable::flextable()`
 #'
 #' @return A clintable object
@@ -12,27 +15,39 @@
 #'
 #' @examples
 #' clintable(mtcars)
-clintable <- function(data, ...) {
-    as_clintable(flextable(data, ...))
+clintable <- function(x, page_by=NULL, group_by=NULL, ...) {
+    as_clintable(
+        flextable(x, ...), 
+        page_by = page_by, 
+        group_by = group_by
+    )
 }
 
 #' Convert a flextable into a clintable object
 #'
 #' @param ft A flextable object
-#'
+#' @param page_by A variable in the input dataframe to use for pagination
+#' @param group_by A variable which will be used for grouping and attached 
+#'   as a label above the table headers
+#' 
 #' @return A clintable object
 #' @export
 #'
 #' @examples
 #' ft <- flextable(mtcars)
 #' as_clintable(ft)
-as_clintable <- function(x) {
+as_clintable <- function(x, page_by=NULL, group_by=NULL) {
     stopifnot(inherits(x, "flextable"))
 
-    # Tack in clinify configurations
-    x$clinify_config <- list(
-        pagination_method = "default"
-    )
+    x$clinify_config$pagination$page_by <- page_by
+    x$clinify_config$pagination$group_by <- group_by
+
+    # TODO: Is this necessary? 
+    if (is.null(page_by) & is.null(group_by)) {
+        x <- set_pagination_method(x, "default")
+    } else {
+        x <- set_pagination_method(x, "custom")
+    }
 
     class(x) <- c("clintable", "flextable")
     x
@@ -42,6 +57,7 @@ as_clintable <- function(x) {
 #'
 #' @noRd
 new_clintable <- function() {
+    # TODO: revisit when actual object needs are established
     structure(
         list(
             header = NULL,

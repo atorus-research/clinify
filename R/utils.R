@@ -28,3 +28,4 @@ set_pagination_method <- function(x, method) {
   x$clinify_config$pagination_method <- method
   x
 }
+

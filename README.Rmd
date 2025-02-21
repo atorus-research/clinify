@@ -47,7 +47,7 @@ Instead of building a new package from the ground up, **clinify** aims to extend
 ## Design Philosophy 
 
 Here are some key principles we're using in building **clinify**:
-
+v
 - **clinify** objects should inherit from an underlying **flextable** or **officer** object
 - **clinify** functionality must not interfere with **flextable** or **officer** functionality, i.e. **flextable** or **officer** functions called should operate without error. 
 
