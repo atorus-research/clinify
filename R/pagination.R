@@ -42,6 +42,11 @@ make_page_vecs <- function(starts, ends) {
   for (i in seq_along(starts)) {
       out[[i]] <- starts[i]:ends[i]
   }
+
+  # If there were names, pull them over
+  if (!is.null(names(starts))) {
+    names(out) <- names(starts)
+  }
   out
 }
 
@@ -54,13 +59,26 @@ make_page_vecs <- function(starts, ends) {
 #'
 #' @noRd
 make_ind_list <- function(col_vecs, page_vecs) {
+
   page_nums <- seq(1, length(col_vecs) * length(page_vecs))
   rows <- unlist(
       lapply(page_vecs, \(x) rep(list(x), length(col_vecs))),
       recursive = FALSE
   )
+
   cols <- rep(col_vecs, length(page_vecs))
-  lapply(page_nums, \(i) list(rows = rows[[i]], cols = cols[[i]]))
+  if (!is.null(names(page_vecs))) {
+    nms <- unlist(
+      lapply(names(page_vecs), \(x) rep(list(x), length(col_vecs))),
+      recursive = FALSE
+    )
+
+    out <- lapply(page_nums, \(i) list(rows = rows[[i]], cols = cols[[i]], label = nms[[i]]))
+  }
+  else {
+    out <- lapply(page_nums, \(i) list(rows = rows[[i]], cols = cols[[i]]))
+  }
+  out
 }
 
 
@@ -89,28 +107,41 @@ clin_page_by <- function(x, page_by, max_rows=10) {
 #'
 #' @examples
 clin_group_by <- function(x, group_by) {
-    x$clinify_config$group_by <- group_by
+  x$clinify_config$group_by <- group_by
+  x
 }
 
 group_by_ <- function(refdat, group_by) {
-  browser()
   # Find every index the page by variable changes
   splits <- refdat[[group_by]] == c(NA, head(refdat[[group_by]], -1))
   splits[1] <- FALSE # Easy indexing of 1 which is NA
   group_starts <- which(!splits)
-  group_ends <- c((group_starts - 1)[-1], nrow(refdat))
-
-  groups <- make_page_vecs(group_starts, group_ends)
-  names(groups) <- refdat[[group_by]][group_starts]
-  groups
+  
+  names(group_starts) <- refdat[[group_by]][group_starts]
+  group_starts
 }
 
-page_by_ <- function(refdat, page_by) {
-  # Find every index the page by variable changes
-  splits <- refdat[[page_by]] == c(NA, head(refdat[[page_by]], -1))
-  splits[1] <- FALSE # Easy indexing of 1 which is NA
-  page_starts <- which(!splits)
-  page_ends <- c((page_starts - 1)[-1], nrow(refdat))
+page_by_ <- function(refdat, page_by, group_starts=NULL) {
+
+  if (!is.null(page_by)) {
+    # Find every index the page by variable changes
+    splits <- refdat[[page_by]] == c(NA, head(refdat[[page_by]], -1))
+    splits[1] <- FALSE # Easy indexing of 1 which is NA
+
+    page_starts <- which(!splits)
+  } else {
+    page_starts <- numeric()
+  }
+
+  if (!is.null(group_starts)) {
+    gs <- group_by_(refdat, group_starts)
+    page_starts <- sort(union(page_starts, gs))
+    # Bring the group names over and carry them forward
+    names(page_starts)[which(page_starts %in% gs)] <- names(gs)
+    names(page_starts) <- zoo::na.locf(names(page_starts))
+  }
+  
+  page_ends <- unname(c((page_starts - 1)[-1], nrow(refdat)))
   make_page_vecs(page_starts, page_ends)
 }
 
@@ -128,24 +159,24 @@ max_rows_ <- function(refdat, max_rows) {
 }
 
 prep_pagination_ <- function(x) {
+
+  # TODO: Alternating pages with no page by doesn't work with groups right now
   config <- x$clinify_config
   refdat <- x$body$dataset
   
   col_vecs <- NULL
   page_vecs <- NULL
 
-
-
-  # Establish page by first because page var will strip out of clintable
-  if (!is.null(config$page_by)) {
-    # Slice the order variable out of the clintable
-    if (config$page_by %in% x$col_keys) {
-      key_idx <- eval_select(config$page_by, refdat)
+  # Establish page by and group by first because page var will strip out of clintable
+  if (!is.null(config$page_by) || !is.null(config$group_by)) {
+    # Slice the page by and group by out of the clintable
+    if (any(c(config$page_by, config$group_by) %in% x$col_keys)) {
+      key_idx <- eval_select(c(config$page_by, config$group_by), refdat)
       cols <- seq(1:ncol(refdat))[-key_idx]
       x <- slice_clintable(x, 1:nrow(refdat), cols)
     }
-    page_vecs <- page_by_(refdat, config$page_by)
-  } 
+    page_vecs <- page_by_(refdat, config$page_by, group_starts = config$group_by)
+  }
 
   # Make Column vectors
   if (!is.null(config$key_cols) & !is.null(config$col_groups)) {
