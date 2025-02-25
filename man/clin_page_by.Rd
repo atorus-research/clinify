@@ -17,3 +17,6 @@ A clintable object
 \description{
 Configure pagination using a page variable
 }
+\examples{
+#TODO: 
+}

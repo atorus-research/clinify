@@ -20,8 +20,7 @@
 #'     c('disp', 'drat', 'wt'),
 #'     c('qsec', 'vs', 'am'),
 #'     c('gear', 'carb')
-#'   ),
-#'   max_rows = 10
+#'   )
 #' )
 clin_alt_pages <- function(x, key_cols, col_groups) {
   x$clinify_config$pagination_method <- "custom"
@@ -121,7 +120,7 @@ make_ind_list <- function(col_vecs, page_vecs) {
 #'  Get indices of the beginning of each group based on input variable
 #' 
 #' @param refdat The dataframe stored in the flextable object
-#' @group_by A character string of the variable from refdat to be used
+#' @param group_by A character string of the variable from refdat to be used
 #'
 #' @return Group start indices
 #' @noRd

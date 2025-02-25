@@ -12,3 +12,6 @@ A clintable object
 \description{
 Configure a clintable to table by a grouping variable, which will be used as a label
 }
+\examples{
+#TODO: 
+}

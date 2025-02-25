@@ -33,7 +33,6 @@ ct <- clin_alt_pages(
     c('disp', 'drat', 'wt'),
     c('qsec', 'vs', 'am'),
     c('gear', 'carb')
-  ),
-  max_rows = 10
+  )
 )
 }
