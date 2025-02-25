@@ -133,6 +133,48 @@ test_that("Page by no alternating", {
   
 })
   
+test_that("Alternating no page by", {
+  ct <- clin_alt_pages(
+    clintable(mtcars),
+    key_cols = c('mpg', 'cyl', 'hp'),
+    col_groups = list(
+      c('disp', 'drat', 'wt'),
+      c('qsec', 'vs', 'am'),
+      c('gear', 'carb')
+      ) 
+    )
+  
+  expect_message(ct2 <- prep_pagination_(ct), "NOTE: Alternating")
+
+  exp_out <- list(
+    list(
+      rows = 1:20,
+      cols = p1
+    ), 
+    list(
+      rows = 1:20,
+      cols = p2
+    ), 
+    list(
+      rows = 1:20,
+      cols = p3
+    ), 
+    list(
+      rows = 21:32,
+      cols = p1
+    ), 
+    list(
+      rows = 21:32,
+      cols = p2
+    ),
+    list(
+      rows = 21:32,
+      cols = p3
+    )
+  )
+
+})
+
 test_that("Alternating with page by with groups",{
 
   ct <- clin_alt_pages(
@@ -396,47 +438,47 @@ test_that("Alternating pages with groups", {
       label = "a"
     ), 
     list(
-      rows = 21:30,
+      rows = 21:32,
       cols = p1,
       label = "a"
     ), 
     list(
-      rows = 21:30,
+      rows = 21:32,
       cols = p2,
       label = "a"
     ), 
     list(
-      rows = 21:30,
+      rows = 21:32,
       cols = p3,
       label = "a"
     ), 
     list(
-      rows = 31:32,
+      rows = 33:52,
       cols = p1,
-      label = "a"
+      label = "b"
     ), 
     list(
-      rows = 31:32,
+      rows = 33:52,
       cols = p2,
-      label = "a"
+      label = "b"
     ), 
     list(
-      rows = 31:32,
+      rows = 33:52,
       cols = p3,
-      label = "a"
+      label = "b"
     ), 
     list(
-      rows = 33:64,
+      rows = 53:64,
       cols = p1,
       label = "b"
     ),
     list(
-      rows = 33:64,
+      rows = 53:64,
       cols = p2,
       label = "b"
     ),
     list(
-      rows = 33:64,
+      rows = 53:64,
       cols = p3,
       label = "b"
     )

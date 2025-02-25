@@ -121,7 +121,7 @@ group_by_ <- function(refdat, group_by) {
   group_starts
 }
 
-page_by_ <- function(refdat, page_by, group_starts=NULL) {
+page_by_ <- function(refdat, page_by, group_by=NULL) {
 
   if (!is.null(page_by)) {
     # Find every index the page by variable changes
@@ -133,8 +133,8 @@ page_by_ <- function(refdat, page_by, group_starts=NULL) {
     page_starts <- numeric()
   }
 
-  if (!is.null(group_starts)) {
-    gs <- group_by_(refdat, group_starts)
+  if (!is.null(group_by)) {
+    gs <- group_by_(refdat, group_by)
     page_starts <- sort(union(page_starts, gs))
     # Bring the group names over and carry them forward
     names(page_starts)[which(page_starts %in% gs)] <- names(gs)
@@ -145,56 +145,77 @@ page_by_ <- function(refdat, page_by, group_starts=NULL) {
   make_page_vecs(page_starts, page_ends)
 }
 
-max_rows_ <- function(refdat, max_rows) {
+max_rows_ <- function(refdat, max_rows, group_by=NULL) {
   tot_rows <- nrow(refdat)
-  page_ends <- which(seq_along(1 : tot_rows) %% max_rows == 0)
-  page_starts <- page_ends - max_rows + 1
 
-  if (tot_rows %% max_rows) {
-      page_starts[length(page_starts) + 1] <- tail(page_ends, 1) + 1
-      page_ends[length(page_ends) + 1] <- tot_rows
+  # Grab the group starts
+  if (!is.null(group_by)) {
+    gs <- group_by_(refdat, group_by)
+  } else {
+    gs <- 1
   }
+
+  # Approximate the total pages so I can avoid appends
+  page_starts <- integer(ceiling(tot_rows / max_rows))
+  page_starts[1] <- 1
+  ps <- 1L
+
+  # Start iterating at second index until pages are done
+  i <- 2
+  while ((ps + max_rows) <= tot_rows) {
+    # Increment page start by max rows or the group start is next in line
+    ps <- min(ps + max_rows, suppressWarnings(min(gs[gs > ps])))
+    page_starts[i] <- ps
+    i <- i+1
+  }
+
+  # Carry the names forward
+  if (!is.null(names(gs))) {
+    names(page_starts)[which(page_starts %in% gs)] <- names(gs)
+    names(page_starts) <- zoo::na.locf(names(page_starts))
+  }
+
+  page_ends <- unname(c((page_starts - 1)[-1], tot_rows))
   # Create vectors for each row that belongs to a page
   make_page_vecs(page_starts, page_ends)
 }
 
 prep_pagination_ <- function(x) {
 
-  # TODO: Alternating pages with no page by doesn't work with groups right now
+
   config <- x$clinify_config
   refdat <- x$body$dataset
   
   col_vecs <- NULL
   page_vecs <- NULL
 
-  # Establish page by and group by first because page var will strip out of clintable
-  if (!is.null(config$page_by) || !is.null(config$group_by)) {
-    # Slice the page by and group by out of the clintable
-    if (any(c(config$page_by, config$group_by) %in% x$col_keys)) {
-      key_idx <- eval_select(c(config$page_by, config$group_by), refdat)
-      cols <- seq(1:ncol(refdat))[-key_idx]
-      x <- slice_clintable(x, 1:nrow(refdat), cols)
-    }
-    page_vecs <- page_by_(refdat, config$page_by, group_starts = config$group_by)
-  }
+  # TODO: Something off here? 
+  if (!is.null(config$col_groups) && is.null(config$page_by) && is.null(config$max_rows)) {
 
+    message("NOTE: Alternating pages were set, but no selection for row wise pagination was configured",
+            " Defaulting to 20 rows per page.")
+    config$max_rows <- 20
+    page_vecs <- max_rows_(refdat, config$max_rows, group_by = config$group_by)
+
+    # Establish page by and group by first because page var will strip out of clintable
+  } else if (is.null(config$max_rows) && (!is.null(config$page_by) || !is.null(config$group_by))) {
+    page_vecs <- page_by_(refdat, config$page_by, group_by = config$group_by)
+  } 
+
+  # Slice the page by and group by out of the clintable
+  if (any(c(config$page_by, config$group_by) %in% x$col_keys)) {
+    key_idx <- eval_select(c(config$page_by, config$group_by), refdat)
+    cols <- seq(1:ncol(refdat))[-key_idx]
+    x <- slice_clintable(x, 1:nrow(refdat), cols)
+  }
+  
   # Make Column vectors
-  if (!is.null(config$key_cols) & !is.null(config$col_groups)) {
+  if (!is.null(config$col_groups)) {
     # Alternating pages
     col_vecs <- alt_pages_(refdat, config$key_cols, config$col_groups)
-    if (is.null(config$page_by) && is.null(config$max_rows)) {
-      message("NOTE: Alternating pages were set, but no selection for row wise pagination was configured",
-              " Defaulting to 20 rows per page.")
-      config$max_rows <- 20
-    }
   } else {
     # Defaults
     col_vecs <- list(eval_select(x$col_keys, refdat))
-  }
-
-  # Make page vectors - catch this last because it could be set during alt pages
-  if (!is.null(config$max_rows)) {
-    page_vecs <- max_rows_(refdat, config$max_rows)
   }
 
   x$clinify_config$pagination_idx <- make_ind_list(col_vecs, page_vecs)
