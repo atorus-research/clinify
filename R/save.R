@@ -29,7 +29,7 @@
 #' print(ct)
 #'
 write_clintable <- function(x, file, settings = getOption('clin_doc_settings'), ...) {
-  pg_method <- get_pagination_method(x)
+  pg_method <- x$clinify_config$pagination_method
 
   doc <- read_docx()
 
@@ -59,7 +59,8 @@ write_clintable <- function(x, file, settings = getOption('clin_doc_settings'), 
   # This point down from print method directly ----
   if (pg_method == "default") {
     doc <- body_add_flextable(doc, x)
-  } else if (pg_method == "alternating") {
+  } else if (pg_method == "custom") {
+    x <- prep_pagination_(x)
     write_alternating(doc, x)
   }
 
@@ -88,13 +89,25 @@ write_alternating <- function(doc, x) {
 
   # Page breaks up to last page
   for (p in pag_idx[1:n-1]) {
-    doc <- body_add_flextable(doc, slice_clintable(x, p$rows, p$cols))
+    doc <- add_table_(doc, x, p)
     doc <- body_add_break(doc)
   }
+
   # Write last page
-  doc <- body_add_flextable(
-    doc, 
-    slice_clintable(x, pag_idx[[n]]$rows, pag_idx[[n]]$cols)
-  )
+  doc <- add_table_(doc, x, pag_idx[[n]])
   doc
+}
+
+#' Method to add table to document
+#'
+#' @param x a clintable object
+#' @param doc An officer word document object
+#' @noRd
+add_table_ <- function(doc, x, p) {
+  tbl <- slice_clintable(x, p$rows, p$cols)
+  if (!is.null(p$label)) {
+    tbl <- add_header_lines(tbl, values = p$label)
+    tbl<- align(tbl, 1, 1, 'left', part="header")
+  }
+  doc <- body_add_flextable(doc, tbl)
 }
