@@ -33,18 +33,20 @@
 #' print(ct)
 #'
 print.clintable <- function(x, n=3, nrows = 15, ...) {
+
   refdat <- x$body$dataset
-  pg_method <- get_pagination_method(x)
+  pg_method <- x$clinify_config$pagination_method
 
   titles <- x$clinify_config$titles
   footnotes <- x$clinify_config$footnotes
-
+  
   if (pg_method == "default") {
     nrows <- min(c(nrows, nrow(refdat)))
     pg <- slice_clintable(x, 1:nrows, eval_select(x$col_keys, refdat))
     print_clinpage(pg, titles, footnotes)
-  } else if (pg_method == "alternating") {
-    print_alternating(x, n=n)
+  } else if (pg_method == "custom") {
+    x <- prep_pagination_(x)
+    print_alternating(x, n=n, titles, footnotes)
   }
 
 }
@@ -56,11 +58,20 @@ print.clintable <- function(x, n=3, nrows = 15, ...) {
 #' @return Invisible
 #'
 #' @noRd
-print_clinpage <- function(x, titles = NULL, footnotes = NULL) {
+print_clinpage <- function(x, titles = NULL, footnotes = NULL, group_label = NULL) {
+
+  if (!is.null(group_label)) {
+    # TODO: Allow formatting on this
+    x <- add_header_lines(x, values = group_label)
+    x <- align(x, 1, 1, 'left', part="header")
+  }
 
   body <- flextable::htmltools_value(x = x)
+  # Two different type of leading spaces that appear in the HTML
   body[[3]] <- gsub("(?<!th)  ", "&nbsp; ", body[[3]], perl=TRUE)
   body[[3]] <- gsub('(<span\\b[^>]*>) ', '\\1&nbsp;', body[[3]], perl=TRUE)
+  # Concurrent spaces
+  body[[3]] <- gsub("&nbsp;  ", "&nbsp;&nbsp; ", body[[3]], perl=TRUE)
 
   if (!is.null(titles)) {
     # TODO: This should take into consideration how many cells are merged within the header
@@ -76,7 +87,7 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL) {
   }
 
   out <- htmltools::browsable(body)
-  print(out)
+
   invisible(out)
 }
 
@@ -84,14 +95,20 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL) {
 #'
 #' @param x a clintable object
 #' @param n number of pages within the clintable to print
-print_alternating <- function(x, n) {
-  refdat <- x$body$dataset
+print_alternating <- function(x, n, titles=NULL, footnotes=NULL) {
 
   pag_idx <- x$clinify_config$pagination_idx
 
+  # Don't try to print more pages than requested
+  n <- min(length(pag_idx), n)
+
   out <- lapply(pag_idx[1:n], \(p) {
-    print_clinpage(slice_clintable(x, p$rows, p$cols))
-    })
+    print_clinpage(
+      slice_clintable(x, p$rows, p$cols),
+      titles = titles,
+      footnotes = footnotes,
+      group_label = p$label)
+  })
 
   for (p in out) {
     print(p)

@@ -20,7 +20,6 @@
 #'
 #' @return None
 #' @export
-
 header_style_default <- function(x, ...) {
 
   # Remove all borders as heading does not need any.
