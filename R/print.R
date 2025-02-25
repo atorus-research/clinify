@@ -46,7 +46,7 @@ print.clintable <- function(x, n=3, nrows = 15, ...) {
     print_clinpage(pg, titles, footnotes)
   } else if (pg_method == "custom") {
     x <- prep_pagination_(x)
-    print_alternating(x, n=n)
+    print_alternating(x, n=n, titles, footnotes)
   }
 
 }
@@ -72,13 +72,6 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL, group_label = NUL
   body[[3]] <- gsub('(<span\\b[^>]*>) ', '\\1&nbsp;', body[[3]], perl=TRUE)
   # Concurrent spaces
   body[[3]] <- gsub("&nbsp;  ", "&nbsp;&nbsp; ", body[[3]], perl=TRUE)
-
-  if (!is.null(titles)) {
-    # TODO: This should take into consideration how many cells are merged within the header
-    titles <- width(titles, width = flextable_dim(x)$widths / 2)
-    hdr <- flextable::htmltools_value(x = titles)[[3]]
-    body[[3]] <- htmltools::HTML(paste0(hdr, body[[3]]))
-  }
 
   if (!is.null(titles)) {
     # TODO: This should take into consideration how many cells are merged within the header

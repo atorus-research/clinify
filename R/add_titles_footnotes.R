@@ -52,7 +52,7 @@ add_titles_footnotes_ <- function(x, sect, ls = NULL, ft = NULL) {
 
 #' Create a new title or footnote flextable
 #'
-#' @param ls a list of character vectors, no more than 3 elements to a vector.
+#' @param x a list of character vectors, no more than 3 elements to a vector.
 #' @param sect Either "titles" or "footnotes"
 #'
 #' @return A flextable object
