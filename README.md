@@ -65,3 +65,75 @@ Here are some key principles we’re using in building **clinify**:
 - **clinify** functionality must not interfere with **flextable** or
   **officer** functionality, i.e. **flextable** or **officer** functions
   called should operate without error.
+
+## Example
+
+Here’s a basic example of some of clinify’s benefit in action
+
+``` r
+library(clinify)
+#> Loading required package: flextable
+#> Loading required package: officer
+# Mock some data
+dat <- mtcars
+dat['page'] <- c(
+  rep(1, 10),
+  rep(2, 10),
+  rep(3, 10),
+  c(4, 4)
+)
+dat2 <- rbind(dat, dat)
+dat2['groups'] <- c(
+  rep('a', 32),
+  rep('b', 32)
+)
+
+# Create a basic table
+ct <- clintable(dat2) |> 
+  # Break pages by the "page" variable
+  clin_page_by('page') |> 
+  # Add header lines using the "groups" variable
+  clin_group_by('groups') |> 
+  # For overflowing columns, alternate pages with 
+  # fixed variables for each page
+  clin_alt_pages(
+    key_cols = c('mpg', 'cyl', 'hp'),
+    col_groups = list(
+      c('disp', 'drat', 'wt'),
+      c('qsec', 'vs', 'am'),
+      c('gear', 'carb')
+    ) 
+  ) |> 
+  # Apply default stylings to the table
+  table_style_default() |> 
+  # Add titles here is using new_header_footer to allow flextable functions
+  # to customize the titles block
+  clin_add_titles(
+    ft = new_title_footnote(
+        list(
+          c("Left", "Center", "Right"),
+          c("Just the middle")
+        ),
+        "titles"
+      ) |> 
+      header_style_default()
+  ) |> 
+  clin_add_footnotes(
+    ft = new_title_footnote(
+      list(
+        c(
+          "Here's a footnote.", 
+          format(Sys.time(), "%H:%M %A, %B %d, %Y")
+        )
+      ),
+      "footnote"
+    ) |> 
+      footer_style_default() 
+  )
+
+# Print pages (by default 3 pages) to the viewer of the IDE
+print(ct)
+
+# Write the table out to docx
+write_clintable(ct, "demo_table.docx")
+```
