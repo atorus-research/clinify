@@ -4,7 +4,7 @@
 \alias{print_alternating}
 \title{Method for printing alternating pages}
 \usage{
-print_alternating(x, n)
+print_alternating(x, n, titles = NULL, footnotes = NULL)
 }
 \arguments{
 \item{x}{a clintable object}

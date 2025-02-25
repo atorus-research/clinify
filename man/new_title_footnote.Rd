@@ -7,9 +7,9 @@
 new_title_footnote(x, sect = c("titles", "footnotes"))
 }
 \arguments{
-\item{sect}{Either "titles" or "footnotes"}
+\item{x}{a list of character vectors, no more than 3 elements to a vector.}
 
-\item{ls}{a list of character vectors, no more than 3 elements to a vector.}
+\item{sect}{Either "titles" or "footnotes"}
 }
 \value{
 A flextable object

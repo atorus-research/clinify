@@ -1,60 +1,113 @@
-### Save Functions
-
-#' save the `clin_document` to specified location
+#' Clintable print method
 #'
-#' @description `save` saves the `clin_document` and returns it invisibly.
+#' Extraction of flextable print method with special handling of clintable pages
+#' and
 #'
-#' @details By default, `save` method saves the document to the current folder
-#' with the name of 'my_doc.docx'
+#' @param x a clintable object
+#' @param ... Additional parameters passed to flextable print method
 #'
-#' @param x A `clin_document` object
-#'
-#' \item{target - a full path to the document}
+#' @return Invisible
 #' @export
 #'
 #' @examples
-#' # Load in Pipe
-#' library(magrittr)
 #'
-#' doc <- clin_document(iris) %>% build()
-#' save(doc)
+#' ct <- clintable(mtcars)
 #'
-#' @seealso clin_document
-save <- function(x, ...) {
-    UseMethod("save")
+#' print(ct)
+#'
+#' ct <- clin_alt_pages(
+#'   ct,
+#'   key_cols = c('mpg', 'cyl', 'hp'),
+#'   col_groups = list(
+#'     c('disp', 'drat', 'wt'),
+#'     c('qsec', 'vs', 'am'),
+#'     c('gear', 'carb')
+#'   ),
+#'   max_rows = 10
+#' )
+#'
+#' print(ct)
+#'
+write_clintable <- function(x, file, settings = getOption('clin_doc_settings'), ...) {
+  pg_method <- x$clinify_config$pagination_method
+
+  doc <- read_docx()
+
+  # Settings from options
+  settings_ <- list(
+    page_size = page_size(width=11.7, height = 8.3, orient = "landscape"),
+    page_margins = page_mar(top=1, bottom=1, left=0.5, right=1),
+    type = "continuous"
+  )
+
+  if (!is.null(settings)) {
+    for (n in names(settings)) {
+      settings_[[n]] <- settings[[n]]
+    }
+  }
+
+  if (!is.null(x$clinify_config$titles)) {
+    settings_$header_default <- block_list(x$clinify_config$titles)
+  }
+  if (!is.null(x$clinify_config$footnotes)) {
+    settings_$footer_default <- block_list(x$clinify_config$footnotes)
+  }
+
+  # apply settings to doc
+  doc <- body_set_default_section(doc, do.call(prop_section, settings_))
+
+  # This point down from print method directly ----
+  if (pg_method == "default") {
+    doc <- body_add_flextable(doc, x)
+  } else if (pg_method == "custom") {
+    x <- prep_pagination_(x)
+    write_alternating(doc, x)
+  }
+
+  print(doc, target=file)
 }
 
-#' clin_document S3 method
+#' Print a clinpage object
+#'
+#' @param x A clinpage object
+#'
+#' @return Invisible
+#'
 #' @noRd
-#' @export
-save.clin_document <- function(x, target=NULL) {
+# write_clinpage <- function(doc, x) {
+#   body_add_flextable(doc, x)
+# }
 
-    #TODO implement SAVE method properly
-    if (is.null(target)) {target = file.path(getwd(), "my_doc.docx")}
+#' Method for printing alternating pages
+#'
+#' @param x a clintable object
+#' @noRd
+write_alternating <- function(doc, x) {
 
-    doc <- read_docx()
+  pag_idx <- x$clinify_config$pagination_idx
+  n <- length(pag_idx)
 
-    # Add all pages to the document
-    for (page in x$pages) {
-        body_add_flextable(doc, value = page$output)
-        }
+  # Page breaks up to last page
+  for (p in pag_idx[1:n-1]) {
+    doc <- add_table_(doc, x, p)
+    doc <- body_add_break(doc)
+  }
 
-    # Below part probably can be abstracted as well. Or can be left as is...
-    body_set_default_section(doc,
-            prop_section(
-                page_size = page_size(width=11, height = 8.5, orient = "landscape"),
-                page_margins = page_mar(top=0.5, bottom=1, left=1, right=1),
-                type = "continuous",
-                # here we should pass built flextable objects, but
-                # clin_document.titles/footnotes are regular lists
-                footer_default = block_list(x$footnotes_rendered),
-                header_default = block_list(x$titles_rendered)
-                )
-    ) %>%
-
-    # Save docs file.
-    print(target = target)
-
-    invisible(x)
+  # Write last page
+  doc <- add_table_(doc, x, pag_idx[[n]])
+  doc
 }
 
+#' Method to add table to document
+#'
+#' @param x a clintable object
+#' @param doc An officer word document object
+#' @noRd
+add_table_ <- function(doc, x, p) {
+  tbl <- slice_clintable(x, p$rows, p$cols)
+  if (!is.null(p$label)) {
+    tbl <- add_header_lines(tbl, values = p$label)
+    tbl<- align(tbl, 1, 1, 'left', part="header")
+  }
+  doc <- body_add_flextable(doc, tbl)
+}
