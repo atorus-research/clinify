@@ -39,14 +39,13 @@ clintable <- function(x, page_by=NULL, group_by=NULL, ...) {
 as_clintable <- function(x, page_by=NULL, group_by=NULL) {
     stopifnot(inherits(x, "flextable"))
 
-    x$clinify_config$pagination$page_by <- page_by
-    x$clinify_config$pagination$group_by <- group_by
+    x$clinify_config$page_by <- page_by
+    x$clinify_config$group_by <- group_by
 
-    # TODO: Is this necessary? 
     if (is.null(page_by) & is.null(group_by)) {
-        x <- set_pagination_method(x, "default")
+        x$clinify_config$pagination_method <- "default"
     } else {
-        x <- set_pagination_method(x, "custom")
+        x$clinify_config$pagination_method <- "custom"
     }
 
     class(x) <- c("clintable", "flextable")

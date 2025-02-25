@@ -30,6 +30,40 @@ clin_alt_pages <- function(x, key_cols, col_groups) {
   x
 }
 
+#' Configure pagination using a page variable
+#' 
+#' @param x A clintable object
+#' @param byvar A column in the table used for page grouping
+#'
+#' @return A clintable object
+#' @export
+#'
+#' @examples
+#' #TODO: 
+clin_page_by <- function(x, page_by, max_rows=10) {
+  x$clinify_config$pagination_method <- "custom"
+  
+  if (!missing(page_by)) {
+    x$clinify_config$page_by <- page_by
+  } else {
+    x$clinify_config$max_rows <- max_rows
+  }
+  x
+}
+
+#' Configure a clintable to table by a grouping variable, which will be used as a label
+#'
+#' @return A clintable object
+#' @export
+#'
+#' @examples
+#' #TODO: 
+clin_group_by <- function(x, group_by) {
+  x$clinify_config$pagination_method <- "custom"
+  x$clinify_config$group_by <- group_by
+  x
+}
+
 #' Internal method to take a vector of start and end indices and generate the
 #' sequence of numbers between each point
 #'
@@ -52,6 +86,9 @@ make_page_vecs <- function(starts, ends) {
 
 #' Generate the rows/columns pairing for each output page
 #'
+#' If the page vectors are named, the name will be applied 
+#' to the label element of each list
+#' 
 #' @param col_vecs list of numeric vectors
 #' @param page_vecs list of numeric vectors
 #'
@@ -81,36 +118,13 @@ make_ind_list <- function(col_vecs, page_vecs) {
   out
 }
 
-
-#' Configure pagination using a page variable
+#'  Get indices of the beginning of each group based on input variable
 #' 
-#' @param x A clintable object
-#' @param byvar A column in the table used for page grouping
+#' @param refdat The dataframe stored in the flextable object
+#' @group_by A character string of the variable from refdat to be used
 #'
-#' @return A clintable object
-#' @export
-#'
-#' @examples
-clin_page_by <- function(x, page_by, max_rows=10) {
-  if (!missing(page_by)) {
-    x$clinify_config$page_by <- page_by
-  } else {
-    x$clinify_config$max_rows <- max_rows
-  }
-  x
-}
-
-#' Configure a clintable to table by a grouping variable, which will be used as a label
-#'
-#' @return A clintable object
-#' @export
-#'
-#' @examples
-clin_group_by <- function(x, group_by) {
-  x$clinify_config$group_by <- group_by
-  x
-}
-
+#' @return Group start indices
+#' @noRd
 group_by_ <- function(refdat, group_by) {
   # Find every index the page by variable changes
   splits <- refdat[[group_by]] == c(NA, head(refdat[[group_by]], -1))
@@ -121,6 +135,14 @@ group_by_ <- function(refdat, group_by) {
   group_starts
 }
 
+#' Generate page vectors using page_by variable with group considerations
+#' 
+#' @param refdat The dataframe stored in the flextable object
+#' @param max_rows A variable in refdat used to determine pages
+#' @param group_by A character string of the variable from refdat to be used
+#'
+#' @return Page vectors
+#' @noRd
 page_by_ <- function(refdat, page_by, group_by=NULL) {
 
   if (!is.null(page_by)) {
@@ -145,6 +167,14 @@ page_by_ <- function(refdat, page_by, group_by=NULL) {
   make_page_vecs(page_starts, page_ends)
 }
 
+#' Generate page vectors by maximum rows with group considerations
+#' 
+#' @param refdat The dataframe stored in the flextable object
+#' @param max_rows The max rows per page
+#' @param group_by A character string of the variable from refdat to be used
+#'
+#' @return Page vectors
+#' @noRd
 max_rows_ <- function(refdat, max_rows, group_by=NULL) {
   tot_rows <- nrow(refdat)
 
@@ -180,8 +210,30 @@ max_rows_ <- function(refdat, max_rows, group_by=NULL) {
   make_page_vecs(page_starts, page_ends)
 }
 
-prep_pagination_ <- function(x) {
+#' Generate alternating page column vectors
+#' 
+#' @param refdat The dataframe stored in the flextable object
+#' @param key_cols A character vector of columns to apply on each page
+#' @param col_groups A character vector of variable that will appear on individual pages
+#'
+#' @return Page vectors
+#' @noRd
+alt_pages_ <- function(refdat, key_cols, col_groups) {
+  key_idx <- eval_select(key_cols, refdat)
+  grp_idx <- lapply(col_groups, eval_select, data=refdat)
+  # Create column vectors
+  lapply(grp_idx, \(x) append(key_idx, x))
+}
 
+#' This is the driver function to process the pagination calculations. Based
+#' on the settings applied through object creation, this function will interpret
+#' and create the indices necessary for pagination to be applied
+#' 
+#' @param x A clintable object
+#'
+#' @return A clintable with the pagination IDs populated
+#' @noRd
+prep_pagination_ <- function(x) {
 
   config <- x$clinify_config
   refdat <- x$body$dataset
@@ -189,7 +241,7 @@ prep_pagination_ <- function(x) {
   col_vecs <- NULL
   page_vecs <- NULL
 
-  # TODO: Something off here? 
+  # If alternating and no paging set, apply max rows
   if (!is.null(config$col_groups) && is.null(config$page_by) && is.null(config$max_rows)) {
 
     message("NOTE: Alternating pages were set, but no selection for row wise pagination was configured",
@@ -220,12 +272,4 @@ prep_pagination_ <- function(x) {
 
   x$clinify_config$pagination_idx <- make_ind_list(col_vecs, page_vecs)
   x
-}
-
-
-alt_pages_ <- function(refdat, key_cols, col_groups) {
-  key_idx <- eval_select(key_cols, refdat)
-  grp_idx <- lapply(col_groups, eval_select, data=refdat)
-  # Create column vectors
-  lapply(grp_idx, \(x) append(key_idx, x))
 }

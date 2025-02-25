@@ -33,17 +33,18 @@
 #' print(ct)
 #'
 print.clintable <- function(x, n=3, nrows = 15, ...) {
+
   refdat <- x$body$dataset
-  pg_method <- get_pagination_method(x)
+  pg_method <- x$clinify_config$pagination_method
 
   titles <- x$clinify_config$titles
   footnotes <- x$clinify_config$footnotes
-
+  
   if (pg_method == "default") {
     nrows <- min(c(nrows, nrow(refdat)))
     pg <- slice_clintable(x, 1:nrows, eval_select(x$col_keys, refdat))
     print_clinpage(pg, titles, footnotes)
-  } else if (pg_method == "alternating") {
+  } else if (pg_method == "custom") {
     print_alternating(x, n=n)
   }
 
@@ -91,6 +92,7 @@ print_alternating <- function(x, n) {
 
   pag_idx <- x$clinify_config$pagination_idx
 
+  browser()
   out <- lapply(pag_idx[1:n], \(p) {
     print_clinpage(slice_clintable(x, p$rows, p$cols))
     })
