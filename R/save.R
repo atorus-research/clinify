@@ -52,9 +52,10 @@ write_clintable <- function(x, file, settings = getOption('clin_doc_settings'), 
   if (!is.null(x$clinify_config$footnotes)) {
     settings_$footer_default <- block_list(x$clinify_config$footnotes)
   }
-
+  
   # apply settings to doc
   doc <- body_set_default_section(doc, do.call(prop_section, settings_))
+
 
   # This point down from print method directly ----
   if (pg_method == "default") {

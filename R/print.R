@@ -3,11 +3,14 @@
 #' Extraction of flextable print method with special handling of clintable pages
 #' and
 #'
-#' @param x a clintable object
-#' @param n number of pages within the clintable to print. Only used when
+#' @param x A clintable object
+#' @param n Number of pages within the clintable to print. Only used when
 #'   pagination is configured
-#' @param nrows number of rows to print. Only used when rows aren't configured
+#' @param nrows Number of rows to print. Only used when rows aren't configured
 #'   within the pagination method
+#' @param apply_defaults Apply default styles. These styles are stored in the 
+#'   options clinify_header_default, clinify_footer_default, and 
+#'   clinify_table_default respectively. Defaults to true. 
 #' @param ... Additional parameters passed to flextable print method
 #'
 #' @return Invisible
@@ -32,18 +35,25 @@
 #'
 #' print(ct)
 #'
-print.clintable <- function(x, n=3, nrows = 15, ...) {
+print.clintable <- function(x, n=3, nrows = 15, apply_defaults=TRUE, ...) {
 
   refdat <- x$body$dataset
   pg_method <- x$clinify_config$pagination_method
 
   titles <- x$clinify_config$titles
   footnotes <- x$clinify_config$footnotes
+
+  # Apply the default styling
+  if (apply_defaults) {
+    if (!is.null(titles)) titles <- getOption('clinify_titles_default')(titles)
+    if (!is.null(footnotes)) footnotes <- getOption('clinify_footnotes_default')(footnotes)
+    x <- getOption('clinify_table_default')(x)
+  }
   
   if (pg_method == "default") {
     nrows <- min(c(nrows, nrow(refdat)))
     pg <- slice_clintable(x, 1:nrows, eval_select(x$col_keys, refdat))
-    print_clinpage(pg, titles, footnotes)
+    print(print_clinpage(pg, titles, footnotes))
   } else if (pg_method == "custom") {
     x <- prep_pagination_(x)
     print_alternating(x, n=n, titles, footnotes)
