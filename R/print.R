@@ -53,10 +53,10 @@ print.clintable <- function(x, n=3, nrows = 15, apply_defaults=TRUE, ...) {
   if (pg_method == "default") {
     nrows <- min(c(nrows, nrow(refdat)))
     pg <- slice_clintable(x, 1:nrows, eval_select(x$col_keys, refdat))
-    print(print_clinpage(pg, titles, footnotes))
+    htmltools::browsable(print_clinpage(pg, titles, footnotes))
   } else if (pg_method == "custom") {
     x <- prep_pagination_(x)
-    print_alternating(x, n=n, titles, footnotes)
+    htmltools::browsable(print_alternating(x, n=n, titles, footnotes))
   }
 
 }
@@ -76,7 +76,7 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL, group_label = NUL
     x <- align(x, 1, 1, 'left', part="header")
   }
 
-  body <- flextable::htmltools_value(x = x)
+  body <- flextable::htmltools_value(x = x) 
   # Two different type of leading spaces that appear in the HTML
   body[[3]] <- gsub("(?<!th)  ", "&nbsp; ", body[[3]], perl=TRUE)
   body[[3]] <- gsub('(<span\\b[^>]*>) ', '\\1&nbsp;', body[[3]], perl=TRUE)
@@ -96,9 +96,7 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL, group_label = NUL
     body[[3]] <- htmltools::HTML(paste0(body[[3]], ftr))
   }
 
-  out <- htmltools::browsable(body)
-
-  invisible(out)
+  body
 }
 
 #' Method for printing alternating pages
@@ -112,7 +110,7 @@ print_alternating <- function(x, n, titles=NULL, footnotes=NULL) {
   # Don't try to print more pages than requested
   n <- min(length(pag_idx), n)
 
-  out <- lapply(pag_idx[1:n], \(p) {
+  pgs <- lapply(pag_idx[1:n], \(p) {
     print_clinpage(
       slice_clintable(x, p$rows, p$cols),
       titles = titles,
@@ -120,9 +118,45 @@ print_alternating <- function(x, n, titles=NULL, footnotes=NULL) {
       group_label = p$label)
   })
 
-  for (p in out) {
-    print(p)
+  # Create the arguments and page selectors for the pages being printed
+  args <- list()
+  cntrl <- list()
+  for (i in seq_along(pgs)) {
+    # Generate the divs of the individual pages
+    if (i==1) {
+      args <- append(args, list(div(id=sprintf("page%s", i), class="page", pgs[i])))
+    } else {
+      # Only display first page
+      args <- append(args, 
+        list(div(id=sprintf("page%s", i), style = "display:none;", class="page", pgs[i]))
+      )
+    }
+    
+    # Create the buttons for the page selector
+    cntrl <- append(cntrl, 
+      list(tags$button(
+        as.character(i),
+        onclick = sprintf("showPage(%s)", i)
+      )
+    ))
   }
 
-  invisible(out)
+  # Page control div
+  pagination_controls <- do.call(div, cntrl)
+  # Args of the object
+  args <- append(args, list(pagination_controls, pagination_js))
+
+  # Make the taglist and output it
+  html_page <- do.call(tagList, args)
+  browsable(html_page)
 }
+
+#' JS for the page buttons
+#' @noRd
+pagination_js <- tags$script(HTML("
+  function showPage(pageNum) {
+    var pages = document.querySelectorAll('.page');
+    pages.forEach(page => page.style.display = 'none');
+    document.getElementById('page' + pageNum).style.display = 'block';
+  }
+"))
