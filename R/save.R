@@ -1,7 +1,6 @@
-#' Clintable print method
+#' Clintable write method
 #'
-#' Extraction of flextable print method with special handling of clintable pages
-#' and
+#' Write a clinify table out to a docx file
 #'
 #' @param x a clintable object
 #' @param file The file path to which the file should be written
@@ -14,10 +13,8 @@
 #' @export
 #'
 #' @examples
-#'
+#' \dontrun{
 #' ct <- clintable(mtcars)
-#'
-#' print(ct)
 #'
 #' ct <- clin_alt_pages(
 #'   ct,
@@ -26,13 +23,12 @@
 #'     c('disp', 'drat', 'wt'),
 #'     c('qsec', 'vs', 'am'),
 #'     c('gear', 'carb')
-#'   ),
-#'   max_rows = 10
+#'   )
 #' )
 #'
-#' print(ct)
-#'
-write_clintable <- function(x, file, apply_defaults=TRUE, settings = NULL) {
+#' write_clintable(ct, 'demo.docx')
+#' }
+write_clintable <- function(x, file, apply_defaults=TRUE) {
   pg_method <- x$clinify_config$pagination_method
   titles <- x$clinify_config$titles
   footnotes <- x$clinify_config$footnotes
@@ -44,10 +40,6 @@ write_clintable <- function(x, file, apply_defaults=TRUE, settings = NULL) {
     if (!is.null(titles)) titles <- getOption('clinify_titles_default')(titles)
     if (!is.null(footnotes)) footnotes <- getOption('clinify_footnotes_default')(footnotes)
     x <- getOption('clinify_table_default')(x)
-  }
-
-  if (!is.null(settings)) {
-    settings <- list()
   }
 
   if (!is.null(titles)) {
@@ -70,17 +62,6 @@ write_clintable <- function(x, file, apply_defaults=TRUE, settings = NULL) {
 
   print(doc, target=file)
 }
-
-#' Print a clinpage object
-#'
-#' @param x A clinpage object
-#'
-#' @return Invisible
-#'
-#' @noRd
-# write_clinpage <- function(doc, x) {
-#   body_add_flextable(doc, x)
-# }
 
 #' Method for printing alternating pages
 #'

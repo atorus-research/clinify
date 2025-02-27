@@ -2,9 +2,9 @@
 % Please edit documentation in R/save.R
 \name{write_clintable}
 \alias{write_clintable}
-\title{Clintable print method}
+\title{Clintable write method}
 \usage{
-write_clintable(x, file, apply_defaults = TRUE, settings = NULL)
+write_clintable(x, file, apply_defaults = TRUE)
 }
 \arguments{
 \item{x}{a clintable object}
@@ -21,14 +21,11 @@ clinify_table_default respectively. Defaults to true.}
 Invisible
 }
 \description{
-Extraction of flextable print method with special handling of clintable pages
-and
+Write a clinify table out to a docx file
 }
 \examples{
-
+\dontrun{
 ct <- clintable(mtcars)
-
-print(ct)
 
 ct <- clin_alt_pages(
   ct,
@@ -37,10 +34,9 @@ ct <- clin_alt_pages(
     c('disp', 'drat', 'wt'),
     c('qsec', 'vs', 'am'),
     c('gear', 'carb')
-  ),
-  max_rows = 10
+  )
 )
 
-print(ct)
-
+write_clintable(ct, 'demo.docx')
+}
 }
