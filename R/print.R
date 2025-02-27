@@ -53,10 +53,10 @@ print.clintable <- function(x, n=3, nrows = 15, apply_defaults=TRUE, ...) {
   if (pg_method == "default") {
     nrows <- min(c(nrows, nrow(refdat)))
     pg <- slice_clintable(x, 1:nrows, eval_select(x$col_keys, refdat))
-    htmltools::browsable(print_clinpage(pg, titles, footnotes))
+    print(htmltools::browsable(print_clinpage(pg, titles, footnotes)))
   } else if (pg_method == "custom") {
     x <- prep_pagination_(x)
-    htmltools::browsable(print_alternating(x, n=n, titles, footnotes))
+    print(print_alternating(x, n=n, titles, footnotes))
   }
 
 }
