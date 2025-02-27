@@ -4,12 +4,18 @@
 \alias{write_clintable}
 \title{Clintable print method}
 \usage{
-write_clintable(x, file, settings = getOption("clin_doc_settings"), ...)
+write_clintable(x, file, apply_defaults = TRUE, settings = NULL)
 }
 \arguments{
 \item{x}{a clintable object}
 
-\item{...}{Additional parameters passed to flextable print method}
+\item{file}{The file path to which the file should be written}
+
+\item{apply_defaults}{Apply default styles. These styles are stored in the
+options clinify_header_default, clinify_footer_default, and
+clinify_table_default respectively. Defaults to true.}
+
+\item{settings}{Settings that will be passed}
 }
 \value{
 Invisible

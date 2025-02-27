@@ -87,8 +87,10 @@ ct <- clintable(dat2) |>
       c('gear', 'carb')
     ) 
   ) |> 
-  # Apply default stylings to the table
-  table_style_default() |> 
+  # Apply column widths as a proportion of the total page
+  # For alternating pages, the proportion allocated to key columns
+  # is carried to each page group
+  clin_col_widths(mpg = .2, cyl=.2, disp=.15, vs=.15) |>
   # Add titles here is using new_header_footer to allow flextable functions
   # to customize the titles block
   clin_add_titles(
@@ -98,8 +100,7 @@ ct <- clintable(dat2) |>
           c("Just the middle")
         ),
         "titles"
-      ) |> 
-      header_style_default()
+      )
   ) |> 
   clin_add_footnotes(
     ft = new_title_footnote(
@@ -110,8 +111,7 @@ ct <- clintable(dat2) |>
         )
       ),
       "footnote"
-    ) |> 
-      footer_style_default() 
+    )
   )
 
 # Print pages (by default 3 pages) to the viewer of the IDE

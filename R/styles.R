@@ -179,18 +179,14 @@ clinify_table_default <- function(x, ...) {
 #' @export
 clinify_docx_default <- function() {
 
-  doc <- officer::read_docx()
-
   # I want these as defaults but need to carry it forward because
   # the default section strips it off
-  margins <- as.list(officer::docx_dim(doc)$margins)
+  margins <- as.list(officer::docx_dim(officer::read_docx())$margins)
 
-  doc <- officer::body_set_default_section(doc, 
-    officer::prop_section(
-      page_size = page_size(orient="landscape"),
-      type="continuous",
-      page_margins = do.call(page_mar, margins)
-    )
+  officer::prop_section(
+    page_size = page_size(orient="landscape"),
+    type="continuous",
+    page_margins = do.call(page_mar, margins)
   )
 
 }
@@ -204,11 +200,12 @@ clinify_docx_default <- function() {
 #' @return An rdocx object from the officer package
 #' @export
 clin_default_table_width <- function() {
-  dims <- getOption("clinify_default_dimensions")
+  sect <- getOption("clinify_docx_default")
   
-  if (is.null(dims)) {
-    stop("clin_col_width() cannot be used if the option 'clinify_default_dimensions' is not set.")
+  if (is.null(sect)) {
+    stop("clin_col_width() cannot be used if the option 'clinify_docx_default' is not set.")
   }
+
   # Table width is page width - margins. 
-  dims$page['width'] - (dims$margins['left'] + dims$margins['right'])
+  sect$page_size$width - (sect$page_margins$left + sect$page_margins$right)
 }

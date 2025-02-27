@@ -4,7 +4,11 @@
 #' and
 #'
 #' @param x a clintable object
-#' @param ... Additional parameters passed to flextable print method
+#' @param file The file path to which the file should be written
+#' @param apply_defaults Apply default styles. These styles are stored in the 
+#'   options clinify_header_default, clinify_footer_default, and 
+#'   clinify_table_default respectively. Defaults to true. 
+#' @param settings Settings that will be passed
 #'
 #' @return Invisible
 #' @export
@@ -28,41 +32,40 @@
 #'
 #' print(ct)
 #'
-write_clintable <- function(x, file, settings = getOption('clin_doc_settings'), ...) {
+write_clintable <- function(x, file, apply_defaults=TRUE, settings = NULL) {
   pg_method <- x$clinify_config$pagination_method
+  titles <- x$clinify_config$titles
+  footnotes <- x$clinify_config$footnotes
 
-  doc <- read_docx()
+  doc <- officer::read_docx()
+  settings_ <- getOption('clinify_docx_default')
 
-  # Settings from options
-  settings_ <- list(
-    page_size = page_size(width=11.7, height = 8.3, orient = "landscape"),
-    page_margins = page_mar(top=1, bottom=1, left=0.5, right=1),
-    type = "continuous"
-  )
+  if (apply_defaults) {
+    if (!is.null(titles)) titles <- getOption('clinify_titles_default')(titles)
+    if (!is.null(footnotes)) footnotes <- getOption('clinify_footnotes_default')(footnotes)
+    x <- getOption('clinify_table_default')(x)
+  }
 
   if (!is.null(settings)) {
-    for (n in names(settings)) {
-      settings_[[n]] <- settings[[n]]
-    }
+    settings <- list()
   }
 
-  if (!is.null(x$clinify_config$titles)) {
-    settings_$header_default <- block_list(x$clinify_config$titles)
+  if (!is.null(titles)) {
+    settings_$header_default <- block_list(titles)
   }
-  if (!is.null(x$clinify_config$footnotes)) {
-    settings_$footer_default <- block_list(x$clinify_config$footnotes)
+  if (!is.null(footnotes)) {
+    settings_$footer_default <- block_list(footnotes)
   }
   
   # apply settings to doc
-  doc <- body_set_default_section(doc, do.call(prop_section, settings_))
-
+  doc <- body_set_default_section(doc, settings_)
 
   # This point down from print method directly ----
   if (pg_method == "default") {
     doc <- body_add_flextable(doc, x)
   } else if (pg_method == "custom") {
     x <- prep_pagination_(x)
-    write_alternating(doc, x)
+    doc <- write_alternating(doc, x)
   }
 
   print(doc, target=file)

@@ -1,3 +1,32 @@
+#' Set column widths using percent 
+#'
+#' Extraction of flextable print method with special handling of clintable pages
+#' and
+#'
+#' @param x A clintable object
+#' @param ... Named parameters where the names are columns in the flextable and 
+#'   the values are decimals representing the percent of total width of the table
+#'
+#' @return A clintable object
+#' @export
+#'
+#' @examples
+#'
+#' ct <- clintable(mtcars)
+#'
+#' ct <- clin_alt_pages(
+#'   ct,
+#'   key_cols = c('mpg', 'cyl', 'hp'),
+#'   col_groups = list(
+#'     c('disp', 'drat', 'wt'),
+#'     c('qsec', 'vs', 'am'),
+#'     c('gear', 'carb')
+#'   )
+#' ) |> 
+#' clin_col_widths(mpg = .2, cyl=.2, disp=.15, vs=.15)
+#'
+#' print(ct)
+#'
 clin_col_widths <- function(x, ...) {
 
   stopifnot(inherits(x, "clintable"))
