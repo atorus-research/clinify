@@ -91,7 +91,7 @@ write_alternating <- function(doc, x) {
 add_table_ <- function(doc, x, p) {
   tbl <- slice_clintable(x, p$rows, p$cols)
   if (!is.null(p$label)) {
-    tbl <- add_header_lines(tbl, values = p$label)
+    tbl <- add_header_lines(tbl, values = paste(p$label, collapse="\n"))
     tbl<- align(tbl, 1, 1, 'left', part="header")
   }
   doc <- body_add_flextable(doc, tbl)

@@ -53,10 +53,14 @@ print.clintable <- function(x, n=3, nrows = 15, apply_defaults=TRUE, ...) {
   if (pg_method == "default") {
     nrows <- min(c(nrows, nrow(refdat)))
     pg <- slice_clintable(x, 1:nrows, eval_select(x$col_keys, refdat))
-    print(htmltools::browsable(print_clinpage(pg, titles, footnotes)))
+    out <- htmltools::browsable(print_clinpage(pg, titles, footnotes))
+    print(out)
+    invisible(out)
   } else if (pg_method == "custom") {
     x <- prep_pagination_(x)
-    print(print_alternating(x, n=n, titles, footnotes))
+    out <- print_alternating(x, n=n, titles, footnotes)
+    print(out)
+    invisible(out)
   }
 
 }
@@ -72,10 +76,10 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL, group_label = NUL
 
   if (!is.null(group_label)) {
     # TODO: Allow formatting on this
-    x <- add_header_lines(x, values = group_label)
+    x <- add_header_lines(x, values = paste(group_label, collapse="\n"))
     x <- align(x, 1, 1, 'left', part="header")
   }
-
+  
   body <- flextable::htmltools_value(x = x) 
   # Two different type of leading spaces that appear in the HTML
   body[[3]] <- gsub("(?<!th)  ", "&nbsp; ", body[[3]], perl=TRUE)

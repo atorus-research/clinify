@@ -9,7 +9,7 @@ clin_page_by(x, page_by, max_rows = 10)
 \arguments{
 \item{x}{A clintable object}
 
-\item{byvar}{A column in the table used for page grouping}
+\item{byvar}{Columns in the table used for page grouping}
 }
 \value{
 A clintable object
