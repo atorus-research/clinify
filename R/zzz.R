@@ -4,6 +4,7 @@
 #' @importFrom dplyr bind_rows
 #' @importFrom magrittr `%>%`
 #' @importFrom tidyselect eval_select
+#' @importFrom knitr knit_print
 NULL
 
 .onLoad <- function(libname, pkgname) {

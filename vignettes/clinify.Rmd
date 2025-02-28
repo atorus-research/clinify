@@ -1,0 +1,128 @@
+---
+title: "Getting Started"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The primary motiviation 
+```{r setup, echo=FALSE, results = 'hide'}
+library(clinify)
+```
+
+The primary motivation behind **{clinify}** is to take the things that are great about the R packages {flextable} and {officer}, take the standard and complex pieces of formatting clinical tables for regulatory use, and simplify the tedious pieces. {flextable} and {officer} offer a huge range of capability for creating tables in R and rendering them to various formats. {flextable} makes formatting the table itself straightforward, while {officer} gives you lower level access to create documents like docx files and insert separate components as needed.
+
+When working with clinical tables, the devil is in the details. Every organization tends to have its own bits of nuance, and the flexibility of each organization to deviate from those standards varies. In the R world, there have still been a number of features that have either made generating clinical tables with certain features very tedious, or in some cases not possible with the current tooling. With **{clinify}** we attempt to close that gap and give some quality-of-life features to programmers making these tables.
+
+Let's start at the beginning
+
+```{r intro}
+ct <- clintable(mtcars)
+print(ct)
+```
+
+In **{clinify}**, a clintable itself is at it's root a `flextable` object with some extra metadata attached to it. A core part of the design philosophy of **{clinify}** is to build off of {flextable} at its core, extending functionality so that flextable functions are still operable on a `clintable` object. 
+
+The table printed above is the foundation of a `clintable` object. What we see here is the print method of a `clintable` being used. Compared to flextable, the primary thing that has is the application of default styling. Organizations generally have specific style preferences for their outputs, such as font and font size, standard conventions for borders, page size and margins, etc. These are configuration in **{clinify}** using some standard options that will be explained in another vignette. The `print()` method respects these settings to allow you to interactively explore your table being formatted. 
+
+Let's expand some features of the table.
+
+```{r titles_and_footnotes}
+ct <- clintable(mtcars) |>
+  clin_add_titles(
+    list(
+      c("Left", "Center", "Right"),
+      c("Just the middle")
+    )
+  ) |> 
+  clin_add_footnotes(
+      list(
+        c(
+          "Here's a footnote.", 
+          format(Sys.time(), "%H:%M %A, %B %d, %Y")
+        )
+      )
+    )
+
+print(ct)
+```
+
+Here we've added some titles and footnotes to the document. The functions `clin_add_titles()` and `clin_add_footnotes()` allow you to insert titles and footnotes into the `clintable` metadata. When the `clintable` is written to a document or printed, the titles are respected. When you're printing interactively, the HTML that's rendered allows you to see the titles and footnotes above and below the table as if you're viewing an individual page. When writing to a docx file, the titles are placed in the header and the footnotes are placed into the footer. 
+
+In this example, by providing a list of character vectors, each element of the list is added as a new line. There are some broad assumptions being made:
+
+- In titles, a single element will align center. In footnotes, the element will align right.
+- If two elements are provided, they align left and right.
+- If three elements are provided, they align left, right, and center. 
+
+Ultimately, the attached tables are converted to flextables. As such, you can create your own flextable and attach it to the header or footer using the `ft` option in `clin_add_titles()`. We also have the helper function `new_title_footnote()` that allows you to supply a list and generate the flextable so you can apply extra formatting as desired. 
+
+Let's look at a couple more functions.
+
+```{r extras}
+dat <- mtcars
+dat['page'] <- c(
+  rep(1, 10),
+  rep(2, 10),
+  rep(3, 10),
+  c(4, 4)
+)
+dat2 <- rbind(dat, dat)
+dat2['groups1'] <- c(
+  rep('a', 32),
+  rep('b', 32)
+)
+dat2['groups2'] <- c(
+  rep('1', 16),
+  rep('2', 16),
+  rep('1', 16),
+  rep('2', 16)
+)
+
+# Create a basic table
+ct <- clintable(dat2) |> 
+  clin_page_by('page') |> 
+  clin_group_by(c('groups1', 'groups2')) |> 
+  clin_alt_pages(
+    key_cols = c('mpg', 'cyl', 'hp'),
+    col_groups = list(
+      c('disp', 'drat', 'wt'),
+      c('qsec', 'vs', 'am'),
+      c('gear', 'carb')
+    ) 
+  ) |> 
+  clin_col_widths(mpg = .2, cyl=.2, disp=.15, vs=.15) |>
+  clin_add_titles(
+    list(
+      c("Left", "Center", "Right"),
+      c("Just the middle")
+    )
+  ) |> 
+  clin_add_footnotes(
+      list(
+        c(
+          "Here's a footnote.", 
+          format(Sys.time(), "%H:%M %A, %B %d, %Y")
+        )
+      )
+    )
+
+print(ct)
+```
+
+A number of new things have happened here. Let's go through function by function.
+
+First, we've used the function `clin_page_by()` manually specify how page breaks should be handled. This is a data driven function, so here we've specified to use the `page` variable from the `dat2` dataframe. Each time this variable **changes**, a page break will be inserted. Note that this isn't used for sorting, just inserting a change break.
+
+Next, we've used the function `clin_group_by()`. This allows us to put by lines *above* the column headers using data from the input data frame. Similar to `clin_page_by()` each time this value changes, a new page will start. Just like the table data, these lines above the column headers will always reflect the data from within the variable. You can use as many group variable as you need here. 
+
+Next we've used `clin_alt_pages()`. This has been one of the most requested features we've seen since we originally developed the package {pharmaRTF}. 

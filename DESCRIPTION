@@ -13,9 +13,12 @@ Imports:
     flextable,
     magrittr,
     officer,
-    rlang
-Suggests: 
+    rlang,
     knitr,
+    htmltools,
+    shiny,
+    tidyselect
+Suggests: 
     rmarkdown,
     testthat (>= 3.0.0)
 Description: Develop custom styling for the clinical outputs and apply them in .docx.
