@@ -32,7 +32,7 @@ clin_alt_pages <- function(x, key_cols, col_groups) {
 #' Configure pagination using a page variable
 #' 
 #' @param x A clintable object
-#' @param byvar A column in the table used for page grouping
+#' @param byvar Columns in the table used for page grouping
 #'
 #' @return A clintable object
 #' @export
@@ -77,8 +77,8 @@ make_page_vecs <- function(starts, ends) {
   }
 
   # If there were names, pull them over
-  if (!is.null(names(starts))) {
-    names(out) <- names(starts)
+  if (!is.null(attr(starts, 'group_labels'))) {
+    attr(out, 'group_labels') <- attr(starts, 'group_labels')
   }
   out
 }
@@ -103,9 +103,13 @@ make_ind_list <- function(col_vecs, page_vecs) {
   )
 
   cols <- rep(col_vecs, length(page_vecs))
-  if (!is.null(names(page_vecs))) {
+  if (!is.null(attr(page_vecs, 'group_labels'))) {
+    
     nms <- unlist(
-      lapply(names(page_vecs), \(x) rep(list(x), length(col_vecs))),
+      apply(
+        attr(page_vecs, 'group_labels'), 1, 
+        \(x) rep(list(as.character(x)), length(col_vecs))
+        ),
       recursive = FALSE
     )
 
@@ -125,13 +129,26 @@ make_ind_list <- function(col_vecs, page_vecs) {
 #' @return Group start indices
 #' @noRd
 group_by_ <- function(refdat, group_by) {
-  # Find every index the page by variable changes
-  splits <- refdat[[group_by]] == c(NA, head(refdat[[group_by]], -1))
-  splits[1] <- FALSE # Easy indexing of 1 which is NA
-  group_starts <- which(!splits)
+
+  # Mock a matrix to catch each split of the group by
+  splits <- matrix(
+    TRUE, 
+    nrow=nrow(refdat), 
+    ncol=length(group_by), 
+    dimnames=list(NULL, group_by)
+  )
+
+  # For each group in the splits, 
+  for (g in group_by) {
+    splits[,g] <- refdat[[g]] == c(NA, head(refdat[[g]], -1))
+    splits[1,g] <- FALSE
+  }
+
+  group_starts <- which(!apply(splits, 1, all))
+  group_vals <- as.matrix(refdat[group_starts, group_by])
+  rownames(group_vals) <- NULL # I hate rownames
   
-  names(group_starts) <- refdat[[group_by]][group_starts]
-  group_starts
+  list(group_starts=group_starts, group_vals=group_vals)
 }
 
 #' Generate page vectors using page_by variable with group considerations
@@ -156,10 +173,15 @@ page_by_ <- function(refdat, page_by, group_by=NULL) {
 
   if (!is.null(group_by)) {
     gs <- group_by_(refdat, group_by)
-    page_starts <- sort(union(page_starts, gs))
+    page_starts <- sort(union(page_starts, gs$group_starts))
+    group_labels <- matrix(
+      NA_character_, 
+      nrow=length(page_starts), 
+      ncol=length(group_by)
+    )
     # Bring the group names over and carry them forward
-    names(page_starts)[which(page_starts %in% gs)] <- names(gs)
-    names(page_starts) <- zoo::na.locf(names(page_starts))
+    group_labels[which(page_starts %in% gs$group_starts),] <- gs$group_vals
+    attr(page_starts, 'group_labels') <- zoo::na.locf(group_labels)
   }
   
   page_ends <- unname(c((page_starts - 1)[-1], nrow(refdat)))
@@ -181,7 +203,7 @@ max_rows_ <- function(refdat, max_rows, group_by=NULL) {
   if (!is.null(group_by)) {
     gs <- group_by_(refdat, group_by)
   } else {
-    gs <- 1
+    gs <- list(group_starts=1)
   }
 
   # Approximate the total pages so I can avoid appends
@@ -193,15 +215,24 @@ max_rows_ <- function(refdat, max_rows, group_by=NULL) {
   i <- 2
   while ((ps + max_rows) <= tot_rows) {
     # Increment page start by max rows or the group start is next in line
-    ps <- min(ps + max_rows, suppressWarnings(min(gs[gs > ps])))
+    ps <- min(
+      ps + max_rows, 
+      suppressWarnings(min(gs$group_starts[gs$group_starts > ps]))
+    )
     page_starts[i] <- ps
     i <- i+1
   }
 
   # Carry the names forward
-  if (!is.null(names(gs))) {
-    names(page_starts)[which(page_starts %in% gs)] <- names(gs)
-    names(page_starts) <- zoo::na.locf(names(page_starts))
+  if (!is.null(gs$group_vals)) {
+    group_labels <- matrix(
+      NA_character_, 
+      nrow=length(page_starts), 
+      ncol=length(group_by)
+    )
+    # Bring the group names over and carry them forward
+    group_labels[which(page_starts %in% gs$group_starts),] <- gs$group_vals
+    attr(page_starts, 'group_labels') <- zoo::na.locf(group_labels)
   }
 
   page_ends <- unname(c((page_starts - 1)[-1], tot_rows))

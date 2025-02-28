@@ -4,16 +4,20 @@
 \alias{print.clintable}
 \title{Clintable print method}
 \usage{
-\method{print}{clintable}(x, n = 3, nrows = 15, ...)
+\method{print}{clintable}(x, n = 3, nrows = 15, apply_defaults = TRUE, ...)
 }
 \arguments{
-\item{x}{a clintable object}
+\item{x}{A clintable object}
 
-\item{n}{number of pages within the clintable to print. Only used when
+\item{n}{Number of pages within the clintable to print. Only used when
 pagination is configured}
 
-\item{nrows}{number of rows to print. Only used when rows aren't configured
+\item{nrows}{Number of rows to print. Only used when rows aren't configured
 within the pagination method}
+
+\item{apply_defaults}{Apply default styles. These styles are stored in the
+options clinify_header_default, clinify_footer_default, and
+clinify_table_default respectively. Defaults to true.}
 
 \item{...}{Additional parameters passed to flextable print method}
 }
