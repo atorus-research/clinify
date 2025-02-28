@@ -1,5 +1,5 @@
 
-#' The function to apply default header styling
+#' The function to apply default title styling
 #'
 #' Next styling is applied:
 #' -- font colour - black \cr
@@ -20,7 +20,7 @@
 #'
 #' @return None
 #' @export
-header_style_default <- function(x, ...) {
+clinify_titles_default <- function(x, ...) {
 
   # Remove all borders as heading does not need any.
   x <- flextable::border_remove(x)
@@ -35,7 +35,7 @@ header_style_default <- function(x, ...) {
   # ALL headers would have 3 columns underneath the hood (for left, center and
   # right-aligned text). Hence we divide by 3 to specify the width of a single
   # column.
-  x <- flextable::width(x, width = 9.8/3)
+  x <- flextable::width(x, width = clin_default_table_width()/3)
   # Setup the interval between rows.
   x <- flextable::line_spacing(x, space = 1, part = "all")
   # Setup the cell padding.
@@ -46,8 +46,7 @@ header_style_default <- function(x, ...) {
   )
 }
 
-
-#' The function to apply default footer styling
+#' The function to apply default footnote styling
 #'
 #' Next styling is applied:
 #' -- font colour - black \cr
@@ -72,7 +71,7 @@ header_style_default <- function(x, ...) {
 #'
 #' @return None
 #' @export
-footer_style_default <- function(x, ...) {
+clinify_footnotes_default <- function(x, ...) {
 
   # Remove all borders.
   x <- flextable::border_remove(x)
@@ -85,8 +84,8 @@ footer_style_default <- function(x, ...) {
   x <- flextable::bold(x, bold = FALSE)
   x <- flextable::italic(x, italic = FALSE)
   # One has to specify the width of the page header "table", which in this case
-  # is landscape page width (11.42 in) minus two times 1 in margin.
-  x <- flextable::width(x, width = 9.8/3)
+  # is landscape page width minus two times 1 in margin.
+  x <- flextable::width(x, width = clin_default_table_width()/3)
   # Setup the interval between rows.
   x <- flextable::line_spacing(x, space = 1, part = "all")
   # Setup the cell padding.
@@ -108,13 +107,14 @@ footer_style_default <- function(x, ...) {
 #' padding for table first header - top = 9
 #' padding for table last header - bottom = 9
 #' table's layout is set to be fixed.
+#' 
 #' @import flextable
 #' @param x flextable object that is modified by the function.
 #' @param ... any additional arguments
 #'
 #' @return None
 #' @export
-table_style_default <- function(x, ...) {
+clinify_table_default <- function(x, ...) {
 
   # Merge cells with same name
   # (merge occurs both horizontally and vertically)
@@ -169,4 +169,43 @@ table_style_default <- function(x, ...) {
   x <- flextable::padding(x, i=1, part = "header", padding.top = 9)
   x <- flextable::padding(x, i=flextable::nrow_part(x, part="header"), part = "header", padding.bottom = 9)
 
+}
+
+#' Function to create a default officer docx object
+#'
+#' Default document attributes assume landscape A4 paper size
+#'
+#' @return An rdocx object from the officer package
+#' @export
+clinify_docx_default <- function() {
+
+  # I want these as defaults but need to carry it forward because
+  # the default section strips it off
+  margins <- as.list(officer::docx_dim(officer::read_docx())$margins)
+
+  officer::prop_section(
+    page_size = page_size(orient="landscape"),
+    type="continuous",
+    page_margins = do.call(page_mar, margins)
+  )
+
+}
+
+#' Helper function to get the total page width
+#'
+#' Using the document dimensions stored in options, calculate the 
+#' width that can be used in table body, titles, and footnotes. Calculation
+#' uses the page width subtracting right and left margins.
+#'
+#' @return An rdocx object from the officer package
+#' @export
+clin_default_table_width <- function() {
+  sect <- getOption("clinify_docx_default")
+  
+  if (is.null(sect)) {
+    stop("clin_col_width() cannot be used if the option 'clinify_docx_default' is not set.")
+  }
+
+  # Table width is page width - margins. 
+  sect$page_size$width - (sect$page_margins$left + sect$page_margins$right)
 }
