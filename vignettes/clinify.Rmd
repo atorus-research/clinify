@@ -125,4 +125,36 @@ First, we've used the function `clin_page_by()` manually specify how page breaks
 
 Next, we've used the function `clin_group_by()`. This allows us to put by lines *above* the column headers using data from the input data frame. Similar to `clin_page_by()` each time this value changes, a new page will start. Just like the table data, these lines above the column headers will always reflect the data from within the variable. You can use as many group variable as you need here. 
 
-Next we've used `clin_alt_pages()`. This has been one of the most requested features we've seen since we originally developed the package {pharmaRTF}. 
+Next we've used `clin_alt_pages()`. This has been one of the most requested features we've seen since we originally developed the package {pharmaRTF}. This feature is designed to handle cases where the number of variables you need to present overflow the width of the page that you have available. The function works with rotating pages, so the same data rows are presented for each overflowing page, necessary, while the columns being presented change. After the first input of the `clintable` object, you have two parameters:
+
+- `key_cols`: Columns that should be fixed to each page being presented
+- `col_groups`: The groups of columns that should be presented on each of the alternating pages
+
+If we look at that function specifically:
+
+```{r, eval=FALSE}
+  [...] |>
+  clin_alt_pages(
+    key_cols = c('mpg', 'cyl', 'hp'),
+    col_groups = list(
+      c('disp', 'drat', 'wt'),
+      c('qsec', 'vs', 'am'),
+      c('gear', 'carb')
+    ) 
+  )
+```
+
+In total there will be 3 alternating pages. The columns presented on each page will be:
+
+- `mpg`, `cyl`, `hp`, `disp`, `drat`, `wt`
+- `mpg`, `cyl`, `hp`, `qsec`, `vs`, `am`
+- `mpg`, `cyl`, `hp`, `gear`, and `carb`
+
+To make things easier for the developer, while developing interactively the print method has been updated to print 3 pages as styled HTML into the viewer pane, where you can select the page of choice from a page selector below the table. When printing to a word document, pages are inserted in the proper order. The logic works as follows:
+
+- Identify chunk of rows for a given page. This can be based on the `page_by` method to manually insert page breaks or you can select maximum rows to print to a single page
+- Identify the separate columns necessary for the individual pages
+- Write out the chunk of rows for each set of `col_groups` in order before jumping to the next set of rows.
+
+
+
