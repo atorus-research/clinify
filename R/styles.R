@@ -118,8 +118,8 @@ clinify_table_default <- function(x, ...) {
 
   # Merge cells with same name
   # (merge occurs both horizontally and vertically)
-  x <- flextable::merge_v(x, part="header")
-  x <- flextable::merge_h(x, part="header")
+  # x <- flextable::merge_v(x, part="header")
+  # x <- flextable::merge_h(x, part="header")
 
 
   # You can center-align all table headers but first, for example like this:
@@ -138,12 +138,17 @@ clinify_table_default <- function(x, ...) {
   )
   # Top horizontal line for the table header.
   x <- flextable::hline_top(x, part = "header")
-  x <- flextable::hline_bottom(x, part = "header")
   x <- flextable::hline(x,
              part = "header",
              border = officer::fp_border()
   )
 
+  # Remove blank bottoms
+  blk_inds <- which(x$header$dataset == "", arr.ind = TRUE)
+  x <- flextable::hline(x, i=blk_inds[,'row'], j=blk_inds[,'col'],
+    part = "header",
+    border = officer::fp_border(style="none", width=0))
+  x <- flextable::hline_bottom(x, part = "header")
 
   # Set font properties for the table header.
   x <- flextable::font(x, part = "header", fontname = "Courier New")
@@ -154,7 +159,6 @@ clinify_table_default <- function(x, ...) {
 
   # Set fontsize for both table header and table body.
   x <- flextable::fontsize(x, part = "all", size=9)
-
 
   # Set table's layout.
   x <- flextable::set_table_properties(
