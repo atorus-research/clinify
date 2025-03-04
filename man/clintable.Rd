@@ -4,7 +4,7 @@
 \alias{clintable}
 \title{Create a new clintable object}
 \usage{
-clintable(x, page_by = NULL, group_by = NULL, ...)
+clintable(x, page_by = NULL, group_by = NULL, use_labels = TRUE, ...)
 }
 \arguments{
 \item{x}{A data frame}
@@ -13,6 +13,10 @@ clintable(x, page_by = NULL, group_by = NULL, ...)
 
 \item{group_by}{A variable which will be used for grouping and attached
 as a label above the table headers}
+
+\item{use_labels}{Use variable labels as column headers. Nested levels can be
+achieved using the string "||" as a delimitter. Horizontal and vertical levels
+using identical words will be merged.}
 
 \item{...}{Parameters to pass to \code{flextable::flextable()}}
 }

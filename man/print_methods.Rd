@@ -2,9 +2,12 @@
 % Please edit documentation in R/print.R
 \name{print.clintable}
 \alias{print.clintable}
+\alias{knit_print.clintable}
 \title{Clintable print method}
 \usage{
 \method{print}{clintable}(x, n = 3, nrows = 15, apply_defaults = TRUE, ...)
+
+\method{knit_print}{clintable}(x, n = 3, nrows = 15, apply_defaults = TRUE, ...)
 }
 \arguments{
 \item{x}{A clintable object}
@@ -48,3 +51,4 @@ ct <- clin_alt_pages(
 print(ct)
 
 }
+\concept{Print methods}

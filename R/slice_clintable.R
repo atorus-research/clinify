@@ -18,6 +18,7 @@
 #' x <- flextable(mtcars)
 #' y <- slice_clintable(x, 20:32, c(1:3, 5:8))
 #' z <- flextable(mtcars[20:32, c(1:3, 5:8)])
+#' @noRd
 slice_clintable <- function(x, rows, columns) {
     out <- new_clinpage()
     out$header <- slice_complex_tabpart(x$header, 1:nrow(x$header$dataset), columns)

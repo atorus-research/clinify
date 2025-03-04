@@ -13,9 +13,12 @@ Imports:
     flextable,
     magrittr,
     officer,
-    rlang
-Suggests: 
+    rlang,
     knitr,
+    htmltools,
+    shiny,
+    tidyselect
+Suggests: 
     rmarkdown,
     testthat (>= 3.0.0)
 Description: Develop custom styling for the clinical outputs and apply them in .docx.
@@ -30,3 +33,4 @@ RoxygenNote: 7.3.2
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
+URL: https://atorus-research.github.io/clinify/
