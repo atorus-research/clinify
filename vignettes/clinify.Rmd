@@ -1,0 +1,267 @@
+---
+title: "Getting Started"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo=FALSE, results = 'hide'}
+suppressPackageStartupMessages(library(clinify))
+```
+
+The primary motivation behind **{clinify}** is to take the things that are great about the R packages {flextable} and {officer}, take the standard and complex pieces of formatting clinical tables for regulatory use, and simplify the tedious pieces. {flextable} and {officer} offer a huge range of capability for creating tables in R and rendering them to various formats. {flextable} makes formatting the table itself straightforward, while {officer} gives you lower level access to create documents like docx files and insert separate components as needed.
+
+When working with clinical tables, the devil is in the details. Every organization tends to have its own bits of nuance, and the flexibility of each organization to deviate from those standards varies. In the R world, there have still been a number of features that have either made generating clinical tables with certain features very tedious, or in some cases not possible with the current tooling. With **{clinify}** we attempt to close that gap and give some quality-of-life features to programmers making these tables.
+
+## Basics
+
+Let's start at the beginning
+
+```{r intro}
+ct <- clintable(mtcars)
+print(ct)
+```
+
+In **{clinify}**, a clintable itself is at it's root a `flextable` object with some extra metadata attached to it. A core part of the design philosophy of **{clinify}** is to build off of {flextable} at its core, extending functionality so that flextable functions are still operable on a `clintable` object. 
+
+The table printed above is the foundation of a `clintable` object. What we see here is the print method of a `clintable` being used. Compared to flextable, the primary thing that has is the application of default styling. Organizations generally have specific style preferences for their outputs, such as font and font size, standard conventions for borders, page size and margins, etc. These are configuration in **{clinify}** using some standard options that will be explained in another vignette. The `print()` method respects these settings to allow you to interactively explore your table being formatted. 
+
+## Titles and Footnotes
+
+Let's expand some features of the table.
+
+```{r titles_and_footnotes}
+ct <- clintable(mtcars) |>
+  clin_add_titles(
+    list(
+      c("Left", "Center", "Right"),
+      c("Just the middle")
+    )
+  ) |> 
+  clin_add_footnotes(
+      list(
+        c(
+          "Here's a footnote.", 
+          format(Sys.time(), "%H:%M %A, %B %d, %Y")
+        )
+      )
+    )
+
+print(ct)
+```
+
+Here we've added some titles and footnotes to the document. The functions `clin_add_titles()` and `clin_add_footnotes()` allow you to insert titles and footnotes into the `clintable` metadata. When the `clintable` is written to a document or printed, the titles are respected. When you're printing interactively, the HTML that's rendered allows you to see the titles and footnotes above and below the table as if you're viewing an individual page. When writing to a docx file, the titles are placed in the header and the footnotes are placed into the footer. 
+
+In this example, by providing a list of character vectors, each element of the list is added as a new line. There are some broad assumptions being made:
+
+- In titles, a single element will align center. In footnotes, the element will align right.
+- If two elements are provided, they align left and right.
+- If three elements are provided, they align left, right, and center. 
+
+Ultimately, the attached tables are converted to flextables. As such, you can create your own flextable and attach it to the header or footer using the `ft` option in `clin_add_titles()`. We also have the helper function `new_title_footnote()` that allows you to supply a list and generate the flextable so you can apply extra formatting as desired. 
+
+## Pagination and Alternating Pages
+
+Let's look at a couple more functions.
+
+```{r extras}
+dat <- mtcars
+dat['page'] <- c(
+  rep(1, 10),
+  rep(2, 10),
+  rep(3, 10),
+  c(4, 4)
+)
+dat2 <- rbind(dat, dat)
+dat2['groups1'] <- c(
+  rep('a', 32),
+  rep('b', 32)
+)
+dat2['groups2'] <- c(
+  rep('1', 16),
+  rep('2', 16),
+  rep('1', 16),
+  rep('2', 16)
+)
+
+# Create a basic table
+ct <- clintable(dat2) |> 
+  clin_page_by('page') |> 
+  clin_group_by(c('groups1', 'groups2')) |> 
+  clin_alt_pages(
+    key_cols = c('mpg', 'cyl', 'hp'),
+    col_groups = list(
+      c('disp', 'drat', 'wt'),
+      c('qsec', 'vs', 'am'),
+      c('gear', 'carb')
+    ) 
+  ) |> 
+  clin_col_widths(mpg = .2, cyl=.2, disp=.15, vs=.15) |>
+  clin_add_titles(
+    list(
+      c("Left", "Center", "Right"),
+      c("Just the middle")
+    )
+  ) |> 
+  clin_add_footnotes(
+      list(
+        c(
+          "Here's a footnote.", 
+          format(Sys.time(), "%H:%M %A, %B %d, %Y")
+        )
+      )
+    )
+
+print(ct)
+```
+
+A number of new things have happened here. Let's go through function by function.
+
+First, we've used the function `clin_page_by()` manually specify how page breaks should be handled. This is a data driven function, so here we've specified to use the `page` variable from the `dat2` dataframe. Each time this variable **changes**, a page break will be inserted. Note that this isn't used for sorting, just inserting a change break.
+
+Next, we've used the function `clin_group_by()`. This allows us to put by lines *above* the column headers using data from the input data frame. Similar to `clin_page_by()` each time this value changes, a new page will start. Just like the table data, these lines above the column headers will always reflect the data from within the variable. You can use as many group variable as you need here. 
+
+Next we've used `clin_alt_pages()`. This has been one of the most requested features we've seen since we originally developed the package {pharmaRTF}. This feature is designed to handle cases where the number of variables you need to present overflow the width of the page that you have available. The function works with rotating pages, so the same data rows are presented for each overflowing page, necessary, while the columns being presented change. After the first input of the `clintable` object, you have two parameters:
+
+- `key_cols`: Columns that should be fixed to each page being presented
+- `col_groups`: The groups of columns that should be presented on each of the alternating pages
+
+If we look at that function specifically:
+
+```{r, eval=FALSE}
+  [...] |>
+  clin_alt_pages(
+    key_cols = c('mpg', 'cyl', 'hp'),
+    col_groups = list(
+      c('disp', 'drat', 'wt'),
+      c('qsec', 'vs', 'am'),
+      c('gear', 'carb')
+    ) 
+  )
+```
+
+In total there will be 3 alternating pages. The columns presented on each page will be:
+
+- `mpg`, `cyl`, `hp`, `disp`, `drat`, `wt`
+- `mpg`, `cyl`, `hp`, `qsec`, `vs`, `am`
+- `mpg`, `cyl`, `hp`, `gear`, and `carb`
+
+To make things easier for the developer, while developing interactively the print method has been updated to print 3 pages as styled HTML into the viewer pane, where you can select the page of choice from a page selector below the table. When printing to a word document, pages are inserted in the proper order. The logic works as follows:
+
+- Identify chunk of rows for a given page. This can be based on the `page_by` method to manually insert page breaks or you can select maximum rows to print to a single page
+- Identify the separate columns necessary for the individual pages
+- Write out the chunk of rows for each set of `col_groups` in order before jumping to the next set of rows.
+
+# Column Headers and Widths
+
+From the previous example, another **{clinify}** function we used was `clin_col_width()`. The goal of this function is simply to make setting your column widths for a table straightforward. By default, in {flextable} your column widths are based on a unit such as inches or centimeters. In `clin_col_width()` we allow you to use the proportion of the page that you'd like that column to fill. From the syntax above:
+
+```{r, eval=FALSE}
+[...] |>
+  clin_col_widths(mpg = .2, cyl=.2, disp=.15, vs=.15) |>
+[...]
+```
+
+In this case, we're saying that:
+
+- `mpg` will fill 20% of the page
+- `cyl` will fill 20% of the page
+- `disp` will fill 15% of the page
+- `vs` will fill 15% of the page
+
+The rest of the columns will be spaced evenly based on the remaining space. The space that's filled is based on default configurations for page width, which are configurable within your session. Furthermore, `clin_col_width()` adapts to alternating pages. The ratios given to key columns apply for each alternating page, and the proportions applied to the additional `col_group` variables adapt any remaining space to ensure a page fits the total page width. 
+
+One last tedious part of structuring any table is getting the table headers formatted correctly. There are a couple specific features, such as spanning headers, which can also be tricky to get right, especially in a semi-automated way. For this reason, we've added the function `clin_column_headers()` to make this process a bit easier. Let's use `iris` as an example of a table to which we want to apply some spanning headers.
+
+```{r}
+  clintable(iris) |> 
+    clin_column_headers(
+      Sepal.Length = c("Flowers", "Sepal", "Length"),  
+      Sepal.Width = c("Flowers", "Sepal", "Width"),  
+      Petal.Length = c("Petal", "Length"),  
+      Petal.Width = c("Petal", "Width")
+    )
+```
+
+The first parameter of `clin_column_headers()` will be the `clintable` object for which you want headers to apply. From there, use the column name to which you're applying a header. The way this function works is to use a character element for row of headers you want to apply. So for example, if you need three rows of headers, you can use 3 elements for a single column. The elements go to their respective rows. 
+
+When using spanning headers, you're also typically using cell merging so that a single string of text spans over multiple columns. To accomplish this, repeat the text that you want to merge and ensure that those elements are placed in the same row. Consider the example above:
+
+```{r eval=FALSE}
+[...]
+      Sepal.Length = c("Flowers", "Sepal", "Length"),  
+      Sepal.Width = c("Flowers", "Sepal", "Width"),  
+[...]
+```
+
+For the Sepal variable, we have two spanning headers. One for "flowers", and one for "Sepal". These cells will be merged, and the bottom row contains "Length" and "Width" separately.
+
+Another common way you may want to apply headers is by using your variable labels. By default, clintable will respect this. Furthermore, the same spanning can be achieved as well. Let's consider another example:
+
+```{r}
+  iris2 <- iris
+  attr(iris2$Sepal.Length, 'label') <- "Flower||Sepal||Length"
+  attr(iris2$Sepal.Width, 'label') <- "Flower||Sepal||Width"
+  attr(iris2$Petal.Length, 'label') <- "Flower||Petal||Length"
+  attr(iris2$Petal.Width, 'label') <- "Flower||Petal||Width"
+
+  clintable(iris2) |> 
+    align(align='center', part='header') |>
+    align(align='center', part='body')
+```
+
+The underlying logic of this example is exactly the same as using `clin_column_headers()`, and in fact `clin_column_headers()` is actually called by default. The difference is that here, to separate levels we use the delimiter `||`. Note in this example how the spanning variable have also changed so that `Flower` stretches over all four Petal and Sepal columns. 
+
+Note that after headers are applied, additional styling can be done. In this case, we use the `flextable::align()` function to change the alignment on both the table body and column headers to center. Note that default styles are applied when the table is written out or printed, so these might potentially override some settings depending on how those functions are applied.
+
+## Writing to DOCX
+
+While printing the table during development helps you with the development process, ultimately **{clinify}** lets you write the document to a docx file. This was a primary reason why we wanted to build on top of {flextable}; with {flextable} and {officer} we're able to have a great amount of control over how things are written specifically written into the word document. We try to make this process rather seamless and comparable to the `print()` method. To write the document out to docx, use the `write_clintable()` function. Let's revisit our table from before.
+
+```{r write_clintable, eval=FALSE}
+# Create a basic table
+ct <- clintable(dat2) |> 
+  clin_page_by(max_rows = 36) |> 
+  clin_group_by(c('groups1', 'groups2')) |> 
+  clin_alt_pages(
+    key_cols = c('mpg', 'cyl', 'hp'),
+    col_groups = list(
+      c('disp', 'drat', 'wt'),
+      c('qsec', 'vs', 'am'),
+      c('gear', 'carb')
+    ) 
+  ) |> 
+  clin_col_widths(mpg = .2, cyl=.2, disp=.15, vs=.15) |>
+  clin_add_titles(
+    list(
+      c("Left", "Center", "Right"),
+      c("Just the middle")
+    )
+  ) |> 
+  clin_add_footnotes(
+      list(
+        c(
+          "Here's a footnote.", 
+          format(Sys.time(), "%H:%M %A, %B %d, %Y")
+        )
+      )
+    )
+
+write_clintable(ct, file="example_table.docx")
+```
+
+<p align="center"><img src="table.png" width="800px"></p>
+
+## Why this framework? 
+
+So why **{clinify}**? As we explained earlier, the key idea is that {flextable} and {officer} have so much of the functionality that's already needed - so **{clinify}** focuses on specific additional features and streamline certain pieces to make the development of tables more straightforward. One last point is that in building this package, we also didn't want to reinvent the wheel. Several other packages coordinate with the {flextable} and {officer} ecosystem, such as {rtables} or {gtsummary}. Our intent is that **{clinify}** can hopefully work with these packages as well introduce some of this tedious additional functionality. 
+

@@ -21,6 +21,9 @@ A clintable object
 Convert a flextable into a clintable object
 }
 \examples{
+
 ft <- flextable(mtcars)
 as_clintable(ft)
+
+
 }

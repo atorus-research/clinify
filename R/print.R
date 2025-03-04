@@ -15,7 +15,9 @@
 #'
 #' @return Invisible
 #' @export
-#'
+#' 
+#' @family Print methods
+#' @rdname print_methods
 #' @examples
 #'
 #' ct <- clintable(mtcars)
@@ -37,6 +39,30 @@
 #'
 print.clintable <- function(x, n=3, nrows = 15, apply_defaults=TRUE, ...) {
 
+  out <- clintable_as_html(x, n, nrows, apply_defaults, ...)
+
+  if (interactive()) {
+    print(htmltools::browsable(out))
+    invisible(out)
+  } else {
+    out
+  }
+}
+
+#' @family Print methods
+#' @rdname print_methods
+#' @export
+knit_print.clintable <- function(x, n=3, nrows = 15, apply_defaults=TRUE, ...) {
+
+  out <- clintable_as_html(x, n, nrows, apply_defaults, ...)
+  knitr::raw_html(out)
+}
+
+#' Render HTML for a clintable
+#'
+#' Extraction of flextable print method with special handling of clintable pages
+#' @noRd
+clintable_as_html <- function(x, n=3, nrows = 15, apply_defaults=TRUE, ...) {
   refdat <- x$body$dataset
   pg_method <- x$clinify_config$pagination_method
 
@@ -53,16 +79,12 @@ print.clintable <- function(x, n=3, nrows = 15, apply_defaults=TRUE, ...) {
   if (pg_method == "default") {
     nrows <- min(c(nrows, nrow(refdat)))
     pg <- slice_clintable(x, 1:nrows, eval_select(x$col_keys, refdat))
-    out <- htmltools::browsable(print_clinpage(pg, titles, footnotes))
-    print(out)
-    invisible(out)
+    out <- print_clinpage(pg, titles, footnotes)
   } else if (pg_method == "custom") {
     x <- prep_pagination_(x)
     out <- print_alternating(x, n=n, titles, footnotes)
-    print(out)
-    invisible(out)
   }
-
+  out
 }
 
 #' Print a clinpage object
@@ -107,6 +129,7 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL, group_label = NUL
 #'
 #' @param x a clintable object
 #' @param n number of pages within the clintable to print
+#' @noRd
 print_alternating <- function(x, n, titles=NULL, footnotes=NULL) {
 
   pag_idx <- x$clinify_config$pagination_idx
@@ -151,8 +174,7 @@ print_alternating <- function(x, n, titles=NULL, footnotes=NULL) {
   args <- append(args, list(pagination_controls, pagination_js))
 
   # Make the taglist and output it
-  html_page <- do.call(tagList, args)
-  browsable(html_page)
+  do.call(tagList, args)
 }
 
 #' JS for the page buttons

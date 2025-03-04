@@ -1,0 +1,68 @@
+url: https://atorus-research.github.io/clinify/
+destination: docs
+
+template:
+  bootstrap: 5
+  bslib:
+    bg: "#FFFFFF"
+    fg: "#1D252D"
+    primary: "#1D252D"
+  params:
+    bootswatch: yeti
+    ganalytics: UA-165685385-2
+  opengraph:
+    twitter:
+      creator: "@AtorusR"
+      card: summary_large_image
+search:
+  exclude: ['news/index.html']
+repo:
+  url:
+    home: https://github.com/atorus-research/clinify/
+    source: https://github.com/atorus-research/clinify/blob/main/
+    issue: https://github.com/atorus-research/clinify/issues/
+    user: https://github.com/atorus-research
+news:
+  cran_dates: true
+reference:
+- title: Table Object
+  desc: Make a clintable Object
+- contents:
+  - clintable
+  - as_clintable
+- title: Titles and Footnotes
+  desc: Attach titles or footnotes to a clintable
+- contents:
+  - clin_add_titles
+  - new_title_footnote
+- title: Pagination
+  desc: Control table pagination
+- contents:
+  - clin_alt_pages
+  - clin_page_by
+  - clin_group_by
+- title: Styling
+  desc: Table aesthetic helpers
+- contents:
+  - clin_col_widths
+  - clin_column_headers
+- title: Style defaults
+  desc: Default style functions
+- contents:
+  - clinify_footnotes_default
+  - clinify_titles_default
+  - clinify_table_default
+  - clinify_docx_default
+  - clin_default_table_width
+- title: Outputs
+  desc: Table rendering functions
+- contents:
+  - print.clintable
+  - write_clintable
+- title: Data
+  desc: Package datasets
+- contents:
+  - test_adae
+  - test_adas
+  - test_adlb
+  - test_adsl
