@@ -13,7 +13,7 @@
 #' @examples
 #' ct <- clintable(mtcars)
 #'
-#' ct <- clin_alt_pages(
+#' clin_alt_pages(
 #'   ct,
 #'   key_cols = c('mpg', 'cyl', 'hp'),
 #'   col_groups = list(
@@ -197,6 +197,7 @@ page_by_ <- function(refdat, page_by, group_by=NULL) {
 #' @return Page vectors
 #' @noRd
 max_rows_ <- function(refdat, max_rows, group_by=NULL) {
+
   tot_rows <- nrow(refdat)
 
   # Grab the group starts
@@ -207,13 +208,13 @@ max_rows_ <- function(refdat, max_rows, group_by=NULL) {
   }
 
   # Approximate the total pages so I can avoid appends
-  page_starts <- integer(ceiling(tot_rows / max_rows))
+  page_starts <- integer(max(ceiling(tot_rows / max_rows), length(gs$group_starts)))
   page_starts[1] <- 1
   ps <- 1L
 
   # Start iterating at second index until pages are done
   i <- 2
-  while ((ps + max_rows) <= tot_rows) {
+  while ((ps + max_rows) <= tot_rows || (!is.na(gs$group_starts[i]) && (gs$group_starts[i] < tot_rows))) {
     # Increment page start by max rows or the group start is next in line
     ps <- min(
       ps + max_rows, 
@@ -278,11 +279,12 @@ prep_pagination_ <- function(x) {
             " Defaulting to 20 rows per page.")
     config$max_rows <- 20
     page_vecs <- max_rows_(refdat, config$max_rows, group_by = config$group_by)
-
     # Establish page by and group by first because page var will strip out of clintable
   } else if (is.null(config$max_rows) && (!is.null(config$page_by) || !is.null(config$group_by))) {
     page_vecs <- page_by_(refdat, config$page_by, group_by = config$group_by)
-  } 
+  } else if (!is.null(config$max_rows)) {
+    page_vecs <- max_rows_(refdat, config$max_rows, group_by = config$group_by)
+  }
 
   # Slice the page by and group by out of the clintable
   if (any(c(config$page_by, config$group_by) %in% x$col_keys)) {

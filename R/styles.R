@@ -185,14 +185,15 @@ clinify_docx_default <- function() {
 
   # I want these as defaults but need to carry it forward because
   # the default section strips it off
-  margins <- as.list(officer::docx_dim(officer::read_docx())$margins)
+  margins <- as.list(
+    append(officer::docx_dim(officer::read_docx())$margins, list(gutter=0))
+  )
 
   officer::prop_section(
     page_size = page_size(orient="landscape"),
     type="continuous",
-    page_margins = do.call(page_mar, margins)
+    page_margins = do.call(page_mar, margins)  
   )
-
 }
 
 #' Helper function to get the total page width

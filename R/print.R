@@ -45,7 +45,7 @@ print.clintable <- function(x, n=3, nrows = 15, apply_defaults=TRUE, ...) {
     print(htmltools::browsable(out))
     invisible(out)
   } else {
-    knitr::raw_html(out)
+    out
   }
 }
 
@@ -129,6 +129,7 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL, group_label = NUL
 #'
 #' @param x a clintable object
 #' @param n number of pages within the clintable to print
+#' @noRd
 print_alternating <- function(x, n, titles=NULL, footnotes=NULL) {
 
   pag_idx <- x$clinify_config$pagination_idx

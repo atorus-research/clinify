@@ -1,3 +1,35 @@
+#' Convert a flextable into a clintable object
+#' 
+#' @param ft A flextable object
+#' @param page_by A variable in the input dataframe to use for pagination
+#' @param group_by A variable which will be used for grouping and attached 
+#'   as a label above the table headers
+#' 
+#' @return A clintable object
+#' @export
+#'
+#' @examples
+#'
+#' ft <- flextable(mtcars)
+#' as_clintable(ft)
+#'
+#' 
+as_clintable <- function(x, page_by=NULL, group_by=NULL) {
+    stopifnot(inherits(x, "flextable"))
+
+    x$clinify_config$page_by <- page_by
+    x$clinify_config$group_by <- group_by
+
+    if (is.null(page_by) & is.null(group_by)) {
+        x$clinify_config$pagination_method <- "default"
+    } else {
+        x$clinify_config$pagination_method <- "custom"
+    }
+
+    class(x) <- c("clintable", "flextable")
+    x
+}
+
 #' Create a new clintable object
 #'
 #' A clintable object directly inherits from a flextable object. This function
@@ -31,34 +63,6 @@ clintable <- function(x, page_by=NULL, group_by=NULL, use_labels=TRUE, ...) {
     ct
 }
 
-#' Convert a flextable into a clintable object
-#'
-#' @param ft A flextable object
-#' @param page_by A variable in the input dataframe to use for pagination
-#' @param group_by A variable which will be used for grouping and attached 
-#'   as a label above the table headers
-#' 
-#' @return A clintable object
-#' @export
-#'
-#' @examples
-#' ft <- flextable(mtcars)
-#' as_clintable(ft)
-as_clintable <- function(x, page_by=NULL, group_by=NULL) {
-    stopifnot(inherits(x, "flextable"))
-
-    x$clinify_config$page_by <- page_by
-    x$clinify_config$group_by <- group_by
-
-    if (is.null(page_by) & is.null(group_by)) {
-        x$clinify_config$pagination_method <- "default"
-    } else {
-        x$clinify_config$pagination_method <- "custom"
-    }
-
-    class(x) <- c("clintable", "flextable")
-    x
-}
 
 #' Blank object creator for a clintable object
 #'
