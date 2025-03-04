@@ -26,7 +26,7 @@ This function configures alternating pages on a clintable object.
 \examples{
 ct <- clintable(mtcars)
 
-ct <- clin_alt_pages(
+clin_alt_pages(
   ct,
   key_cols = c('mpg', 'cyl', 'hp'),
   col_groups = list(
