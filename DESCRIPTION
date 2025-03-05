@@ -1,6 +1,6 @@
 Package: clinify
 Type: Package
-Title: flextable and officer extensions for clinical outputs
+Title: Clinical Table Styling Tools and Utilities
 Version: 0.1.0
 Authors@R: c(
     person(given = "Mike",
