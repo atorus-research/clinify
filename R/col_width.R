@@ -70,7 +70,7 @@ clin_col_widths <- function(x, ...) {
       if (sum(c(key_col_wd, cg_wd)) > 1) {
         stop("Key columns + alternating page column widths sum to >1. Width arguments represent percent width of page.")
       }
-      x <- width(x, j=names(cg_wd), cg_wd * wd)
+      x <- flextable::width(x, j=names(cg_wd), cg_wd * wd)
 
       leftovers <- setdiff(c(col_groups[[i]]), names(cw))
 
@@ -84,18 +84,18 @@ clin_col_widths <- function(x, ...) {
 
           lo_keys <- rep(lo_wd_pct, length(leftover_keys))
           names(lo_keys) <- leftover_keys
-          x <- width(x, j=leftover_keys, lo_keys)
+          x <- flextable::width(x, j=leftover_keys, lo_keys)
           key_col_wd <- c(key_col_wd, lo_keys)
         } else {
           lo_wd <- ((1-tot_pg_pct) / length(leftovers)) * wd
         }
         
-        x <- width(x, j=leftovers, lo_wd)
+        x <- flextable::width(x, j=leftovers, lo_wd)
       }
 
     } 
     # Set the key col widths
-    x <- width(x, j=names(key_col_wd), key_col_wd * wd)
+    x <- flextable::width(x, j=names(key_col_wd), key_col_wd * wd)
   } else {
     # Standard table
     if (sum(cw) > 1) {
@@ -103,9 +103,9 @@ clin_col_widths <- function(x, ...) {
     }
 
     leftovers <- setdiff(x$col_keys, names(cw))
-    x <- width(x, j=names(cw), cw * wd)
+    x <- flextable::width(x, j=names(cw), cw * wd)
     lo_wd <- ((1 - sum(cw))/length(leftovers)) * wd
-    if (length(leftovers) > 0) x <- width(x, j=leftovers, lo_wd)
+    if (length(leftovers) > 0) x <- flextable::width(x, j=leftovers, lo_wd)
   }
   x
 }

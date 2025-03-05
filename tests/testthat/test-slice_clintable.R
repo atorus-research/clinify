@@ -1,5 +1,5 @@
 library(Tplyr)
-library(dplyr)
+suppressPackageStartupMessages(library(dplyr))
 library(flextable)
 
 # Prep a dataframe to style

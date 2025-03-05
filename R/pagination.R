@@ -4,8 +4,6 @@
 #' @param x A clintable object
 #' @param key_cols A character vector of variable names
 #' @param col_groups A list of character vectors of variable names
-#' @param byvar A variable in the input dataset to use for pagination settings
-#' @param max_rows The maximum number of rows to include on a page
 #'
 #' @return A clintable object
 #' @export
@@ -32,13 +30,26 @@ clin_alt_pages <- function(x, key_cols, col_groups) {
 #' Configure pagination using a page variable
 #' 
 #' @param x A clintable object
-#' @param byvar Columns in the table used for page grouping
+#' @param page_by A variable in the input dataframe to use for pagination
+#' @param max_rows If no page_by, the maximum rows allowed per page
 #'
 #' @return A clintable object
 #' @export
 #'
 #' @examples
-#' #TODO: 
+#' dat <- mtcars
+#' dat['page'] <- c(
+#'   rep(1, 10),
+#'   rep(2, 10),
+#'   rep(3, 10),
+#'   c(4, 4)
+#' )
+#' 
+#' clintable(dat) |> 
+#'   clin_page_by('page')
+#' 
+#' clintable(mtcars) |> 
+#'   clin_page_by(max_rows=10)
 clin_page_by <- function(x, page_by, max_rows=10) {
   x$clinify_config$pagination_method <- "custom"
   
@@ -52,11 +63,16 @@ clin_page_by <- function(x, page_by, max_rows=10) {
 
 #' Configure a clintable to table by a grouping variable, which will be used as a label
 #'
+#' @param x A clintable object
+#' @param group_by A character vector of variable names which will be used for grouping and attached 
+#'   as a label above the table headers
+#' 
 #' @return A clintable object
 #' @export
 #'
 #' @examples
-#' #TODO: 
+#' clintable(iris) |>
+#'   clin_group_by('Species')
 clin_group_by <- function(x, group_by) {
   x$clinify_config$pagination_method <- "custom"
   x$clinify_config$group_by <- group_by

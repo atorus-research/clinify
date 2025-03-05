@@ -6,6 +6,12 @@
 \usage{
 clin_group_by(x, group_by)
 }
+\arguments{
+\item{x}{A clintable object}
+
+\item{group_by}{A character vector of variable names which will be used for grouping and attached
+as a label above the table headers}
+}
 \value{
 A clintable object
 }
@@ -13,5 +19,6 @@ A clintable object
 Configure a clintable to table by a grouping variable, which will be used as a label
 }
 \examples{
-#TODO: 
+clintable(iris) |>
+  clin_group_by('Species')
 }

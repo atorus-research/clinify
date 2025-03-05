@@ -116,15 +116,6 @@ clinify_footnotes_default <- function(x, ...) {
 #' @export
 clinify_table_default <- function(x, ...) {
 
-  # Merge cells with same name
-  # (merge occurs both horizontally and vertically)
-  # x <- flextable::merge_v(x, part="header")
-  # x <- flextable::merge_h(x, part="header")
-
-
-  # You can center-align all table headers but first, for example like this:
-  # x <- align(x, align = "center", part = "header", j = 2:ncol(df))
-
   # Clear all borders first and apply them just for the header
   # (as horizontal lines).
   x <- flextable::border_remove(x)
@@ -190,9 +181,9 @@ clinify_docx_default <- function() {
   )
 
   officer::prop_section(
-    page_size = page_size(orient="landscape"),
+    page_size = officer::page_size(orient="landscape"),
     type="continuous",
-    page_margins = do.call(page_mar, margins)  
+    page_margins = do.call(officer::page_mar, margins)  
   )
 }
 
