@@ -1,20 +1,20 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# **clinify**
+# **{clinify}**
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-**clinify** is direct extension of the
-[**flextable**](https://davidgohel.github.io/flextable/) and
-[**officer**](https://davidgohel.github.io/officer/) packages, aimed at
+**{clinify}** is direct extension of the
+[{flextable}](https://davidgohel.github.io/flextable/) and
+[{officer}](https://davidgohel.github.io/officer/) packages, aimed at
 supplementing some functionality and simplifying some common tasks in
 the creation of clinical tables, listings and figures.
 
 ## Installation
 
-You can install the development version of **clinify** like so:
+You can install the development version of **{clinify}** like so:
 
 ``` r
 # Install the development version:
@@ -27,7 +27,7 @@ There’s a large assortment of table packages available, and there are
 many that are specifically catered to clinical reporting. For many
 organizations, one of these packages may very well be a great choice,
 but there are a couple of key motivators we’ve found that lead drove us
-to start writing **clinify**:
+to start writing **{clinify}**:
 
 - Clinical output standards likely exist within an organization, and
   changing those standards may not be an option
@@ -41,29 +41,27 @@ to start writing **clinify**:
   configuration is critical, and changes in configuration must be easily
   implemented.
 
-Instead of building a new package from the ground up, **clinify** aims
+Instead of building a new package from the ground up, **{clinify}** aims
 to extend what we see as a best choice for the situation at hand, adding
 new functionality where necessary and streamlining common tasks to make
-them more efficient for programmers to implement. We chose **flextable**
+them more efficient for programmers to implement. We chose {flextable}
 for a two key reasons:
 
-- **flextable** already offers most of the functionality that we’re
-  looking for, particularly with the pairing of **officer**. For
-  example, word documents have to be a first class priority of output
-  support.
+- {flextable} already offers most of the functionality that we’re
+  looking for, particularly with the pairing of {officer}. For example,
+  word documents have to be a first class priority of output support.
 - While creating a table is the focus, the output tends to be more than
   just a table. We need the capability to modify the underlying document
-  as a whole, which is another place that **officer** is truly
-  necessary.
+  as a whole, which is another place that {officer} is truly necessary.
 
 ## Design Philosophy
 
-Here are some key principles we’re using in building **clinify**:
+Here are some key principles we’re using in building **{clinify}**:
 
-- **clinify** objects should inherit from an underlying **flextable** or
-  **officer** object
-- **clinify** functionality must not interfere with **flextable** or
-  **officer** functionality, i.e. **flextable** or **officer** functions
+- **{clinify}** objects should inherit from an underlying {flextable} or
+  {officer} object
+- **{clinify}** functionality must not interfere with {flextable} or
+  {officer} functionality, i.e. {flextable} or {officer} functions
   called should operate without error.
 
 ## Example
@@ -72,8 +70,6 @@ Here’s a basic example of some of clinify’s benefit in action
 
 ``` r
 library(clinify)
-#> Loading required package: flextable
-#> Loading required package: officer
 # Mock some data
 dat <- mtcars
 dat['page'] <- c(
@@ -111,29 +107,36 @@ ct <- clintable(dat2) |>
   # Add titles here is using new_header_footer to allow flextable functions
   # to customize the titles block
   clin_add_titles(
-    ft = new_title_footnote(
-        list(
-          c("Left", "Center", "Right"),
-          c("Just the middle")
-        ),
-        "titles"
-      )
+    list(
+      c("Left", "Center", "Right"),
+      c("Just the middle")
+    )
   ) |> 
   clin_add_footnotes(
-    ft = new_title_footnote(
       list(
         c(
           "Here's a footnote.", 
           format(Sys.time(), "%H:%M %A, %B %d, %Y")
         )
-      ),
-      "footnote"
-    )
-  )
+      )
+    )  
 
 # Print pages (by default 3 pages) to the viewer of the IDE
 print(ct)
+```
 
+<p align="center">
+<img src="man/figures/print.gif" width="800px">
+</p>
+
+Built of {flextable} and {officer}, you can then write the table out to
+a docx file.
+
+``` r
 # Write the table out to docx
 write_clintable(ct, "demo_table.docx")
 ```
+
+<p align="center">
+<img src="vignettes/table.png" width="800px">
+</p>
