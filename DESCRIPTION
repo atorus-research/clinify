@@ -8,8 +8,8 @@ Authors@R: c(
            role = c("aut", "cre"),
            email = "mike.stackhouse@atorusresearch.com",
            comment = c(ORCID = "0000-0001-6030-723X")),
-    person("Ross", "Didenko", email = "rostyslav.didenko@atorusresearch.com", role = c("ctb")),
-    person("Yevhenii", "Boiko", email = "yevhenii.boiko@atorusresearch.com", role = c("ctb")),
+    person("Ross", "Didenko", email = "rostyslav.didenko@atorusresearch.com", role = c("aut")),
+    person("Yevhenii", "Boiko", email = "yevhenii.boiko@atorusresearch.com", role = c("aut")),
     person("Marat", "Zakirov", email = "marat.zakirov@atorusresearch.com", role = "ctb"),
     person("Roman", "Rogoza", email = "roman.rogoza@atorusresearch.com", role = "ctb"))
 Depends: R (>= 4.2)
