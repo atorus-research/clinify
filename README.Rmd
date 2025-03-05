@@ -116,7 +116,13 @@ ct <- clintable(dat2) |>
 
 # Print pages (by default 3 pages) to the viewer of the IDE
 print(ct)
+```
 
+Built of {flextable} and {officer}, you can then write the table out to a docx file.
+
+```{r write_table}
 # Write the table out to docx
 write_clintable(ct, "demo_table.docx")
 ```
+
+<p align="center"><img src="vignettes/table.png" width="800px"></p>
