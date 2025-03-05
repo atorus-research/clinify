@@ -11,7 +11,7 @@ clintable(x, page_by = NULL, group_by = NULL, use_labels = TRUE, ...)
 
 \item{page_by}{A variable in the input dataframe to use for pagination}
 
-\item{group_by}{A variable which will be used for grouping and attached
+\item{group_by}{A character vector of variable names which will be used for grouping and attached
 as a label above the table headers}
 
 \item{use_labels}{Use variable labels as column headers. Nested levels can be

@@ -9,7 +9,9 @@ clin_page_by(x, page_by, max_rows = 10)
 \arguments{
 \item{x}{A clintable object}
 
-\item{byvar}{Columns in the table used for page grouping}
+\item{page_by}{A variable in the input dataframe to use for pagination}
+
+\item{max_rows}{If no page_by, the maximum rows allowed per page}
 }
 \value{
 A clintable object
@@ -18,5 +20,17 @@ A clintable object
 Configure pagination using a page variable
 }
 \examples{
-#TODO: 
+dat <- mtcars
+dat['page'] <- c(
+  rep(1, 10),
+  rep(2, 10),
+  rep(3, 10),
+  c(4, 4)
+)
+
+clintable(dat) |> 
+  clin_page_by('page')
+
+clintable(mtcars) |> 
+  clin_page_by(max_rows=10)
 }

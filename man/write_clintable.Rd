@@ -14,8 +14,6 @@ write_clintable(x, file, apply_defaults = TRUE)
 \item{apply_defaults}{Apply default styles. These styles are stored in the
 options clinify_header_default, clinify_footer_default, and
 clinify_table_default respectively. Defaults to true.}
-
-\item{settings}{Settings that will be passed}
 }
 \value{
 Invisible

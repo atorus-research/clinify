@@ -12,10 +12,6 @@ clin_alt_pages(x, key_cols, col_groups)
 \item{key_cols}{A character vector of variable names}
 
 \item{col_groups}{A list of character vectors of variable names}
-
-\item{byvar}{A variable in the input dataset to use for pagination settings}
-
-\item{max_rows}{The maximum number of rows to include on a page}
 }
 \value{
 A clintable object

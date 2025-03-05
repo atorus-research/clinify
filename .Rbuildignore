@@ -7,3 +7,8 @@
 ^docs$
 ^pkgdown$
 ^codecov\.yml$
+^\.vscode$
+^archive$
+^data\-raw$
+^scratch\.R$
+^demos$

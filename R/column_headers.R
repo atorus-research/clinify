@@ -89,9 +89,9 @@ clin_column_headers <- function(x, ...) {
 
   # Apply to the clintable
   x |> 
-    set_header_df(typology) |> 
-    merge_v(part = "header") |>
-    merge_h(part = "header")
+    flextable::set_header_df(typology) |> 
+    flextable::merge_v(part = "header") |>
+    flextable::merge_h(part = "header")
 
 }
 

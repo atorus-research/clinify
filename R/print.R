@@ -31,8 +31,7 @@
 #'     c('disp', 'drat', 'wt'),
 #'     c('qsec', 'vs', 'am'),
 #'     c('gear', 'carb')
-#'   ),
-#'   max_rows = 10
+#'   )
 #' )
 #'
 #' print(ct)
@@ -98,8 +97,8 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL, group_label = NUL
 
   if (!is.null(group_label)) {
     # TODO: Allow formatting on this
-    x <- add_header_lines(x, values = paste(group_label, collapse="\n"))
-    x <- align(x, 1, 1, 'left', part="header")
+    x <- flextable::add_header_lines(x, values = paste(group_label, collapse="\n"))
+    x <- flextable::align(x, 1, 1, 'left', part="header")
   }
   
   body <- flextable::htmltools_value(x = x) 
@@ -111,13 +110,13 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL, group_label = NUL
 
   if (!is.null(titles)) {
     # TODO: This should take into consideration how many cells are merged within the header
-    titles <- width(titles, width = flextable_dim(x)$widths / 2)
+    titles <- flextable::width(titles, width = flextable::flextable_dim(x)$widths / 2)
     hdr <- flextable::htmltools_value(x = titles)[[3]]
     body[[3]] <- htmltools::HTML(paste0(hdr, body[[3]]))
   }
 
   if (!is.null(footnotes)) {
-    footnotes <- width(footnotes, width = flextable_dim(x)$widths / 2)
+    footnotes <- flextable::width(footnotes, width = flextable::flextable_dim(x)$widths / 2)
     ftr <- flextable::htmltools_value(x = footnotes)[[3]]
     body[[3]] <- htmltools::HTML(paste0(body[[3]], ftr))
   }

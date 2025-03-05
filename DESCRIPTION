@@ -12,25 +12,26 @@ Authors@R: c(
     person("Yevhenii", "Boiko", email = "yevhenii.boiko@atorusresearch.com", role = c("aut")),
     person("Marat", "Zakirov", email = "marat.zakirov@atorusresearch.com", role = "ctb"),
     person("Roman", "Rogoza", email = "roman.rogoza@atorusresearch.com", role = "ctb"))
-Depends: R (>= 4.2)
+Depends:
+    R (>= 4.2)
 Imports: 
-    dplyr,
     flextable,
-    magrittr,
     officer,
-    rlang,
+    magrittr,
+    dplyr,
     knitr,
     htmltools,
-    shiny,
     tidyselect,
     zoo
 Suggests: 
     rmarkdown,
     testthat (>= 3.0.0),
     Tplyr,
-    rvest
+    rvest,
+    withr,
+    xml2
 Description: The primary motivation of clinify is to take the things that are great about the R packages {flextable} and {officer}, take the standard and complex pieces of formatting clinical tables for regulatory use, and simplify the tedious pieces. 
-License: MIT + file LICENSE
+License: Apache License (>= 2)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2

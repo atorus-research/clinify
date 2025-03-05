@@ -17,10 +17,22 @@
 #' @export
 #'
 #' @examples
-#' add_page_footer(c(c("left aligned", "centered", "right aligned"),
-#'                   c("left aligned", "right aligned")))
-#' add_page_footer(NA)
-#' add_page_footer(c(c("right aligned")))
+#' clintable(mtcars) |> 
+#'   clin_add_titles(
+#'     list(
+#'       c("Left", "Center", "Right"),
+#'       c("Just the middle")
+#'     )
+#'   ) |> 
+#'   clin_add_footnotes(
+#'     list(
+#'       c(
+#'         "Here's a footnote.", 
+#'         format(Sys.time(), "%H:%M %A, %B %d, %Y")
+#'       )
+#'     )
+#'   )
+#' 
 clin_add_titles <- function(x, ls = NULL, ft = NULL) {
   x <- add_titles_footnotes_(x, "titles", ls, ft)
 }

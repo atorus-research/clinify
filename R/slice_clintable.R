@@ -12,12 +12,11 @@
 #' @param columns Subset of columns to extract
 #'
 #' @return A clinpage object
-#' @export
 #'
 #' @examples
-#' x <- flextable(mtcars)
+#' x <- flextable::flextable(mtcars)
 #' y <- slice_clintable(x, 20:32, c(1:3, 5:8))
-#' z <- flextable(mtcars[20:32, c(1:3, 5:8)])
+#' z <- flextable::flextable(mtcars[20:32, c(1:3, 5:8)])
 #' @noRd
 slice_clintable <- function(x, rows, columns) {
     out <- new_clinpage()

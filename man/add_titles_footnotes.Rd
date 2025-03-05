@@ -26,9 +26,21 @@ where each sublist represents a separate line (or row) of text. There is also a 
 with both left- and right-aligned text. To do so - simply pass two items to a sublist instead of one.
 }
 \examples{
-add_page_footer(c(c("left aligned", "centered", "right aligned"),
-                  c("left aligned", "right aligned")))
-add_page_footer(NA)
-add_page_footer(c(c("right aligned")))
+clintable(mtcars) |> 
+  clin_add_titles(
+    list(
+      c("Left", "Center", "Right"),
+      c("Just the middle")
+    )
+  ) |> 
+  clin_add_footnotes(
+    list(
+      c(
+        "Here's a footnote.", 
+        format(Sys.time(), "\%H:\%M \%A, \%B \%d, \%Y")
+      )
+    )
+  )
+
 }
 \concept{add_titles_footnotes}

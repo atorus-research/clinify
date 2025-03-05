@@ -7,7 +7,6 @@
 #' @param apply_defaults Apply default styles. These styles are stored in the 
 #'   options clinify_header_default, clinify_footer_default, and 
 #'   clinify_table_default respectively. Defaults to true. 
-#' @param settings Settings that will be passed
 #'
 #' @return Invisible
 #' @export
@@ -54,7 +53,7 @@ write_clintable <- function(x, file, apply_defaults=TRUE) {
 
   # This point down from print method directly ----
   if (pg_method == "default") {
-    doc <- body_add_flextable(doc, x)
+    doc <- flextable::body_add_flextable(doc, x)
   } else if (pg_method == "custom") {
     x <- prep_pagination_(x)
     doc <- write_alternating(doc, x)
@@ -75,7 +74,7 @@ write_alternating <- function(doc, x) {
   # Page breaks up to last page
   for (p in pag_idx[1:n-1]) {
     doc <- add_table_(doc, x, p)
-    doc <- body_add_break(doc)
+    doc <- officer::body_add_break(doc)
   }
 
   # Write last page
@@ -91,8 +90,8 @@ write_alternating <- function(doc, x) {
 add_table_ <- function(doc, x, p) {
   tbl <- slice_clintable(x, p$rows, p$cols)
   if (!is.null(p$label)) {
-    tbl <- add_header_lines(tbl, values = paste(p$label, collapse="\n"))
-    tbl<- align(tbl, 1, 1, 'left', part="header")
+    tbl <- flextable::add_header_lines(tbl, values = paste(p$label, collapse="\n"))
+    tbl<- flextable::align(tbl, 1, 1, 'left', part="header")
   }
-  doc <- body_add_flextable(doc, tbl)
+  doc <- flextable::body_add_flextable(doc, tbl)
 }

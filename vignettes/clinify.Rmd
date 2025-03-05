@@ -27,6 +27,10 @@ When working with clinical tables, the devil is in the details. Every organizati
 Let's start at the beginning
 
 ```{r intro}
+library(clinify)
+library(flextable)
+library(officer)
+
 ct <- clintable(mtcars)
 print(ct)
 ```

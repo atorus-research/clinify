@@ -5,13 +5,10 @@
 #' @importFrom magrittr `%>%`
 #' @importFrom tidyselect eval_select
 #' @importFrom knitr knit_print
+#' @importFrom utils head tail
 NULL
 
 .onLoad <- function(libname, pkgname) {
-    # Ensure that flextable and officer are loaded with clinify
-    require(flextable)
-    require(officer)
-
     sect <- clinify_docx_default()
 
     # Save out options to grab defaults
