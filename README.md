@@ -4,6 +4,9 @@
 # **{clinify}**
 
 <!-- badges: start -->
+
+[![Codecov test
+coverage](https://codecov.io/gh/atorus-research/clinify/graph/badge.svg)](https://app.codecov.io/gh/atorus-research/clinify)
 <!-- badges: end -->
 
 **{clinify}** is direct extension of the

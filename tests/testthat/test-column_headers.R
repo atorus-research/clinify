@@ -23,7 +23,7 @@ test_that("Headers apply as expected", {
     )
 
   # These snapshots capture the major factors of interest
-  expect_snapshot(ct2$header$dataset) # Dup values appied in right spots
+  expect_snapshot(ct2$header$dataset) # Dup values applied in right spots
   expect_snapshot(ct2$header$spans) # Blank column spans don't merge with horizontals
 
   # Use iris
@@ -33,8 +33,10 @@ test_that("Headers apply as expected", {
   attr(refdat$Petal.Length, 'label') <- "Flower||Petal||Length"
   attr(refdat$Petal.Width, 'label') <- "Flower||Petal||Width"
 
-  ct <- clintable(refdat)
-  expect_snapshot(ct2$header$dataset) # Dup values appied in right spots
-  expect_snapshot(ct2$header$spans) # Blank column spans don't merge with horizontals
+  ct3 <- clintable(refdat)
+  has_labels_(ct3$body$dataset)
+  ct3 <- headers_from_labels_(ct3)
+  expect_snapshot(ct3$header$dataset) # Dup values applied in right spots
+  expect_snapshot(ct3$header$spans) # Blank column spans don't merge with horizontals
 
 })
