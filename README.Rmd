@@ -55,7 +55,7 @@ Here are some key principles we're using in building **clinify**:
 
 Here's a basic example of some of clinify's benefit in action
 
-```{r}
+```{r demo_table, eval=FALSE}
 library(clinify)
 # Mock some data
 dat <- mtcars
@@ -94,35 +94,31 @@ ct <- clintable(dat2) |>
   # Add titles here is using new_header_footer to allow flextable functions
   # to customize the titles block
   clin_add_titles(
-    ft = new_title_footnote(
-        list(
-          c("Left", "Center", "Right"),
-          c("Just the middle")
-        ),
-        "titles"
-      )
+    list(
+      c("Left", "Center", "Right"),
+      c("Just the middle")
+    )
   ) |> 
   clin_add_footnotes(
-    ft = new_title_footnote(
       list(
         c(
           "Here's a footnote.", 
           format(Sys.time(), "%H:%M %A, %B %d, %Y")
         )
-      ),
-      "footnote"
-    )
-  )
+      )
+    )  
 
 # Print pages (by default 3 pages) to the viewer of the IDE
 print(ct)
 ```
 
+<p align="center"><img src="man/figures/print.gif" width="800px"></p>
+
 Built of {flextable} and {officer}, you can then write the table out to a docx file.
 
-```{r write_table}
+```{r write_table, eval=FALSE}
 # Write the table out to docx
 write_clintable(ct, "demo_table.docx")
-```
+``` 
 
 <p align="center"><img src="vignettes/table.png" width="800px"></p>

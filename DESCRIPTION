@@ -1,12 +1,17 @@
 Package: clinify
 Type: Package
-Title: Styling for Clinical Outputs
+Title: flextable and officer extensions for clinical outputs
 Version: 0.1.0
 Authors@R: c(
-    person("Ross", "Didenko", email = "rostyslav.didenko@atorusresearch.com", role = c("aut")),
-    person("Yevhenii", "Boiko", email = "yevhenii.boiko@atorusresearch.com", role = c("aut")),
+    person(given = "Mike",
+           family = "Stackhouse",
+           role = c("aut", "cre"),
+           email = "mike.stackhouse@atorusresearch.com",
+           comment = c(ORCID = "0000-0001-6030-723X")),
+    person("Ross", "Didenko", email = "rostyslav.didenko@atorusresearch.com", role = c("ctb")),
+    person("Yevhenii", "Boiko", email = "yevhenii.boiko@atorusresearch.com", role = c("ctb")),
     person("Marat", "Zakirov", email = "marat.zakirov@atorusresearch.com", role = "ctb"),
-    person("Roman", "Rogoza", email = "roman.rogoza@atorusresearch.com", role = "cre"))
+    person("Roman", "Rogoza", email = "roman.rogoza@atorusresearch.com", role = "ctb"))
 Depends: R (>= 4.2)
 Imports: 
     dplyr,
@@ -22,11 +27,7 @@ Imports:
 Suggests: 
     rmarkdown,
     testthat (>= 3.0.0)
-Description: Develop custom styling for the clinical outputs and apply them in .docx.
-    Can set default stylings to flextable headers, footers and body.
-    Can add new headers and footers from the provided data.
-    Can calculate appropriate column sizes and row groupings as well as wrap blocks
-    of data so the rows that should come together unwrapped stays together.
+Description: The primary motivation of clinify is to take the things that are great about the R packages {flextable} and {officer}, take the standard and complex pieces of formatting clinical tables for regulatory use, and simplify the tedious pieces. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
