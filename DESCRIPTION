@@ -26,7 +26,9 @@ Imports:
     zoo
 Suggests: 
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    Tplyr,
+    rvest
 Description: The primary motivation of clinify is to take the things that are great about the R packages {flextable} and {officer}, take the standard and complex pieces of formatting clinical tables for regulatory use, and simplify the tedious pieces. 
 License: MIT + file LICENSE
 Encoding: UTF-8
