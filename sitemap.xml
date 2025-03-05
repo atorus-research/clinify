@@ -1,6 +1,6 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://atorus-research.github.io/clinify/404.html</loc></url>
-<url><loc>https://atorus-research.github.io/clinify/LICENSE-text.html</loc></url>
+<url><loc>https://atorus-research.github.io/clinify/LICENSE.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/articles/clinify.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/articles/index.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/authors.html</loc></url>
@@ -21,10 +21,6 @@
 <url><loc>https://atorus-research.github.io/clinify/reference/index.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/reference/new_title_footnote.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/reference/print_methods.html</loc></url>
-<url><loc>https://atorus-research.github.io/clinify/reference/test_adae.html</loc></url>
-<url><loc>https://atorus-research.github.io/clinify/reference/test_adas.html</loc></url>
-<url><loc>https://atorus-research.github.io/clinify/reference/test_adlb.html</loc></url>
-<url><loc>https://atorus-research.github.io/clinify/reference/test_adsl.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/reference/write_clintable.html</loc></url>
 </urlset>
 
