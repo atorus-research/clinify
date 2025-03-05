@@ -12,5 +12,5 @@
 ^data\-raw$
 ^scratch\.R$
 ^demos$
-^cran-comments\.md$
+^cran_comments\.md$
 ^NEWS\.md$
