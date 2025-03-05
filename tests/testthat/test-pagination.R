@@ -758,3 +758,57 @@ test_that("Multiple group by with alternating pages", {
   expect_true("page" %in% ct$col_keys)
   expect_false("page" %in% ct2$col_keys)
 })
+
+test_that("Test using max rows", {
+  ct <- clintable(refdat2[,-13]) |> 
+    clin_page_by(max_rows = 36) |> 
+    clin_group_by('groups') |> 
+    clin_alt_pages(
+      key_cols = c('mpg', 'cyl', 'hp'),
+      col_groups = list(
+        c('disp', 'drat', 'wt'),
+        c('qsec', 'vs', 'am'),
+        c('gear', 'carb')
+      ) 
+    ) 
+  
+  ct2 <- prep_pagination_(ct)
+
+  exp_out <- list(
+    list(
+      rows = 1:32,
+      cols = p1,
+      label = "a"
+    ), 
+    list(
+      rows = 1:32,
+      cols = p2,
+      label = "a"
+    ), 
+    list(
+      rows = 1:32,
+      cols = p3,
+      label = "a"
+    ), 
+    list(
+      rows = 33:64,
+      cols = p1,
+      label = "b"
+    ),
+    list(
+      rows = 33:64,
+      cols = p2,
+      label = "b"
+    ),
+    list(
+      rows = 33:64,
+      cols = p3,
+      label = "b"
+    )
+  )
+
+  expect_equal(ct2$clinify_config$pagination_idx, exp_out)
+  # 'page' variable should be stripped when applying pagination
+  expect_true("groups" %in% ct$col_keys)
+  expect_false("groups" %in% ct2$col_keys)
+})

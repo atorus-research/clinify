@@ -62,23 +62,3 @@ clintable <- function(x, page_by=NULL, group_by=NULL, use_labels=TRUE, ...) {
     } 
     ct
 }
-
-
-#' Blank object creator for a clintable object
-#'
-#' @noRd
-new_clintable <- function() {
-    # TODO: revisit when actual object needs are established
-    structure(
-        list(
-            header = NULL,
-            body = NULL,
-            footer = NULL,
-            col_keys = NULL,
-            caption = NULL,
-            blanks = NULL,
-            properties = NULL
-        ),
-        class = c("clintable", "flextable")
-    )
-}

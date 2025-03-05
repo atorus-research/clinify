@@ -208,7 +208,7 @@ clin_default_table_width <- function() {
   sect <- getOption("clinify_docx_default")
   
   if (is.null(sect)) {
-    stop("clin_col_width() cannot be used if the option 'clinify_docx_default' is not set.")
+    stop("clin_default_table_width() cannot be used if the option 'clinify_docx_default' is not set.")
   }
 
   # Table width is page width - margins. 

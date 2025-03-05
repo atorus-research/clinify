@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # **{clinify}**
 
 <!-- badges: start -->
+[![Codecov test coverage](https://codecov.io/gh/atorus-research/clinify/graph/badge.svg)](https://app.codecov.io/gh/atorus-research/clinify)
 <!-- badges: end -->
 
 **{clinify}** is direct extension of the [{flextable}](https://davidgohel.github.io/flextable/) and [{officer}](https://davidgohel.github.io/officer/) packages, aimed at supplementing some functionality and simplifying some common tasks in the creation of clinical tables, listings and figures. 

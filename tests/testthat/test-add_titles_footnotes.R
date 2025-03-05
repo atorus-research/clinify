@@ -1,3 +1,17 @@
+test_that("Error messages", {
+  ct <- clintable(mtcars)
+
+  expect_error( 
+    clin_add_titles(ct, ls = list('x'), ft = new_title_footnote(list("x"))),
+    "One of"
+  )
+  
+  expect_error(
+    clin_add_titles(ct, ls = list(c('1', '2', '3', '4'))),
+    "All sublists must"
+  )
+})
+
 
 test_that("Titles and footnotes can be attached", {
 
@@ -26,7 +40,8 @@ test_that("Titles and footnotes can be attached", {
     )
 
   expect_true(all(c("titles", "footnotes") %in% names(ct$clinify_config)))
-  out <- print(ct)
+  out <- clintable_as_html(ct)
+
   # Need to improve this but for now, make sure that the output contains 3 
   # tables - one for the header, one for the footer, and one for the table body
   html_out <- xml2::read_html(out[[3]])
