@@ -11,7 +11,10 @@ Authors@R: c(
     person("Ross", "Didenko", email = "rostyslav.didenko@atorusresearch.com", role = c("aut")),
     person("Yevhenii", "Boiko", email = "yevhenii.boiko@atorusresearch.com", role = c("aut")),
     person("Marat", "Zakirov", email = "marat.zakirov@atorusresearch.com", role = "ctb"),
-    person("Roman", "Rogoza", email = "roman.rogoza@atorusresearch.com", role = "ctb"))
+    person("Roman", "Rogoza", email = "roman.rogoza@atorusresearch.com", role = "ctb"),
+    person(given = "Atorus Research, Inc.",
+           role = "cph"),
+    person(given = "Incyte Corporation", role="cph"))
 Depends:
     R (>= 4.2)
 Imports: 

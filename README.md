@@ -20,6 +20,8 @@ the creation of clinical tables, listings and figures.
 You can install the development version of **{clinify}** like so:
 
 ``` r
+install.packages("clinify")
+
 # Install the development version:
 devtools::install_github("https://github.com/atorus-research/clinify.git", ref="development")
 ```
