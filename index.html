@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Styling for Clinical Outputs • clinify</title>
+<title>flextable and officer extensions for clinical outputs • clinify</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Styling for Clinical Outputs">
-<meta name="description" content="Develop custom styling for the clinical outputs and apply them in .docx. Can set default stylings to flextable headers, footers and body. Can add new headers and footers from the provided data. Can calculate appropriate column sizes and row groupings as well as wrap blocks of data so the rows that should come together unwrapped stays together.">
-<meta property="og:description" content="Develop custom styling for the clinical outputs and apply them in .docx. Can set default stylings to flextable headers, footers and body. Can add new headers and footers from the provided data. Can calculate appropriate column sizes and row groupings as well as wrap blocks of data so the rows that should come together unwrapped stays together.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="flextable and officer extensions for clinical outputs">
+<meta name="description" content="The primary motivation of clinify is to take the things that are great about the R packages {flextable} and {officer}, take the standard and complex pieces of formatting clinical tables for regulatory use, and simplify the tedious pieces.">
+<meta property="og:description" content="The primary motivation of clinify is to take the things that are great about the R packages {flextable} and {officer}, take the standard and complex pieces of formatting clinical tables for regulatory use, and simplify the tedious pieces.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@AtorusR">
 <meta name="twitter:site" content="@AtorusR">
@@ -58,15 +58,15 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="clinify">
-<strong>clinify</strong><a class="anchor" aria-label="anchor" href="#clinify"></a>
+<strong>{clinify}</strong><a class="anchor" aria-label="anchor" href="#clinify"></a>
 </h1></div>
 <!-- badges: start -->
 <!-- badges: end -->
-<p><strong>clinify</strong> is direct extension of the <a href="https://davidgohel.github.io/flextable/" class="external-link"><strong>flextable</strong></a> and <a href="https://davidgohel.github.io/officer/" class="external-link"><strong>officer</strong></a> packages, aimed at supplementing some functionality and simplifying some common tasks in the creation of clinical tables, listings and figures.</p>
+<p><strong>{clinify}</strong> is direct extension of the <a href="https://davidgohel.github.io/flextable/" class="external-link">{flextable}</a> and <a href="https://davidgohel.github.io/officer/" class="external-link">{officer}</a> packages, aimed at supplementing some functionality and simplifying some common tasks in the creation of clinical tables, listings and figures.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of <strong>clinify</strong> like so:</p>
+<p>You can install the development version of <strong>{clinify}</strong> like so:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install the development version:</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/atorus-research/clinify.git"</span>, ref<span class="op">=</span><span class="st">"development"</span><span class="op">)</span></span></code></pre></div>
@@ -74,29 +74,28 @@
 <div class="section level2">
 <h2 id="motivation">Motivation<a class="anchor" aria-label="anchor" href="#motivation"></a>
 </h2>
-<p>There’s a large assortment of table packages available, and there are many that are specifically catered to clinical reporting. For many organizations, one of these packages may very well be a great choice, but there are a couple of key motivators we’ve found that lead drove us to start writing <strong>clinify</strong>:</p>
+<p>There’s a large assortment of table packages available, and there are many that are specifically catered to clinical reporting. For many organizations, one of these packages may very well be a great choice, but there are a couple of key motivators we’ve found that lead drove us to start writing <strong>{clinify}</strong>:</p>
 <ul>
 <li>Clinical output standards likely exist within an organization, and changing those standards may not be an option</li>
 <li>It’s very likely that certain outputs will require that you deviate from those standards, so flexibility it necessary, sometimes in highly nuanced ways</li>
 <li>Organizations like Contract Research Organizations (CROs) may have to adapt to multiple clients’ reporting standards, which likely don’t look the same</li>
 <li>Regardless of the situation, reuse and repeatability of a given configuration is critical, and changes in configuration must be easily implemented.</li>
 </ul>
-<p>Instead of building a new package from the ground up, <strong>clinify</strong> aims to extend what we see as a best choice for the situation at hand, adding new functionality where necessary and streamlining common tasks to make them more efficient for programmers to implement. We chose <strong>flextable</strong> for a two key reasons:</p>
+<p>Instead of building a new package from the ground up, <strong>{clinify}</strong> aims to extend what we see as a best choice for the situation at hand, adding new functionality where necessary and streamlining common tasks to make them more efficient for programmers to implement. We chose {flextable} for a two key reasons:</p>
 <ul>
-<li>
-<strong>flextable</strong> already offers most of the functionality that we’re looking for, particularly with the pairing of <strong>officer</strong>. For example, word documents have to be a first class priority of output support.</li>
-<li>While creating a table is the focus, the output tends to be more than just a table. We need the capability to modify the underlying document as a whole, which is another place that <strong>officer</strong> is truly necessary.</li>
+<li>{flextable} already offers most of the functionality that we’re looking for, particularly with the pairing of {officer}. For example, word documents have to be a first class priority of output support.</li>
+<li>While creating a table is the focus, the output tends to be more than just a table. We need the capability to modify the underlying document as a whole, which is another place that {officer} is truly necessary.</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="design-philosophy">Design Philosophy<a class="anchor" aria-label="anchor" href="#design-philosophy"></a>
 </h2>
-<p>Here are some key principles we’re using in building <strong>clinify</strong>:</p>
+<p>Here are some key principles we’re using in building <strong>{clinify}</strong>:</p>
 <ul>
 <li>
-<strong>clinify</strong> objects should inherit from an underlying <strong>flextable</strong> or <strong>officer</strong> object</li>
+<strong>{clinify}</strong> objects should inherit from an underlying {flextable} or {officer} object</li>
 <li>
-<strong>clinify</strong> functionality must not interfere with <strong>flextable</strong> or <strong>officer</strong> functionality, i.e. <strong>flextable</strong> or <strong>officer</strong> functions called should operate without error.</li>
+<strong>{clinify}</strong> functionality must not interfere with {flextable} or {officer} functionality, i.e. {flextable} or {officer} functions called should operate without error.</li>
 </ul>
 </div>
 <div class="section level2">
@@ -105,8 +104,6 @@
 <p>Here’s a basic example of some of clinify’s benefit in action</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://atorus-research.github.io/clinify/">clinify</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required package: flextable</span></span>
-<span><span class="co">#&gt; Loading required package: officer</span></span>
 <span><span class="co"># Mock some data</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span>
 <span><span class="va">dat</span><span class="op">[</span><span class="st">'page'</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
@@ -144,31 +141,30 @@
 <span>  <span class="co"># Add titles here is using new_header_footer to allow flextable functions</span></span>
 <span>  <span class="co"># to customize the titles block</span></span>
 <span>  <span class="fu"><a href="reference/add_titles_footnotes.html">clin_add_titles</a></span><span class="op">(</span></span>
-<span>    ft <span class="op">=</span> <span class="fu"><a href="reference/new_title_footnote.html">new_title_footnote</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>          <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Left"</span>, <span class="st">"Center"</span>, <span class="st">"Right"</span><span class="op">)</span>,</span>
-<span>          <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Just the middle"</span><span class="op">)</span></span>
-<span>        <span class="op">)</span>,</span>
-<span>        <span class="st">"titles"</span></span>
-<span>      <span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Left"</span>, <span class="st">"Center"</span>, <span class="st">"Right"</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Just the middle"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="reference/add_titles_footnotes.html">clin_add_footnotes</a></span><span class="op">(</span></span>
-<span>    ft <span class="op">=</span> <span class="fu"><a href="reference/new_title_footnote.html">new_title_footnote</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>          <span class="st">"Here's a footnote."</span>, </span>
 <span>          <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"%H:%M %A, %B %d, %Y"</span><span class="op">)</span></span>
 <span>        <span class="op">)</span></span>
-<span>      <span class="op">)</span>,</span>
-<span>      <span class="st">"footnote"</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span>  </span>
 <span></span>
 <span><span class="co"># Print pages (by default 3 pages) to the viewer of the IDE</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ct</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Write the table out to docx</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ct</span><span class="op">)</span></span></code></pre></div>
+<p align="center">
+<img src="reference/figures/print.gif" width="800px"></p>
+<p>Built of {flextable} and {officer}, you can then write the table out to a docx file.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Write the table out to docx</span></span>
 <span><span class="fu"><a href="reference/write_clintable.html">write_clintable</a></span><span class="op">(</span><span class="va">ct</span>, <span class="st">"demo_table.docx"</span><span class="op">)</span></span></code></pre></div>
+<p align="center">
+<img src="articles/table.png" width="800px"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -198,9 +194,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Ross Didenko <br><small class="roles"> Author </small>  </li>
-<li>Yevhenii Boiko <br><small class="roles"> Author </small>  </li>
-<li>Roman Rogoza <br><small class="roles"> Maintainer </small>  </li>
+<li>Mike Stackhouse <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-6030-723X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -212,7 +206,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ross Didenko, Yevhenii Boiko, Roman Rogoza.</p>
+  <p>Developed by Mike Stackhouse.</p>
 </div>
 
 <div class="pkgdown-footer-right">
