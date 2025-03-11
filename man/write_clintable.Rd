@@ -22,7 +22,6 @@ Invisible
 Write a clinify table out to a docx file
 }
 \examples{
-\dontrun{
 ct <- clintable(mtcars)
 
 ct <- clin_alt_pages(
@@ -35,6 +34,6 @@ ct <- clin_alt_pages(
   )
 )
 
-write_clintable(ct, 'demo.docx')
-}
+write_clintable(ct, file.path(tempdir(), 'demo.docx'))
+
 }

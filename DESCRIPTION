@@ -1,7 +1,7 @@
 Package: clinify
 Type: Package
 Title: Clinical Table Styling Tools and Utilities
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(
     person(given = "Mike",
            family = "Stackhouse",
@@ -33,7 +33,7 @@ Suggests:
     rvest,
     withr,
     xml2
-Description: The primary motivation of this package is to take the things that are great about the R packages 'flextable' and 'officer', take the standard and complex pieces of formatting clinical tables for regulatory use, and simplify the tedious pieces. 
+Description: The primary motivation of this package is to take the things that are great about the R packages 'flextable' <https://davidgohel.github.io/flextable/> and 'officer' <https://davidgohel.github.io/officer/>, take the standard and complex pieces of formatting clinical tables for regulatory use, and simplify the tedious pieces. 
 License: Apache License (>= 2)
 Encoding: UTF-8
 LazyData: true
