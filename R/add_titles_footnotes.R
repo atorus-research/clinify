@@ -35,6 +35,7 @@
 #' 
 clin_add_titles <- function(x, ls = NULL, ft = NULL) {
   x <- add_titles_footnotes_(x, "titles", ls, ft)
+  x
 }
 
 #' @family add_titles_footnotes
@@ -42,6 +43,7 @@ clin_add_titles <- function(x, ls = NULL, ft = NULL) {
 #' @export
 clin_add_footnotes <- function(x, ls = NULL, ft = NULL) {
   x <- add_titles_footnotes_(x, "footnotes", ls, ft)
+  x
 }
 
 #' Single method to apply titles or footnotes
