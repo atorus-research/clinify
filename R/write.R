@@ -12,7 +12,6 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' ct <- clintable(mtcars)
 #'
 #' ct <- clin_alt_pages(
@@ -25,8 +24,8 @@
 #'   )
 #' )
 #'
-#' write_clintable(ct, 'demo.docx')
-#' }
+#' write_clintable(ct, file.path(tempdir(), 'demo.docx'))
+#'
 write_clintable <- function(x, file, apply_defaults=TRUE) {
   pg_method <- x$clinify_config$pagination_method
   titles <- x$clinify_config$titles
