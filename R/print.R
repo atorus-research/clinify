@@ -8,14 +8,14 @@
 #'   pagination is configured
 #' @param nrows Number of rows to print. Only used when rows aren't configured
 #'   within the pagination method
-#' @param apply_defaults Apply default styles. These styles are stored in the 
-#'   options clinify_header_default, clinify_footer_default, and 
-#'   clinify_table_default respectively. Defaults to true. 
+#' @param apply_defaults Apply default styles. These styles are stored in the
+#'   options clinify_header_default, clinify_footer_default, and
+#'   clinify_table_default respectively. Defaults to true.
 #' @param ... Additional parameters passed to flextable print method
 #'
 #' @return Invisible
 #' @export
-#' 
+#'
 #' @family Print methods
 #' @rdname print_methods
 #' @examples
@@ -26,18 +26,17 @@
 #'
 #' ct <- clin_alt_pages(
 #'   ct,
-#'   key_cols = c('mpg', 'cyl', 'hp'),
+#'   key_cols = c("mpg", "cyl", "hp"),
 #'   col_groups = list(
-#'     c('disp', 'drat', 'wt'),
-#'     c('qsec', 'vs', 'am'),
-#'     c('gear', 'carb')
+#'     c("disp", "drat", "wt"),
+#'     c("qsec", "vs", "am"),
+#'     c("gear", "carb")
 #'   )
 #' )
 #'
 #' print(ct)
 #'
-print.clintable <- function(x, n=3, nrows = 15, apply_defaults=TRUE, ...) {
-
+print.clintable <- function(x, n = 3, nrows = 15, apply_defaults = TRUE, ...) {
   out <- clintable_as_html(x, n, nrows, apply_defaults, ...)
 
   if (interactive()) {
@@ -51,8 +50,7 @@ print.clintable <- function(x, n=3, nrows = 15, apply_defaults=TRUE, ...) {
 #' @family Print methods
 #' @rdname print_methods
 #' @export
-knit_print.clintable <- function(x, n=3, nrows = 15, apply_defaults=TRUE, ...) {
-
+knit_print.clintable <- function(x, n = 3, nrows = 15, apply_defaults = TRUE, ...) {
   out <- clintable_as_html(x, n, nrows, apply_defaults, ...)
   knitr::raw_html(out)
 }
@@ -61,7 +59,7 @@ knit_print.clintable <- function(x, n=3, nrows = 15, apply_defaults=TRUE, ...) {
 #'
 #' Extraction of flextable print method with special handling of clintable pages
 #' @noRd
-clintable_as_html <- function(x, n=3, nrows = 15, apply_defaults=TRUE, ...) {
+clintable_as_html <- function(x, n = 3, nrows = 15, apply_defaults = TRUE, ...) {
   refdat <- x$body$dataset
   pg_method <- x$clinify_config$pagination_method
 
@@ -70,18 +68,18 @@ clintable_as_html <- function(x, n=3, nrows = 15, apply_defaults=TRUE, ...) {
 
   # Apply the default styling
   if (apply_defaults) {
-    if (!is.null(titles)) titles <- getOption('clinify_titles_default')(titles)
-    if (!is.null(footnotes)) footnotes <- getOption('clinify_footnotes_default')(footnotes)
-    x <- getOption('clinify_table_default')(x)
+    if (!is.null(titles)) titles <- getOption("clinify_titles_default")(titles)
+    if (!is.null(footnotes)) footnotes <- getOption("clinify_footnotes_default")(footnotes)
+    x <- getOption("clinify_table_default")(x)
   }
-  
+
   if (pg_method == "default") {
     nrows <- min(c(nrows, nrow(refdat)))
     pg <- slice_clintable(x, 1:nrows, eval_select(x$col_keys, refdat))
     out <- print_clinpage(pg, titles, footnotes)
   } else if (pg_method == "custom") {
     x <- prep_pagination_(x)
-    out <- print_alternating(x, n=n, titles, footnotes)
+    out <- print_alternating(x, n = n, titles, footnotes)
   }
   out
 }
@@ -94,19 +92,18 @@ clintable_as_html <- function(x, n=3, nrows = 15, apply_defaults=TRUE, ...) {
 #'
 #' @noRd
 print_clinpage <- function(x, titles = NULL, footnotes = NULL, group_label = NULL) {
-
   if (!is.null(group_label)) {
     # TODO: Allow formatting on this
-    x <- flextable::add_header_lines(x, values = paste(group_label, collapse="\n"))
-    x <- flextable::align(x, 1, 1, 'left', part="header")
+    x <- flextable::add_header_lines(x, values = paste(group_label, collapse = "\n"))
+    x <- flextable::align(x, 1, 1, "left", part = "header")
   }
-  
-  body <- flextable::htmltools_value(x = x) 
+
+  body <- flextable::htmltools_value(x = x)
   # Two different type of leading spaces that appear in the HTML
-  body[[3]] <- gsub("(?<!th)  ", "&nbsp; ", body[[3]], perl=TRUE)
-  body[[3]] <- gsub('(<span\\b[^>]*>) ', '\\1&nbsp;', body[[3]], perl=TRUE)
+  body[[3]] <- gsub("(?<!th)  ", "&nbsp; ", body[[3]], perl = TRUE)
+  body[[3]] <- gsub("(<span\\b[^>]*>) ", "\\1&nbsp;", body[[3]], perl = TRUE)
   # Concurrent spaces
-  body[[3]] <- gsub("&nbsp;  ", "&nbsp;&nbsp; ", body[[3]], perl=TRUE)
+  body[[3]] <- gsub("&nbsp;  ", "&nbsp;&nbsp; ", body[[3]], perl = TRUE)
 
   if (!is.null(titles)) {
     # TODO: This should take into consideration how many cells are merged within the header
@@ -129,8 +126,7 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL, group_label = NUL
 #' @param x a clintable object
 #' @param n number of pages within the clintable to print
 #' @noRd
-print_alternating <- function(x, n, titles=NULL, footnotes=NULL) {
-
+print_alternating <- function(x, n, titles = NULL, footnotes = NULL) {
   pag_idx <- x$clinify_config$pagination_idx
 
   # Don't try to print more pages than requested
@@ -141,7 +137,8 @@ print_alternating <- function(x, n, titles=NULL, footnotes=NULL) {
       slice_clintable(x, p$rows, p$cols),
       titles = titles,
       footnotes = footnotes,
-      group_label = p$label)
+      group_label = p$label
+    )
   })
 
   # Create the arguments and page selectors for the pages being printed
@@ -149,22 +146,24 @@ print_alternating <- function(x, n, titles=NULL, footnotes=NULL) {
   cntrl <- list()
   for (i in seq_along(pgs)) {
     # Generate the divs of the individual pages
-    if (i==1) {
-      args <- append(args, list(div(id=sprintf("page%s", i), class="page", pgs[i])))
+    if (i == 1) {
+      args <- append(args, list(div(id = sprintf("page%s", i), class = "page", pgs[i])))
     } else {
       # Only display first page
-      args <- append(args, 
-        list(div(id=sprintf("page%s", i), style = "display:none;", class="page", pgs[i]))
+      args <- append(
+        args,
+        list(div(id = sprintf("page%s", i), style = "display:none;", class = "page", pgs[i]))
       )
     }
-    
+
     # Create the buttons for the page selector
-    cntrl <- append(cntrl, 
+    cntrl <- append(
+      cntrl,
       list(tags$button(
         as.character(i),
         onclick = sprintf("showPage(%s)", i)
-      )
-    ))
+      ))
+    )
   }
 
   # Page control div

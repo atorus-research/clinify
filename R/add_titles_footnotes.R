@@ -17,22 +17,22 @@
 #' @export
 #'
 #' @examples
-#' clintable(mtcars) |> 
+#' clintable(mtcars) |>
 #'   clin_add_titles(
 #'     list(
 #'       c("Left", "Center", "Right"),
 #'       c("Just the middle")
 #'     )
-#'   ) |> 
+#'   ) |>
 #'   clin_add_footnotes(
 #'     list(
 #'       c(
-#'         "Here's a footnote.", 
+#'         "Here's a footnote.",
 #'         format(Sys.time(), "%H:%M %A, %B %d, %Y")
 #'       )
 #'     )
 #'   )
-#' 
+#'
 clin_add_titles <- function(x, ls = NULL, ft = NULL) {
   x <- add_titles_footnotes_(x, "titles", ls, ft)
   x
@@ -51,7 +51,6 @@ clin_add_footnotes <- function(x, ls = NULL, ft = NULL) {
 #' Called by clin_add_titles and clin_add_footnotes
 #' @noRd
 add_titles_footnotes_ <- function(x, sect, ls = NULL, ft = NULL) {
-
   if (all(is.null(ls), is.null(ft)) || all(!is.null(ls), !is.null(ft))) {
     stop("One of, and only one of, ls or ft must be populated")
   }
@@ -73,9 +72,8 @@ add_titles_footnotes_ <- function(x, sect, ls = NULL, ft = NULL) {
 #' @export
 #'
 #' @examples
-#' #TODO:
+#' # TODO:
 new_title_footnote <- function(x, sect = c("titles", "footnotes")) {
-
   sect <- match.arg(sect)
 
   # Check if all lists have length <=3
@@ -111,31 +109,34 @@ new_title_footnote <- function(x, sect = c("titles", "footnotes")) {
   # Apply the common styling
   ft <- ft %>%
     flextable::set_header_labels(Left = "", Center = "", Right = "") %>%
-    flextable::delete_part(part="header") %>%
-    flextable::delete_part(part="footer")
+    flextable::delete_part(part = "header") %>%
+    flextable::delete_part(part = "footer")
 
   # Apply different styling based on the number of elements
   for (i in seq_along(x)) {
     elements <- x[[i]]
     if (length(elements) == 1) {
       ft <- ft %>%
-          flextable::merge_h(i=i, part = "body") %>%
-          flextable::align(j=1, i=i,
-                           align = ifelse(sect == "titles",
-                                          "center",
-                                          "left"),
-                           part = "body")
+        flextable::merge_h(i = i, part = "body") %>%
+        flextable::align(
+          j = 1, i = i,
+          align = ifelse(sect == "titles",
+            "center",
+            "left"
+          ),
+          part = "body"
+        )
     } else if (length(elements) == 2) {
       ft <- ft %>%
-          flextable::merge_h(i=i, part = "body") %>%
-          flextable::align(j = 1, i=i, align = "left", part = "body") %>%
-          flextable::align(j = 2, i=i, align = "right", part = "body")
+        flextable::merge_h(i = i, part = "body") %>%
+        flextable::align(j = 1, i = i, align = "left", part = "body") %>%
+        flextable::align(j = 2, i = i, align = "right", part = "body")
     } else if (length(elements) == 3) {
       ft <- ft %>%
-          flextable::merge_h(i=i, part = "body") %>%
-          flextable::align(j = 1, i=i, align = "left", part = "body") %>%
-          flextable::align(j = 2, i=i, align = "center", part = "body") %>%
-          flextable::align(j = 3, i=i, align = "right", part = "body")
+        flextable::merge_h(i = i, part = "body") %>%
+        flextable::align(j = 1, i = i, align = "left", part = "body") %>%
+        flextable::align(j = 2, i = i, align = "center", part = "body") %>%
+        flextable::align(j = 3, i = i, align = "right", part = "body")
     }
   }
 
