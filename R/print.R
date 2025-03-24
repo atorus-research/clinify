@@ -133,8 +133,9 @@ print_alternating <- function(x, n, titles = NULL, footnotes = NULL) {
   n <- min(length(pag_idx), n)
 
   pgs <- lapply(pag_idx[1:n], \(p) {
+    blah <- slice_clintable(x, p$rows, p$cols)
     print_clinpage(
-      slice_clintable(x, p$rows, p$cols),
+      blah,
       titles = titles,
       footnotes = footnotes,
       group_label = p$label

@@ -72,7 +72,7 @@ clin_column_headers <- function(x, ...) {
   }
 
   # Fill the characters
-  mheaders <- apply(mheaders, 2, \(x) {
+  mheaders <- as.matrix(apply(mheaders, 2, \(x) {
     # Play games with  whitespace to get cell merging to work
     # for bottom borders
     if (all(is.na(x))) {
@@ -81,9 +81,15 @@ clin_column_headers <- function(x, ...) {
       x[is.na(x)] <- ""
     }
     x
-  })
+  }))
 
-  typology <- as.data.frame(t(mheaders), row.names = FALSE)
+  # Single column headers will read as a column
+  # Multi row need to be transposed
+  if (dim(mheaders)[2] > 1) {
+    mheaders <- t(mheaders)
+  }
+
+  typology <- as.data.frame(mheaders, row.names = FALSE)
   typology["col_keys"] <- colnames(refdat)
 
   # Apply to the clintable

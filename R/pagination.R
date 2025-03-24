@@ -300,7 +300,7 @@ prep_pagination_ <- function(x) {
   if (any(c(config$page_by, config$group_by) %in% x$col_keys)) {
     key_idx <- eval_select(c(config$page_by, config$group_by), refdat)
     cols <- seq(1:ncol(refdat))[-key_idx]
-    x <- slice_clintable(x, 1:nrow(refdat), cols)
+    x <- slice_clintable(x, 1:nrow(refdat), cols, skip_spans=TRUE)
   }
 
   # Make Column vectors
