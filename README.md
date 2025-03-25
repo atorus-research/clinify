@@ -10,8 +10,7 @@ coverage](https://codecov.io/gh/atorus-research/clinify/graph/badge.svg)](https:
 [<img src="https://img.shields.io/badge/License-APACHE2-blue.svg">](https://github.com/atorus-research/clinify/blob/main/LICENSE.md)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![R build
-status](https://github.com/atorus-research/clinify/workflows/R-CMD-check/badge.svg)](https://github.com/atorus-research/clinify/actions?workflow=R-CMD-check)
+[![R-CMD-check](https://github.com/atorus-research/clinify/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/atorus-research/clinify/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 **{clinify}** is direct extension of the
