@@ -31,6 +31,14 @@
 #'         format(Sys.time(), "%H:%M %A, %B %d, %Y")
 #'       )
 #'     )
+#'   ) |>
+#'   clin_add_footnote_page(
+#'     list(
+#'       c(
+#'         "Use when you have a lot of footnotes",
+#'         "And you don't want to put them on every page"
+#'       )
+#'     )
 #'   )
 #'
 clin_add_titles <- function(x, ls = NULL, ft = NULL) {
@@ -43,6 +51,14 @@ clin_add_titles <- function(x, ls = NULL, ft = NULL) {
 #' @export
 clin_add_footnotes <- function(x, ls = NULL, ft = NULL) {
   x <- add_titles_footnotes_(x, "footnotes", ls, ft)
+  x
+}
+
+#' @family add_titles_footnotes
+#' @rdname add_titles_footnotes
+#' @export
+clin_add_footnote_page <- function(x, ls = NULL, ft = NULL) {
+  x <- add_titles_footnotes_(x, "footnote_page", ls, ft)
   x
 }
 
@@ -73,7 +89,7 @@ add_titles_footnotes_ <- function(x, sect, ls = NULL, ft = NULL) {
 #'
 #' @examples
 #' # TODO:
-new_title_footnote <- function(x, sect = c("titles", "footnotes")) {
+new_title_footnote <- function(x, sect = c("titles", "footnotes", "footnote_page")) {
   sect <- match.arg(sect)
 
   # Check if all lists have length <=3
@@ -107,17 +123,17 @@ new_title_footnote <- function(x, sect = c("titles", "footnotes")) {
   ft <- flextable::flextable(df)
 
   # Apply the common styling
-  ft <- ft %>%
-    flextable::set_header_labels(Left = "", Center = "", Right = "") %>%
-    flextable::delete_part(part = "header") %>%
+  ft <- ft |>
+    flextable::set_header_labels(Left = "", Center = "", Right = "") |>
+    flextable::delete_part(part = "header") |>
     flextable::delete_part(part = "footer")
 
   # Apply different styling based on the number of elements
   for (i in seq_along(x)) {
     elements <- x[[i]]
     if (length(elements) == 1) {
-      ft <- ft %>%
-        flextable::merge_h(i = i, part = "body") %>%
+      ft <- ft |>
+        flextable::merge_h(i = i, part = "body") |>
         flextable::align(
           j = 1, i = i,
           align = ifelse(sect == "titles",
@@ -127,15 +143,15 @@ new_title_footnote <- function(x, sect = c("titles", "footnotes")) {
           part = "body"
         )
     } else if (length(elements) == 2) {
-      ft <- ft %>%
-        flextable::merge_h(i = i, part = "body") %>%
-        flextable::align(j = 1, i = i, align = "left", part = "body") %>%
+      ft <- ft |>
+        flextable::merge_h(i = i, part = "body") |>
+        flextable::align(j = 1, i = i, align = "left", part = "body") |>
         flextable::align(j = 2, i = i, align = "right", part = "body")
     } else if (length(elements) == 3) {
-      ft <- ft %>%
-        flextable::merge_h(i = i, part = "body") %>%
-        flextable::align(j = 1, i = i, align = "left", part = "body") %>%
-        flextable::align(j = 2, i = i, align = "center", part = "body") %>%
+      ft <- ft |>
+        flextable::merge_h(i = i, part = "body") |>
+        flextable::align(j = 1, i = i, align = "left", part = "body") |>
+        flextable::align(j = 2, i = i, align = "center", part = "body") |>
         flextable::align(j = 3, i = i, align = "right", part = "body")
     }
   }

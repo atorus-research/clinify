@@ -65,21 +65,29 @@ clintable_as_html <- function(x, n = 3, nrows = 15, apply_defaults = TRUE, ...) 
 
   titles <- x$clinify_config$titles
   footnotes <- x$clinify_config$footnotes
+  footnote_page <- x$clinify_config$footnote_page
 
   # Apply the default styling
   if (apply_defaults) {
     if (!is.null(titles)) titles <- getOption("clinify_titles_default")(titles)
     if (!is.null(footnotes)) footnotes <- getOption("clinify_footnotes_default")(footnotes)
     x <- getOption("clinify_table_default")(x)
+    if (!is.null(x$clinify_config$footnote_page)) {
+      footnote_page <- getOption("clinify_footnotes_default")(footnote_page) |>
+        flextable::width(width = flextable::flextable_dim(x)$widths / 2)
+    }
   }
-
   if (pg_method == "default") {
     nrows <- min(c(nrows, nrow(refdat)))
     pg <- slice_clintable(x, 1:nrows, eval_select(x$col_keys, refdat))
-    out <- print_clinpage(pg, titles, footnotes)
+    if (!is.null(footnote_page)) {
+      out <- print_alternating(pg, n=1, titles, footnotes, footnote_page)
+    } else {
+      out <- print_clinpage(pg, titles, footnotes)
+    }
   } else if (pg_method == "custom") {
     x <- prep_pagination_(x)
-    out <- print_alternating(x, n = n, titles, footnotes)
+    out <- print_alternating(x, n = n, titles, footnotes, footnote_page)
   }
   out
 }
@@ -132,22 +140,53 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL, group_label = NUL
 #' @param x a clintable object
 #' @param n number of pages within the clintable to print
 #' @noRd
-print_alternating <- function(x, n, titles = NULL, footnotes = NULL) {
+print_alternating <- function(x, n, titles = NULL, footnotes = NULL, footnote_page = NULL) {
   pag_idx <- x$clinify_config$pagination_idx
 
   # Don't try to print more pages than requested
-  n <- min(length(pag_idx), n)
-
-  pgs <- lapply(pag_idx[1:n], \(p) {
-    blah <- slice_clintable(x, p$rows, p$cols)
-    print_clinpage(
-      blah,
+  if (!is.null(pag_idx)) {
+    n <- min(length(pag_idx), n)
+  } else {
+    n <- 1
+  }
+  
+  # Render the footnote page
+  ft_page <- NULL
+  if (!is.null(footnote_page)) {
+    n <- n-1
+    ft_page <- print_clinpage(
+      footnote_page,
       titles = titles,
-      footnotes = footnotes,
-      group_label = p$label,
-      captions = p$captions
+      footnotes=footnotes
     )
-  })
+  }
+
+  # Print the table pages
+  if (!is.null(pag_idx)) {
+    pgs <- lapply(pag_idx[1:n], \(p) {
+      pag <- slice_clintable(x, p$rows, p$cols)
+      print_clinpage(
+        pag,
+        titles = titles,
+        footnotes = footnotes,
+        group_label = p$label,
+        captions = p$captions
+      )
+    })
+  } else {
+    pgs <- list(
+      print_clinpage(
+        x,
+        titles = titles,
+        footnotes = footnotes
+      )
+    )
+  }
+
+  # Put the footnote page up front
+  if (!is.null(ft_page)) {
+    pgs <- append(pgs, list(ft_page), after=0)
+  }
 
   # Create the arguments and page selectors for the pages being printed
   args <- list()
