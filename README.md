@@ -1,12 +1,17 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# **{clinify}**
+# **clinify** <img src="man/figures/logo.svg" align="right" alt="" width="120" />
 
 <!-- badges: start -->
 
 [![Codecov test
 coverage](https://codecov.io/gh/atorus-research/clinify/graph/badge.svg)](https://app.codecov.io/gh/atorus-research/clinify)
+[<img src="https://img.shields.io/badge/License-APACHE2-blue.svg">](https://github.com/atorus-research/clinify/blob/main/LICENSE.md)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![R build
+status](https://github.com/atorus-research/clinify/workflows/R-CMD-check/badge.svg)](https://github.com/atorus-research/clinify/actions?workflow=R-CMD-check)
 <!-- badges: end -->
 
 **{clinify}** is direct extension of the
@@ -23,7 +28,7 @@ You can install the development version of **{clinify}** like so:
 install.packages("clinify")
 
 # Install the development version:
-devtools::install_github("https://github.com/atorus-research/clinify.git", ref="development")
+devtools::install_github("https://github.com/atorus-research/clinify.git", ref = "development")
 ```
 
 ## Motivation
@@ -77,38 +82,38 @@ Here’s a basic example of some of clinify’s benefit in action
 library(clinify)
 # Mock some data
 dat <- mtcars
-dat['page'] <- c(
+dat["page"] <- c(
   rep(1, 10),
   rep(2, 10),
   rep(3, 10),
   c(4, 4)
 )
 dat2 <- rbind(dat, dat)
-dat2['groups'] <- c(
-  rep('a', 32),
-  rep('b', 32)
+dat2["groups"] <- c(
+  rep("a", 32),
+  rep("b", 32)
 )
 
 # Create a basic table
-ct <- clintable(dat2) |> 
+ct <- clintable(dat2) |>
   # Break pages by the "page" variable
-  clin_page_by('page') |> 
+  clin_page_by("page") |>
   # Add header lines using the "groups" variable
-  clin_group_by('groups') |> 
-  # For overflowing columns, alternate pages with 
+  clin_group_by("groups") |>
+  # For overflowing columns, alternate pages with
   # fixed variables for each page
   clin_alt_pages(
-    key_cols = c('mpg', 'cyl', 'hp'),
+    key_cols = c("mpg", "cyl", "hp"),
     col_groups = list(
-      c('disp', 'drat', 'wt'),
-      c('qsec', 'vs', 'am'),
-      c('gear', 'carb')
-    ) 
-  ) |> 
+      c("disp", "drat", "wt"),
+      c("qsec", "vs", "am"),
+      c("gear", "carb")
+    )
+  ) |>
   # Apply column widths as a proportion of the total page
   # For alternating pages, the proportion allocated to key columns
   # is carried to each page group
-  clin_col_widths(mpg = .2, cyl=.2, disp=.15, vs=.15) |>
+  clin_col_widths(mpg = .2, cyl = .2, disp = .15, vs = .15) |>
   # Add titles here is using new_header_footer to allow flextable functions
   # to customize the titles block
   clin_add_titles(
@@ -116,15 +121,15 @@ ct <- clintable(dat2) |>
       c("Left", "Center", "Right"),
       c("Just the middle")
     )
-  ) |> 
+  ) |>
   clin_add_footnotes(
-      list(
-        c(
-          "Here's a footnote.", 
-          format(Sys.time(), "%H:%M %A, %B %d, %Y")
-        )
+    list(
+      c(
+        "Here's a footnote.",
+        format(Sys.time(), "%H:%M %A, %B %d, %Y")
       )
-    )  
+    )
+  )
 
 # Print pages (by default 3 pages) to the viewer of the IDE
 print(ct)
