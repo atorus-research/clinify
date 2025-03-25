@@ -140,11 +140,7 @@ clinify_table_default <- function(x, ...) {
   x <- flextable::hline_bottom(x, part = "header")
 
   # Set font properties for the table header.
-  x <- flextable::font(x, part = "header", fontname = "Courier New")
-  # x <- bold(x, part = "header")
-
-  # Set font properties for the table body.
-  x <- flextable::font(x, part = "body", fontname = "Courier New")
+  x <- flextable::font(x, part = "all", fontname = "Courier New")
 
   # Set fontsize for both table header and table body.
   x <- flextable::fontsize(x, part = "all", size = 9)
@@ -161,6 +157,20 @@ clinify_table_default <- function(x, ...) {
   # Many other options are also available.
   x <- flextable::padding(x, i = 1, part = "header", padding.top = 9)
   x <- flextable::padding(x, i = flextable::nrow_part(x, part = "header"), part = "header", padding.bottom = 9)
+}
+
+#' TODO 
+#'
+#' @param x flextable object that is modified by the function.
+#' @param ... any additional arguments
+#'
+#' @return clintable object
+#' @export
+clinify_caption_default <- function(x, ...) {
+  # Set font properties for the table header.
+  x <- flextable::font(x, part = "footer", fontname = "Courier New")
+  # Set fontsize for both table header and table body.
+  x <- flextable::fontsize(x, part = "footer", size = 9)
 }
 
 #' Function to create a default officer docx object

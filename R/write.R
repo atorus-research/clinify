@@ -91,5 +91,12 @@ add_table_ <- function(doc, x, p) {
     tbl <- flextable::add_header_lines(tbl, values = paste(p$label, collapse = "\n"))
     tbl <- flextable::align(tbl, 1, 1, "left", part = "header")
   }
+
+  if (!is.null(p$captions)) {
+    # TODO: Allow formatting on this
+    tbl <- flextable::add_footer_lines(tbl, values = paste(p$captions, collapse = "\n"))
+    # This has to be applied after the footer is added
+    tbl <- getOption("clinify_caption_default")(tbl)
+  }
   doc <- flextable::body_add_flextable(doc, tbl)
 }

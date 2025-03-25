@@ -35,6 +35,13 @@ refdat3["groups2"] <- c(
   rep("2", 16),
   rep("1", 16),
   rep("2", 16)
+) 
+
+refdat3['captions'] <- c(
+  rep('Caption 1', 16),
+  rep('Caption 2', 16),
+  rep('Caption 3', 16),
+  rep('Caption 4', 16)
 )
 
 test_that("Alternating with page by", {
@@ -54,51 +61,75 @@ test_that("Alternating with page by", {
   exp_out <- list(
     list(
       rows = 1:10,
-      cols = p1
+      cols = p1,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = 1:10,
-      cols = p2
+      cols = p2,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = 1:10,
-      cols = p3
+      cols = p3,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = 11:20,
-      cols = p1
+      cols = p1,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = 11:20,
-      cols = p2
+      cols = p2,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = 11:20,
-      cols = p3
+      cols = p3,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = 21:30,
-      cols = p1
+      cols = p1,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = 21:30,
-      cols = p2
+      cols = p2,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = 21:30,
-      cols = p3
+      cols = p3,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = c(31, 32),
-      cols = p1
+      cols = p1,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = c(31, 32),
-      cols = p2
+      cols = p2,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = c(31, 32),
-      cols = p3
+      cols = p3,
+      label=NULL,
+      captions=NULL
     )
   )
 
@@ -117,19 +148,27 @@ test_that("Page by no alternating", {
   exp_out <- list(
     list(
       rows = 1:10,
-      cols = pages
+      cols = pages,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = 11:20,
-      cols = pages
+      cols = pages,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = 21:30,
-      cols = pages
+      cols = pages,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = c(31, 32),
-      cols = pages
+      cols = pages,
+      label=NULL,
+      captions=NULL
     )
   )
 
@@ -155,27 +194,39 @@ test_that("Alternating no page by", {
   exp_out <- list(
     list(
       rows = 1:20,
-      cols = p1
+      cols = p1,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = 1:20,
-      cols = p2
+      cols = p2,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = 1:20,
-      cols = p3
+      cols = p3,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = 21:32,
-      cols = p1
+      cols = p1,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = 21:32,
-      cols = p2
+      cols = p2,
+      label=NULL,
+      captions=NULL
     ),
     list(
       rows = 21:32,
-      cols = p3
+      cols = p3,
+      label=NULL,
+      captions=NULL
     )
   )
 })
@@ -199,122 +250,146 @@ test_that("Alternating with page by with groups", {
     list(
       rows = 1:10,
       cols = p1,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 1:10,
       cols = p2,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 1:10,
       cols = p3,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 11:20,
       cols = p1,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 11:20,
       cols = p2,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 11:20,
       cols = p3,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 21:30,
       cols = p1,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 21:30,
       cols = p2,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 21:30,
       cols = p3,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = c(31, 32),
       cols = p1,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = c(31, 32),
       cols = p2,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = c(31, 32),
       cols = p3,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 33:40,
       cols = p1,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 33:40,
       cols = p2,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 33:40,
       cols = p3,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 41:50,
       cols = p1,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 41:50,
       cols = p2,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 41:50,
       cols = p3,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 51:60,
       cols = p1,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 51:60,
       cols = p2,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 51:60,
       cols = p3,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 61:64,
       cols = p1,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 61:64,
       cols = p2,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 61:64,
       cols = p3,
-      label = "b"
+      label = "b",
+      captions=NULL
     )
   )
 
@@ -337,42 +412,50 @@ test_that("Page by no alternating with groups", {
     list(
       rows = 1:10,
       cols = pages,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 11:20,
       cols = pages,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 21:30,
       cols = pages,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = c(31, 32),
       cols = pages,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 33:40,
       cols = pages,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 41:50,
       cols = pages,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 51:60,
       cols = pages,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 61:64,
       cols = pages,
-      label = "b"
+      label = "b",
+      captions=NULL
     )
   )
 
@@ -394,12 +477,14 @@ test_that("Groups no page by", {
     list(
       rows = 1:32,
       cols = pages,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 33:64,
       cols = pages,
-      label = "b"
+      label = "b",
+      captions=NULL
     )
   )
 
@@ -427,62 +512,74 @@ test_that("Alternating pages with groups", {
     list(
       rows = 1:20,
       cols = p1,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 1:20,
       cols = p2,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 1:20,
       cols = p3,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 21:32,
       cols = p1,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 21:32,
       cols = p2,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 21:32,
       cols = p3,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 33:52,
       cols = p1,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 33:52,
       cols = p2,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 33:52,
       cols = p3,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 53:64,
       cols = p1,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 53:64,
       cols = p2,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 53:64,
       cols = p3,
-      label = "b"
+      label = "b",
+      captions=NULL
     )
   )
 
@@ -495,7 +592,7 @@ test_that("Alternating pages with groups", {
 test_that("Multiple groups are pulled out properly", {
   ct <- clintable(refdat3) |>
     clin_page_by("page") |>
-    clin_group_by(c("groups", "groups2"))
+    clin_group_by(c("groups", "groups2"), caption_by="captions")
 
   ct2 <- prep_pagination_(ct)
 
@@ -503,52 +600,62 @@ test_that("Multiple groups are pulled out properly", {
     list(
       rows = 1:10,
       cols = pages,
-      label = c("a", "1")
+      label = c("a", "1"),
+      captions = "Caption 1"
     ),
     list(
       rows = 11:16,
       cols = pages,
-      label = c("a", "1")
+      label = c("a", "1"),
+      captions = "Caption 1"
     ),
     list(
       rows = 17:20,
       cols = pages,
-      label = c("a", "2")
+      label = c("a", "2"),
+      captions = "Caption 2"
     ),
     list(
       rows = 21:30,
       cols = pages,
-      label = c("a", "2")
+      label = c("a", "2"),
+      captions = "Caption 2"
     ),
     list(
       rows = 31:32,
       cols = pages,
-      label = c("a", "2")
+      label = c("a", "2"),
+      captions = "Caption 2"
     ),
     list(
       rows = 33:40,
       cols = pages,
-      label = c("b", "1")
+      label = c("b", "1"),
+      captions = "Caption 3"
     ),
     list(
       rows = 41:48,
       cols = pages,
-      label = c("b", "1")
+      label = c("b", "1"),
+      captions = "Caption 3"
     ),
     list(
       rows = 49:50,
       cols = pages,
-      label = c("b", "2")
+      label = c("b", "2"),
+      captions = "Caption 4"
     ),
     list(
       rows = 51:60,
       cols = pages,
-      label = c("b", "2")
+      label = c("b", "2"),
+      captions = "Caption 4"
     ),
     list(
       rows = 61:64,
       cols = pages,
-      label = c("b", "2")
+      label = c("b", "2"),
+      captions = "Caption 4"
     )
   )
 
@@ -581,152 +688,182 @@ test_that("Multiple group by with alternating pages", {
     list(
       rows = 1:10,
       cols = p1,
-      label = c("a", "1")
+      label = c("a", "1"),
+      captions = NULL
     ),
     list(
       rows = 1:10,
       cols = p2,
-      label = c("a", "1")
+      label = c("a", "1"),
+      captions = NULL
     ),
     list(
       rows = 1:10,
       cols = p3,
-      label = c("a", "1")
+      label = c("a", "1"),
+      captions = NULL
     ),
     list(
       rows = 11:16,
       cols = p1,
-      label = c("a", "1")
+      label = c("a", "1"),
+      captions = NULL
     ),
     list(
       rows = 11:16,
       cols = p2,
-      label = c("a", "1")
+      label = c("a", "1"),
+      captions = NULL
     ),
     list(
       rows = 11:16,
       cols = p3,
-      label = c("a", "1")
+      label = c("a", "1"),
+      captions = NULL
     ),
     list(
       rows = 17:20,
       cols = p1,
-      label = c("a", "2")
+      label = c("a", "2"),
+      captions = NULL
     ),
     list(
       rows = 17:20,
       cols = p2,
-      label = c("a", "2")
+      label = c("a", "2"),
+      captions = NULL
     ),
     list(
       rows = 17:20,
       cols = p3,
-      label = c("a", "2")
+      label = c("a", "2"),
+      captions = NULL
     ),
     list(
       rows = 21:30,
       cols = p1,
-      label = c("a", "2")
+      label = c("a", "2"),
+      captions = NULL
     ),
     list(
       rows = 21:30,
       cols = p2,
-      label = c("a", "2")
+      label = c("a", "2"),
+      captions = NULL
     ),
     list(
       rows = 21:30,
       cols = p3,
-      label = c("a", "2")
+      label = c("a", "2"),
+      captions = NULL
     ),
     list(
       rows = 31:32,
       cols = p1,
-      label = c("a", "2")
+      label = c("a", "2"),
+      captions = NULL
     ),
     list(
       rows = 31:32,
       cols = p2,
-      label = c("a", "2")
+      label = c("a", "2"),
+      captions = NULL
     ),
     list(
       rows = 31:32,
       cols = p3,
-      label = c("a", "2")
+      label = c("a", "2"),
+      captions = NULL
     ),
     list(
       rows = 33:40,
       cols = p1,
-      label = c("b", "1")
+      label = c("b", "1"),
+      captions = NULL
     ),
     list(
       rows = 33:40,
       cols = p2,
-      label = c("b", "1")
+      label = c("b", "1"),
+      captions = NULL
     ),
     list(
       rows = 33:40,
       cols = p3,
-      label = c("b", "1")
+      label = c("b", "1"),
+      captions = NULL
     ),
     list(
       rows = 41:48,
       cols = p1,
-      label = c("b", "1")
+      label = c("b", "1"),
+      captions = NULL
     ),
     list(
       rows = 41:48,
       cols = p2,
-      label = c("b", "1")
+      label = c("b", "1"),
+      captions = NULL
     ),
     list(
       rows = 41:48,
       cols = p3,
-      label = c("b", "1")
+      label = c("b", "1"),
+      captions = NULL
     ),
     list(
       rows = 49:50,
       cols = p1,
-      label = c("b", "2")
+      label = c("b", "2"),
+      captions = NULL
     ),
     list(
       rows = 49:50,
       cols = p2,
-      label = c("b", "2")
+      label = c("b", "2"),
+      captions = NULL
     ),
     list(
       rows = 49:50,
       cols = p3,
-      label = c("b", "2")
+      label = c("b", "2"),
+      captions = NULL
     ),
     list(
       rows = 51:60,
       cols = p1,
-      label = c("b", "2")
+      label = c("b", "2"),
+      captions = NULL
     ),
     list(
       rows = 51:60,
       cols = p2,
-      label = c("b", "2")
+      label = c("b", "2"),
+      captions = NULL
     ),
     list(
       rows = 51:60,
       cols = p3,
-      label = c("b", "2")
+      label = c("b", "2"),
+      captions = NULL
     ),
     list(
       rows = 61:64,
       cols = p1,
-      label = c("b", "2")
+      label = c("b", "2"),
+      captions = NULL
     ),
     list(
       rows = 61:64,
       cols = p2,
-      label = c("b", "2")
+      label = c("b", "2"),
+      captions = NULL
     ),
     list(
       rows = 61:64,
       cols = p3,
-      label = c("b", "2")
+      label = c("b", "2"),
+      captions = NULL
     )
   )
 
@@ -759,32 +896,38 @@ test_that("Test using max rows", {
     list(
       rows = 1:32,
       cols = p1,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 1:32,
       cols = p2,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 1:32,
       cols = p3,
-      label = "a"
+      label = "a",
+      captions=NULL
     ),
     list(
       rows = 33:64,
       cols = p1,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 33:64,
       cols = p2,
-      label = "b"
+      label = "b",
+      captions=NULL
     ),
     list(
       rows = 33:64,
       cols = p3,
-      label = "b"
+      label = "b",
+      captions=NULL
     )
   )
 
@@ -793,3 +936,4 @@ test_that("Test using max rows", {
   expect_true("groups" %in% ct$col_keys)
   expect_false("groups" %in% ct2$col_keys)
 })
+

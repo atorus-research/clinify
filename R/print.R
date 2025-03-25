@@ -91,16 +91,22 @@ clintable_as_html <- function(x, n = 3, nrows = 15, apply_defaults = TRUE, ...) 
 #' @return Invisible
 #'
 #' @noRd
-print_clinpage <- function(x, titles = NULL, footnotes = NULL, group_label = NULL) {
+print_clinpage <- function(x, titles = NULL, footnotes = NULL, group_label = NULL, captions = NULL) {
   if (!is.null(group_label)) {
     # TODO: Allow formatting on this
     x <- flextable::add_header_lines(x, values = paste(group_label, collapse = "\n"))
     x <- flextable::align(x, 1, 1, "left", part = "header")
   }
+  if (!is.null(captions)) {
+    # TODO: Allow formatting on this
+    x <- flextable::add_footer_lines(x, values = paste(captions, collapse = "\n"))
+    # This has to be applied after the footer is added
+    x <- getOption("clinify_caption_default")(x)
+  }
 
   body <- flextable::htmltools_value(x = x)
   # Two different type of leading spaces that appear in the HTML
-  body[[3]] <- gsub("(?<!th)  ", "&nbsp; ", body[[3]], perl = TRUE)
+  body[[3]] <- gsub("(?<!th|<td)  ", "&nbsp; ", body[[3]], perl = TRUE)
   body[[3]] <- gsub("(<span\\b[^>]*>) ", "\\1&nbsp;", body[[3]], perl = TRUE)
   # Concurrent spaces
   body[[3]] <- gsub("&nbsp;  ", "&nbsp;&nbsp; ", body[[3]], perl = TRUE)
@@ -138,7 +144,8 @@ print_alternating <- function(x, n, titles = NULL, footnotes = NULL) {
       blah,
       titles = titles,
       footnotes = footnotes,
-      group_label = p$label
+      group_label = p$label,
+      captions = p$captions
     )
   })
 
