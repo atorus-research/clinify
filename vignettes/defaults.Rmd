@@ -1,0 +1,184 @@
+---
+title: "Setting Clinify Defaults"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Setting Clinify Defaults}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Organizations likely have their own default styles for their clinical tables. Standards likely exist for things such as default page size and orientation, margins, fonts and font sizes. Furthermore, these settings might different between the table body, titles, footnotes. These are things that you likely don't want to have to pre-specify in every individual program. Furthermore, perhaps a style needs to be broadly updated across an entire study, or organization wide. These are settings that are ideally consolidated into one place and applied across potentially dozens of programs. For this reason, **{clinify}** has the option to configure - or additionally override - the default styles applied to a table. 
+
+**{clinify}** loads defaults into multiple options on package load. These options include the following:
+
+- `clinify_docx_default`: An {officer} `prop_section` object that stores the document defaults, including margins, page size, and orientation
+- `clinify_titles_default`: The {flextable} styles applied to the title section that goes in the header of the word document
+- `clinify_footnotes_default`: The {flextable} styles applied to the footnotes that go in the footer of the word document
+- `clinify_table_default`: The {flextable} styles applied to the body of the table
+- `clinify_caption_default`: {flextable} styles applied to captions (in body footnotes applied to tables, see `clin_group_by()`)
+
+
+# Creating Setting Functions
+
+The following sections are the functions which exist in clinify itself. If you wish to override any of these functions, you can create your own version of the function and apply to associated option. 
+
+## `clinify_docx_default`
+
+The default of **{clinify}** generally follows a landscape A4 style page. This is the default of {officer}, but in this example we override the page size of the `prop_section` to be landscape, so the margins get lost. It's necessary to have the margins available for the calculations used in `clin_col_widths()`.
+
+```{r, eval=FALSE}
+clinify_docx_default <- function() {
+  # I want these as defaults but need to carry it forward because
+  # the default section strips it off
+  margins <- as.list(
+    append(officer::docx_dim(officer::read_docx())$margins, list(gutter = 0))
+  )
+
+  officer::prop_section(
+    page_size = officer::page_size(orient = "landscape"),
+    type = "continuous",
+    page_margins = do.call(officer::page_mar, margins)
+  )
+}
+```
+
+## `clinify_titles_default`
+
+```{r, eval=FALSE}
+clinify_titles_default <- function(x, ...) {
+  # Remove all borders as heading does not need any.
+  x <- flextable::border_remove(x)
+  # Setup font properties.
+  x <- flextable::color(x, color = "black")
+  x <- flextable::fontsize(x, size = 9)
+  x <- flextable::font(x, font = "Courier New")
+  x <- flextable::bold(x, bold = FALSE)
+  x <- flextable::italic(x, italic = FALSE)
+
+  # Default table width
+  x <- flextable::width(x, width = clin_default_table_width() / 3)
+  # Setup the interval between rows.
+  x <- flextable::line_spacing(x, space = 1, part = "all")
+  # Setup the cell padding.
+  x <- flextable::padding(x, part = "all", padding.bottom = 0, padding.top = 0)
+  x <- flextable::set_table_properties(
+    x,
+    layout = "fixed"
+  )
+}
+```
+## `clinify_footnotes_default`
+
+```{r, eval=FALSE}
+clinify_footnotes_default <- function(x, ...) {
+  # Remove all borders.
+  x <- flextable::border_remove(x)
+  # Page footer should have single top border over the top row.
+  x <- flextable::hline_top(x, part = "body", border = officer::fp_border(color = "black", width = 1))
+  # Setup font properties.
+  x <- flextable::color(x, color = "black")
+  x <- flextable::fontsize(x, size = 9)
+  x <- flextable::font(x, font = "Courier New")
+  x <- flextable::bold(x, bold = FALSE)
+  x <- flextable::italic(x, italic = FALSE)
+  # One has to specify the width of the page header "table", which in this case
+  # is landscape page width minus two times 1 in margin.
+  x <- flextable::width(x, width = clin_default_table_width() / 3)
+  # Setup the interval between rows.
+  x <- flextable::line_spacing(x, space = 1, part = "all")
+  # Setup the cell padding.
+  x <- flextable::padding(x, part = "all", padding.bottom = 0, padding.top = 0)
+
+  x <- flextable::set_table_properties(
+    x,
+    layout = "fixed"
+  )
+}
+```
+
+## `clinify_table_default`
+
+```{r, eval=FALSE}
+clinify_table_default <- function(x, ...) {
+  # Clear all borders first and apply them just for the header
+  # (as horizontal lines).
+  x <- flextable::border_remove(x)
+  x <- flextable::hline(x,
+    part = "header",
+    border = officer::fp_border(
+      color = "black",
+      style = "solid",
+      width = 0.2
+    )
+  )
+  # Top horizontal line for the table header.
+  x <- flextable::hline_top(x, part = "header")
+  x <- flextable::hline(x,
+    part = "header",
+    border = officer::fp_border()
+  )
+
+  # Remove blank bottoms
+  blk_inds <- which(x$header$dataset == "", arr.ind = TRUE)
+  x <- flextable::hline(x,
+    i = blk_inds[, "row"], j = blk_inds[, "col"],
+    part = "header",
+    border = officer::fp_border(style = "none", width = 0)
+  )
+  x <- flextable::hline_bottom(x, part = "header")
+
+  # Set font properties for the table header.
+  x <- flextable::font(x, part = "all", fontname = "Courier New")
+
+  # Set fontsize for both table header and table body.
+  x <- flextable::fontsize(x, part = "all", size = 9)
+
+  # Set table's layout.
+  x <- flextable::set_table_properties(
+    x,
+    layout = "fixed"
+  )
+
+  # Setup the cell padding for table body.
+  x <- flextable::padding(x, part = "body", padding.bottom = 0.1, padding.top = 0.1)
+
+  # Many other options are also available.
+  x <- flextable::padding(x, i = 1, part = "header", padding.top = 9)
+  x <- flextable::padding(x, i = flextable::nrow_part(x, part = "header"), part = "header", padding.bottom = 9)
+}
+```
+
+## `clinify_caption_default`
+
+Note that this option is only necessary because of how captions are applied by `clin_group_by()`. The caption doesn't bind to the table object until the pagination is being processed. As such, the "footer" of the flextable object itself can't have styles applied until the footer is set. 
+
+```{r, eval=FALSE}
+clinify_caption_default <- function(x, ...) {
+  # Set font properties for the table header.
+  x <- flextable::font(x, part = "footer", fontname = "Courier New")
+  # Set fontsize for both table header and table body.
+  x <- flextable::fontsize(x, part = "footer", size = 9)
+}
+```
+
+
+# Applying the Options
+
+Once you have the function created, the options can be applied as follows.
+
+```{r, eval=FALSE}
+options(
+  clinify_docx_default = sect,
+  clinify_titles_default = clinify_titles_default,
+  clinify_footnotes_default = clinify_footnotes_default,
+  clinify_table_default = clinify_table_default, 
+  clinify_caption_default = clinify_caption_default
+)
+```

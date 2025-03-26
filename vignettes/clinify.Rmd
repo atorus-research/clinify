@@ -234,8 +234,8 @@ While printing the table during development helps you with the development proce
 ```{r write_clintable, eval=FALSE}
 # Create a basic table
 ct <- clintable(dat2) |> 
-  clin_page_by(max_rows = 36) |> 
-  clin_group_by(c('groups1', 'groups2')) |> 
+  clin_page_by('page') |> 
+  clin_group_by(c('groups1', 'groups2'), caption_by = "captions") |> 
   clin_alt_pages(
     key_cols = c('mpg', 'cyl', 'hp'),
     col_groups = list(
@@ -244,6 +244,19 @@ ct <- clintable(dat2) |>
       c('gear', 'carb')
     ) 
   ) |> 
+  clin_column_headers(
+    mpg = "Miles/(US) gallon",
+    cyl = c("Number of cylinders"),
+    disp= c("Displacement\n(cu.in.)"),
+    hp = c("Gross horsepower"),
+    drat = c("Span multiple pages", "Rear axle ratio"),
+    wt = c("Span multiple pages", "Weight (1000 lbs)"),
+    qsec = c("Span multiple pages", "1/4 mile time"),
+    vs = c("Span multiple pages", "Engine\n(0 = V-shaped, 1 = straight)"),
+    am = c("Span multiple pages", "Transmission\n(0 = automatic, 1 = manual)"),
+    gear = c("Some Spanner", "Number of forward gears"),
+    carb = c("Some Spanner", "Number of carburetors")
+  ) |>
   clin_col_widths(mpg = .2, cyl=.2, disp=.15, vs=.15) |>
   clin_add_titles(
     list(
@@ -258,12 +271,30 @@ ct <- clintable(dat2) |>
           format(Sys.time(), "%H:%M %A, %B %d, %Y")
         )
       )
+    ) |>
+  clin_add_footnote_page(
+    list(
+      c("One very long footnote full of text"), 
+      c("Two very long footnote full of text"),
+      c("Three very long footnote full of text"),
+      c("Four very long footnote full of text"),
+      c("Five very long footnote full of text")
     )
+  )
 
+# Catch the officer::rdocx object itself
+doc <- clindoc(ct)
+
+# Write the clindoc
+write_clintable(doc, file="example_table.docx")
+
+# Alternately just write the clintable directly
 write_clintable(ct, file="example_table.docx")
 ```
 
 <p align="center"><img src="table.png" width="800px"></p>
+
+
 
 ## Why this framework? 
 

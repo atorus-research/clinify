@@ -1,0 +1,103 @@
+---
+title: "Pagination"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Pagination}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+A major piece of the advantage that **{clinify}** offers is control over pagination. Clinical tables can get fairly specific in how pagination is handled, requiring page breaks to occur in specific places, data driven content to be pulled into different portions of the table, or overflowing columns into multiple pages. **{clinify}** offers a few different function to help with this process. 
+
+## `clin_page_by()`
+
+One method of pagination for clinical tables that's been used for a long time is to pre-program a variable that specifies where page breaks should occur. When default page break methods don't suffice, this can be one way that you ensure breaks happen in the appropriate places. The `clin_page_by()` function allows you to target a variable in the table that will be used to drive this. 
+
+Let's prep some data and provide an example.
+
+```{r setup}
+library(clinify)
+
+dat <- mtcars
+dat['page'] <- c(
+  rep(1, 10),
+  rep(2, 10),
+  rep(3, 10),
+  c(4, 4)
+)
+dat2 <- rbind(dat, dat)
+dat2['groups1'] <- c(
+  rep('a', 32),
+  rep('b', 32)
+)
+dat2['groups2'] <- c(
+  rep('1', 16),
+  rep('2', 16),
+  rep('1', 16),
+  rep('2', 16)
+)
+dat2['captions'] <- c(
+  rep('Caption 1', 16),
+  rep('Caption 2', 16),
+  rep('Caption 3', 16),
+  rep('Caption 4', 16)
+)
+
+clintable(dat2) |>
+  clin_page_by('page')
+```
+
+An alternative to using a paging variable, another shortcut option is to specify the maximum rows you want to print to a specific page.
+
+```{r}
+clintable(dat2) |>
+  clin_page_by(max_rows = 5)
+```
+
+## `clin_group_by()`
+
+Another specific form of available is the function `clin_group_by()`. This function takes two arguments after the `clintable`:
+
+- `group_by`, and
+- `caption_by`
+
+The data within variables provided in `group_by` will be extracted to lines that are printed **above** the header and in the table body. Similarly, the `caption_by` data will be pulled into footnotes attached below the table body but above the footer. 
+
+```{r}
+clintable(dat2) |> 
+  clin_page_by('page') |> 
+  clin_group_by(c('groups1', 'groups2'), caption_by = "captions")
+```
+
+`clin_group_by()` can be used in combination with `clin_page_by()`, but this is not required. When these two functions are used together, page breaks will occur when **any of** the group, caption, or page variables change. 
+
+## `clin_alt_pages()`
+
+The most complex pagination method is `clin_alt_pages()`. This function allows you to split one table across multiple pages. This is specifically reserved for circumstances in which you have a table that has too many columns to fit on one page. For example, a study may have many different treatment groups that need to be presented, or perhaps a listing needs to present a large number of columns. This isn't an ideal case for a table, but it's still a common situation. 
+
+`clin_alt_pages()` takes two parameters after the `clintable`:
+
+- `key_cols`: Columns frozen to each page
+- `col_groups`: The sets of columns differing from page to page
+
+```{r}
+clintable(dat2) |> 
+  clin_page_by('page') |> 
+  clin_alt_pages(
+    key_cols = c('mpg', 'cyl', 'hp'),
+    col_groups = list(
+      c('disp', 'drat', 'wt'),
+      c('qsec', 'vs', 'am'),
+      c('gear', 'carb')
+    ) 
+  ) 
+```
+
+One thing to note about this function is that it should be paired with `clin_page_by()`. This function works by chunking the input clintable into individual pages and separating those pages using page breaks - so the number of rows printed to each page is necessary for the page splits to work effectively. If `clin_page_by()` is not provided, a warning will appear and the table will default to 20 rows per page.
