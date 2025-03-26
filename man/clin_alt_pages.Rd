@@ -24,11 +24,11 @@ ct <- clintable(mtcars)
 
 clin_alt_pages(
   ct,
-  key_cols = c('mpg', 'cyl', 'hp'),
+  key_cols = c("mpg", "cyl", "hp"),
   col_groups = list(
-    c('disp', 'drat', 'wt'),
-    c('qsec', 'vs', 'am'),
-    c('gear', 'carb')
+    c("disp", "drat", "wt"),
+    c("qsec", "vs", "am"),
+    c("gear", "carb")
   )
 )
 }

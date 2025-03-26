@@ -26,14 +26,18 @@ ct <- clintable(mtcars)
 
 ct <- clin_alt_pages(
   ct,
-  key_cols = c('mpg', 'cyl', 'hp'),
+  key_cols = c("mpg", "cyl", "hp"),
   col_groups = list(
-    c('disp', 'drat', 'wt'),
-    c('qsec', 'vs', 'am'),
-    c('gear', 'carb')
+    c("disp", "drat", "wt"),
+    c("qsec", "vs", "am"),
+    c("gear", "carb")
   )
 )
 
-write_clintable(ct, file.path(tempdir(), 'demo.docx'))
+# Get document object directly
+doc <- clindoc(ct)
+
+# Write out docx file
+write_clintable(ct, file.path(tempdir(), "demo.docx"))
 
 }

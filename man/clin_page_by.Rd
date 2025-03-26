@@ -21,16 +21,16 @@ Configure pagination using a page variable
 }
 \examples{
 dat <- mtcars
-dat['page'] <- c(
+dat["page"] <- c(
   rep(1, 10),
   rep(2, 10),
   rep(3, 10),
   c(4, 4)
 )
 
-clintable(dat) |> 
-  clin_page_by('page')
+clintable(dat) |>
+  clin_page_by("page")
 
-clintable(mtcars) |> 
-  clin_page_by(max_rows=10)
+clintable(mtcars) |>
+  clin_page_by(max_rows = 10)
 }

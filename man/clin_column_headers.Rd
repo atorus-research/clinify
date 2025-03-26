@@ -40,10 +40,10 @@ the label string.
 
 clintable(iris) |>
   clin_column_headers(
-    Sepal.Length = c("Flowers", "Sepal", "Length"),  
-    Sepal.Width = c("Flowers", "Sepal", "Width"),  
-    Petal.Length = c("Petal", "Length"),  
+    Sepal.Length = c("Flowers", "Sepal", "Length"),
+    Sepal.Width = c("Flowers", "Sepal", "Width"),
+    Petal.Length = c("Petal", "Length"),
     Petal.Width = c("Petal", "Width")
- )
+  )
 
 }

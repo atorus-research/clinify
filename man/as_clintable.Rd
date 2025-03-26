@@ -25,5 +25,4 @@ Convert a flextable into a clintable object
 ft <- flextable::flextable(mtcars)
 as_clintable(ft)
 
-
 }

@@ -3,11 +3,14 @@
 \name{clin_add_titles}
 \alias{clin_add_titles}
 \alias{clin_add_footnotes}
+\alias{clin_add_footnote_page}
 \title{Add page footer}
 \usage{
 clin_add_titles(x, ls = NULL, ft = NULL)
 
 clin_add_footnotes(x, ls = NULL, ft = NULL)
+
+clin_add_footnote_page(x, ls = NULL, ft = NULL)
 }
 \arguments{
 \item{x}{a clintable object}
@@ -26,18 +29,26 @@ where each sublist represents a separate line (or row) of text. There is also a 
 with both left- and right-aligned text. To do so - simply pass two items to a sublist instead of one.
 }
 \examples{
-clintable(mtcars) |> 
+clintable(mtcars) |>
   clin_add_titles(
     list(
       c("Left", "Center", "Right"),
       c("Just the middle")
     )
-  ) |> 
+  ) |>
   clin_add_footnotes(
     list(
       c(
-        "Here's a footnote.", 
+        "Here's a footnote.",
         format(Sys.time(), "\%H:\%M \%A, \%B \%d, \%Y")
+      )
+    )
+  ) |>
+  clin_add_footnote_page(
+    list(
+      c(
+        "Use when you have a lot of footnotes",
+        "And you don't want to put them on every page"
       )
     )
   )
