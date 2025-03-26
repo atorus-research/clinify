@@ -165,7 +165,7 @@
       5 Three very long footnote full of text Three very long footnote full of text
       6  Four very long footnote full of text  Four very long footnote full of text
       7  Five very long footnote full of text  Five very long footnote full of text
-      8                    Here's a footnote.       10:00 Wednesday, March 26, 2025
+      8                    Here's a footnote.       10:55 Wednesday, March 26, 2025
                                            X3
       1                                 Right
       2                       Just the middle
@@ -174,7 +174,7 @@
       5 Three very long footnote full of text
       6  Four very long footnote full of text
       7  Five very long footnote full of text
-      8       10:00 Wednesday, March 26, 2025
+      8       10:55 Wednesday, March 26, 2025
 
 ---
 
@@ -198,7 +198,7 @@
       14               22.8                               4
       15               19.2                               6
       16          Caption 1                       Caption 1
-      17 Here's a footnote. 10:00 Wednesday, March 26, 2025
+      17 Here's a footnote. 10:55 Wednesday, March 26, 2025
                                       X3                   X4                  X5
       1                            Right                 <NA>                <NA>
       2                  Just the middle                 <NA>                <NA>
@@ -216,7 +216,7 @@
       14                              95                140.8                3.92
       15                             123                167.6                3.92
       16                       Caption 1            Caption 1           Caption 1
-      17 10:00 Wednesday, March 26, 2025                 <NA>                <NA>
+      17 10:55 Wednesday, March 26, 2025                 <NA>                <NA>
                           X6
       1                 <NA>
       2                 <NA>
@@ -258,7 +258,7 @@
       14               22.8                               4
       15               19.2                               6
       16          Caption 1                       Caption 1
-      17 Here's a footnote. 10:00 Wednesday, March 26, 2025
+      17 Here's a footnote. 10:55 Wednesday, March 26, 2025
                                       X3                  X4
       1                            Right                <NA>
       2                  Just the middle                <NA>
@@ -276,7 +276,7 @@
       14                              95               22.90
       15                             123               18.30
       16                       Caption 1           Caption 1
-      17 10:00 Wednesday, March 26, 2025                <NA>
+      17 10:55 Wednesday, March 26, 2025                <NA>
                                          X5                                      X6
       1                                <NA>                                    <NA>
       2                                <NA>                                    <NA>

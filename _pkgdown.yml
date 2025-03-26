@@ -59,3 +59,10 @@ reference:
 - contents:
   - print.clintable
   - write_clintable
+articles:
+- title: Vignettes
+  navbar: Vignettes
+  contents:
+  - defaults
+  - pagination
+  - titles_footnotes
