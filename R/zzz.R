@@ -11,6 +11,9 @@ NULL
 .onLoad <- function(libname, pkgname) {
   sect <- clinify_docx_default()
 
+  # Store any defaults
+  op <- options()
+
   # Save out options to grab defaults
   options(
     clinify_docx_default = sect,
@@ -19,4 +22,7 @@ NULL
     clinify_table_default = clinify_table_default, 
     clinify_caption_default = clinify_caption_default
   )
+
+  # Reapply them
+  options(op)
 }

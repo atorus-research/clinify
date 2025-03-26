@@ -18,6 +18,11 @@
 #' @noRd
 slice_clintable <- function(x, rows, columns, skip_spans=FALSE) {
   out <- new_clinpage()
+
+  if (!is.null(names(columns))) {
+    columns <- eval_select(names(columns), x$body$dataset)
+  }
+  
   out$header <- slice_complex_tabpart(x$header, 1:nrow(x$header$dataset), columns)
   out$footer <- slice_complex_tabpart(x$footer, 1:nrow(x$footer$dataset), columns)
   out$body <- slice_complex_tabpart(x$body, rows, columns)

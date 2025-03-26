@@ -1,24 +1,34 @@
-#' The function to apply default title styling
+#' Apply Default Clinical Styling to Clintables
 #'
-#' Next styling is applied:
-#' -- font colour - black \cr
-#' -- all borders are removed \cr
-#' -- font style - Courier New, 9pt, not bold, not italic \cr
-#' -- interval between rows - 1 space \cr
-#' -- padding - bottom = 0, top = 0 \cr
+#' These functions apply default styling to `clintable` objects used for 
+#' clinical tables, including titles and footnotes. The styling includes 
+#' removing borders, setting font properties, and adjusting table width, 
+#' line spacing, and padding.
 #'
-#' One has to specify the width of the page header "table", which in this case
-#' is landscape page width (11.42 in) minus two times 1 in margin.
-#' ALL headers would have 3 columns underneath the hood (for left, center and
-#' right-aligned text). Hence we divide by 3 to specify the width of a single
-#' column
-#' @import flextable
+#' @param x A `clintable` object representing the table (title or footnote).
+#' @param ... Additional arguments (currently unused).
 #'
-#' @param x flextable object that is modified by the function.
-#' @param ... any additional arguments
-#'
-#' @return None
+#' @return A `clintable` object with the applied styling.
+#' @family Clinify Defaults
+#' @rdname clinify_defaults
 #' @export
+#' 
+#' @examples
+#' 
+#' op <- options()
+#' 
+#' sect <- clinify_docx_default()
+#' 
+#' # Save out options to grab defaults
+#' options(
+#'   clinify_docx_default = sect,
+#'   clinify_titles_default = clinify_titles_default,
+#'   clinify_footnotes_default = clinify_footnotes_default,
+#'   clinify_table_default = clinify_table_default, 
+#'   clinify_caption_default = clinify_caption_default
+#' )
+#' 
+#' options(op)
 clinify_titles_default <- function(x, ...) {
   # Remove all borders as heading does not need any.
   x <- flextable::border_remove(x)
@@ -28,11 +38,8 @@ clinify_titles_default <- function(x, ...) {
   x <- flextable::font(x, font = "Courier New")
   x <- flextable::bold(x, bold = FALSE)
   x <- flextable::italic(x, italic = FALSE)
-  # One has to specify the width of the page header "table", which in this case
-  # is landscape page width (11.42 in) minus two times 1 in margin.
-  # ALL headers would have 3 columns underneath the hood (for left, center and
-  # right-aligned text). Hence we divide by 3 to specify the width of a single
-  # column.
+
+  # Default table width
   x <- flextable::width(x, width = clin_default_table_width() / 3)
   # Setup the interval between rows.
   x <- flextable::line_spacing(x, space = 1, part = "all")
@@ -44,30 +51,8 @@ clinify_titles_default <- function(x, ...) {
   )
 }
 
-#' The function to apply default footnote styling
-#'
-#' Next styling is applied:
-#' -- font colour - black \cr
-#' -- page footer should have single black top border over the top row that is
-#'    width of 1 \cr
-#' -- all borders are removed \cr
-#' -- font style - Courier New, 9pt, not bold, not italic \cr
-#' -- interval between rows - 1 space \cr
-#' -- padding - bottom = 0, top = 0 \cr
-#'
-#' One has to specify the width of the page header "table", which in this case
-#' is landscape page width (11.42 in) minus two times 1 in margin.
-#' ALL headers would have 3 columns underneath the hood (for left, center and
-#' right-aligned text). Hence we divide by 3 to specify the width of a single
-#' column
-#' @import flextable
-#' @import officer
-#'
-#'
-#' @param x flextable object that is modified by the function.
-#' @param ... any additional arguments
-#'
-#' @return None
+#' @family Clinify Defaults
+#' @rdname clinify_defaults
 #' @export
 clinify_footnotes_default <- function(x, ...) {
   # Remove all borders.
@@ -94,23 +79,9 @@ clinify_footnotes_default <- function(x, ...) {
   )
 }
 
-#' The function to apply default table styling
-#'
-#' Headers with the same value are merged both horizontally and vertically
-#' All borders are clear except for the header (bleck, solid, 0.2pt)
-#' As well as top horizontal line for the table header.
-#' font style - Courier New, 9pt, not bold, not italic
-#' padding for table body - bottom = 0.1, top = 0.1
-#' padding for table first header - top = 9
-#' padding for table last header - bottom = 9
-#' table's layout is set to be fixed.
-#'
-#' @import flextable
-#' @param x flextable object that is modified by the function.
-#' @param ... any additional arguments
-#'
-#' @return None
-#' @export
+#' @family Clinify Defaults
+#' @rdname clinify_defaults
+#' @export 
 clinify_table_default <- function(x, ...) {
   # Clear all borders first and apply them just for the header
   # (as horizontal lines).
@@ -159,12 +130,8 @@ clinify_table_default <- function(x, ...) {
   x <- flextable::padding(x, i = flextable::nrow_part(x, part = "header"), part = "header", padding.bottom = 9)
 }
 
-#' TODO 
-#'
-#' @param x flextable object that is modified by the function.
-#' @param ... any additional arguments
-#'
-#' @return clintable object
+#' @family Clinify Defaults
+#' @rdname clinify_defaults
 #' @export
 clinify_caption_default <- function(x, ...) {
   # Set font properties for the table header.
@@ -173,11 +140,8 @@ clinify_caption_default <- function(x, ...) {
   x <- flextable::fontsize(x, part = "footer", size = 9)
 }
 
-#' Function to create a default officer docx object
-#'
-#' Default document attributes assume landscape A4 paper size
-#'
-#' @return An rdocx object from the officer package
+#' @family Clinify Defaults
+#' @rdname clinify_defaults
 #' @export
 clinify_docx_default <- function() {
   # I want these as defaults but need to carry it forward because
@@ -193,14 +157,16 @@ clinify_docx_default <- function() {
   )
 }
 
-#' Helper function to get the total page width
+#' Get the Default Table Width for Clinical Documents
 #'
-#' Using the document dimensions stored in options, calculate the
-#' width that can be used in table body, titles, and footnotes. Calculation
-#' uses the page width subtracting right and left margins.
+#' This function calculates the default table width based on the page width 
+#' and margins specified in the `clinify_docx_default` option.
 #'
 #' @return An rdocx object from the officer package
 #' @export
+#' 
+#' @examples
+#' clin_default_table_width()
 clin_default_table_width <- function() {
   sect <- getOption("clinify_docx_default")
 

@@ -496,7 +496,7 @@ test_that("Groups no page by", {
 
 test_that("Alternating pages with groups", {
   ct <- clin_alt_pages(
-    clintable(refdat2[-13]),
+    clintable(refdat3[-13]),
     key_cols = c("mpg", "cyl", "hp"),
     col_groups = list(
       c("disp", "drat", "wt"),
@@ -878,9 +878,9 @@ test_that("Multiple group by with alternating pages", {
 })
 
 test_that("Test using max rows", {
-  ct <- clintable(refdat2[, -13]) |>
+  ct <- clintable(refdat3[, -13]) |>
     clin_page_by(max_rows = 36) |>
-    clin_group_by("groups") |>
+    clin_group_by("groups", caption_by = "captions") |>
     clin_alt_pages(
       key_cols = c("mpg", "cyl", "hp"),
       col_groups = list(
@@ -894,40 +894,76 @@ test_that("Test using max rows", {
 
   exp_out <- list(
     list(
-      rows = 1:32,
+      rows = 1:16,
       cols = p1,
       label = "a",
-      captions=NULL
+      captions="Caption 1"
     ),
     list(
-      rows = 1:32,
+      rows = 1:16,
       cols = p2,
       label = "a",
-      captions=NULL
+      captions="Caption 1"
     ),
     list(
-      rows = 1:32,
+      rows = 1:16,
       cols = p3,
       label = "a",
-      captions=NULL
+      captions="Caption 1"
     ),
     list(
-      rows = 33:64,
+      rows = 17:32,
+      cols = p1,
+      label = "a",
+      captions="Caption 2"
+    ),
+    list(
+      rows = 17:32,
+      cols = p2,
+      label = "a",
+      captions="Caption 2"
+    ),
+    list(
+      rows = 17:32,
+      cols = p3,
+      label = "a",
+      captions="Caption 2"
+    ),
+    list(
+      rows = 33:48,
       cols = p1,
       label = "b",
-      captions=NULL
+      captions="Caption 3"
     ),
     list(
-      rows = 33:64,
+      rows = 33:48,
       cols = p2,
       label = "b",
-      captions=NULL
+      captions="Caption 3"
     ),
     list(
-      rows = 33:64,
+      rows = 33:48,
       cols = p3,
       label = "b",
-      captions=NULL
+      captions="Caption 3"
+    ),
+    list(
+      rows = 49:64,
+      cols = p1,
+      label = "b",
+      captions="Caption 4"
+    ),
+    list(
+      rows = 49:64,
+      cols = p2,
+      label = "b",
+      captions="Caption 4"
+    ),
+    list(
+      rows = 49:64,
+      cols = p3,
+      label = "b",
+      captions="Caption 4"
     )
   )
 

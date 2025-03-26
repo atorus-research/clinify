@@ -23,90 +23,20 @@
 #'     c("gear", "carb")
 #'   )
 #' )
+#' 
+#' # Get document object directly
+#' doc <- clindoc(ct)
 #'
+#' # Write out docx file
 #' write_clintable(ct, file.path(tempdir(), "demo.docx"))
 #'
 write_clintable <- function(x, file, apply_defaults = TRUE) {
-  pg_method <- x$clinify_config$pagination_method
-  titles <- x$clinify_config$titles
-  footnotes <- x$clinify_config$footnotes
-  footnote_page <- x$clinify_config$footnote_page
-
-  doc <- officer::read_docx()
-  settings_ <- getOption("clinify_docx_default")
-
-  if (apply_defaults) {
-    if (!is.null(titles)) titles <- getOption("clinify_titles_default")(titles)
-    if (!is.null(footnotes)) footnotes <- getOption("clinify_footnotes_default")(footnotes)
-    x <- getOption("clinify_table_default")(x)
-    if (!is.null(x$clinify_config$footnote_page)) {
-      footnote_page <- getOption("clinify_footnotes_default")(footnote_page)
-    }
-  }
-
-  if (!is.null(titles)) {
-    settings_$header_default <- block_list(titles)
-  }
-  if (!is.null(footnotes)) {
-    settings_$footer_default <- block_list(footnotes)
-  }
-
-  # apply settings to doc
-  doc <- body_set_default_section(doc, settings_)
-
-  if (!is.null(footnote_page)) {
-    doc <- flextable::body_add_flextable(doc, footnote_page)
-    doc <- officer::body_add_break(doc)
-  }
-
-  # This point down from print method directly ----
-  if (pg_method == "default") {
-    doc <- flextable::body_add_flextable(doc, x)
-    doc <- officer::body_add_break(doc)
-  } else if (pg_method == "custom") {
-    x <- prep_pagination_(x)
-    doc <- write_alternating(doc, x)
+  if (inherits(x, 'clindoc')) {
+    doc <- x
+  } else {
+    doc <- as_clindoc(x, apply_defaults)
   }
 
   print(doc, target = file)
 }
 
-#' Method for printing alternating pages
-#'
-#' @param x a clintable object
-#' @noRd
-write_alternating <- function(doc, x) {
-  pag_idx <- x$clinify_config$pagination_idx
-  n <- length(pag_idx)
-
-  # Page breaks up to last page
-  for (p in pag_idx[1:n - 1]) {
-    doc <- add_table_(doc, x, p)
-    doc <- officer::body_add_break(doc)
-  }
-
-  # Write last page
-  doc <- add_table_(doc, x, pag_idx[[n]])
-  doc
-}
-
-#' Method to add table to document
-#'
-#' @param x a clintable object
-#' @param doc An officer word document object
-#' @noRd
-add_table_ <- function(doc, x, p) {
-  tbl <- slice_clintable(x, p$rows, p$cols)
-  if (!is.null(p$label)) {
-    tbl <- flextable::add_header_lines(tbl, values = paste(p$label, collapse = "\n"))
-    tbl <- flextable::align(tbl, 1, 1, "left", part = "header")
-  }
-
-  if (!is.null(p$captions)) {
-    # TODO: Allow formatting on this
-    tbl <- flextable::add_footer_lines(tbl, values = paste(p$captions, collapse = "\n"))
-    # This has to be applied after the footer is added
-    tbl <- getOption("clinify_caption_default")(tbl)
-  }
-  doc <- flextable::body_add_flextable(doc, tbl)
-}
