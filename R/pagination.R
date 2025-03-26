@@ -66,8 +66,8 @@ clin_page_by <- function(x, page_by, max_rows = 10) {
 #' @param x A clintable object
 #' @param group_by A character vector of variable names which will be used for grouping and attached
 #'   as a label above the table headers
-#' @param caption_by A single element string of a variable name which will be used as a caption 
-#'   attached below the table body and above in the footer. Defaults to NULL. 
+#' @param caption_by A single element string of a variable name which will be used as a caption
+#'   attached below the table body and above in the footer. Defaults to NULL.
 #'
 #' @return A clintable object
 #' @export
@@ -75,7 +75,7 @@ clin_page_by <- function(x, page_by, max_rows = 10) {
 #' @examples
 #' clintable(iris) |>
 #'   clin_group_by("Species")
-clin_group_by <- function(x, group_by, caption_by=NULL) {
+clin_group_by <- function(x, group_by, caption_by = NULL) {
   x$clinify_config$pagination_method <- "custom"
   x$clinify_config$group_by <- group_by
   x$clinify_config$caption_by <- caption_by
@@ -150,8 +150,8 @@ make_ind_list <- function(col_vecs, page_vecs) {
 
   out <- lapply(page_nums, \(i) {
     list(rows = rows[[i]], cols = cols[[i]], label = nms[[i]], captions = caps[[i]])
-    })
-    
+  })
+
   out
 }
 
@@ -162,8 +162,7 @@ make_ind_list <- function(col_vecs, page_vecs) {
 #'
 #' @return Group start indices
 #' @noRd
-group_by_ <- function(refdat, group_by, caption_by=NULL) {
-
+group_by_ <- function(refdat, group_by, caption_by = NULL) {
   # Mock a matrix to catch each split of the group by
   splits <- matrix(
     TRUE,
@@ -183,7 +182,7 @@ group_by_ <- function(refdat, group_by, caption_by=NULL) {
     refdat[group_starts, c(group_by, caption_by)],
     dimnames = list(NULL, c(group_by, caption_by))
   )
-  
+
   rownames(group_vals) <- NULL # I hate rownames
   colnames(group_vals) <- c(group_by, caption_by)
 
@@ -198,7 +197,7 @@ group_by_ <- function(refdat, group_by, caption_by=NULL) {
 #'
 #' @return Page vectors
 #' @noRd
-page_by_ <- function(refdat, page_by, group_by = NULL, caption_by=NULL) {
+page_by_ <- function(refdat, page_by, group_by = NULL, caption_by = NULL) {
   if (!is.null(page_by)) {
     # Find every index the page by variable changes
     splits <- refdat[[page_by]] == c(NA, head(refdat[[page_by]], -1))
@@ -224,8 +223,8 @@ page_by_ <- function(refdat, page_by, group_by = NULL, caption_by=NULL) {
     )
 
     # Bring the group names over and carry them forward
-    group_labels[which(page_starts %in% gs$group_starts), ] <- gs$group_vals[,group_by]
-    captions[which(page_starts %in% gs$group_starts), ] <- gs$group_vals[,caption_by]
+    group_labels[which(page_starts %in% gs$group_starts), ] <- gs$group_vals[, group_by]
+    captions[which(page_starts %in% gs$group_starts), ] <- gs$group_vals[, caption_by]
     attr(page_starts, "group_labels") <- zoo::na.locf(group_labels)
     attr(page_starts, "captions") <- zoo::na.locf(captions)
   }
@@ -242,7 +241,7 @@ page_by_ <- function(refdat, page_by, group_by = NULL, caption_by=NULL) {
 #'
 #' @return Page vectors
 #' @noRd
-max_rows_ <- function(refdat, max_rows, group_by = NULL, caption_by=NULL) {
+max_rows_ <- function(refdat, max_rows, group_by = NULL, caption_by = NULL) {
   tot_rows <- nrow(refdat)
 
   # Grab the group starts
@@ -278,7 +277,7 @@ max_rows_ <- function(refdat, max_rows, group_by = NULL, caption_by=NULL) {
       dimnames = list(NULL, group_by)
     )
     # Bring the group names over and carry them forward
-    group_labels[which(page_starts %in% gs$group_starts), ] <- gs$group_vals[,group_by]
+    group_labels[which(page_starts %in% gs$group_starts), ] <- gs$group_vals[, group_by]
     attr(page_starts, "group_labels") <- zoo::na.locf(group_labels)
   }
   if (!is.null(caption_by)) {
@@ -288,7 +287,7 @@ max_rows_ <- function(refdat, max_rows, group_by = NULL, caption_by=NULL) {
       ncol = length(caption_by),
       dimnames = list(NULL, caption_by)
     )
-    captions[which(page_starts %in% gs$group_starts), ] <- gs$group_vals[,caption_by]
+    captions[which(page_starts %in% gs$group_starts), ] <- gs$group_vals[, caption_by]
     attr(page_starts, "captions") <- zoo::na.locf(captions)
   }
 
@@ -346,7 +345,7 @@ prep_pagination_ <- function(x) {
   if (any(c(config$page_by, config$group_by, config$caption_by) %in% x$col_keys)) {
     key_idx <- eval_select(c(config$page_by, config$group_by, config$caption_by), refdat)
     cols <- seq(1:ncol(refdat))[-key_idx]
-    x <- slice_clintable(x, 1:nrow(refdat), cols, skip_spans=TRUE)
+    x <- slice_clintable(x, 1:nrow(refdat), cols, skip_spans = TRUE)
   }
 
   # Make Column vectors

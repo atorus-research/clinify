@@ -16,13 +16,13 @@
 #' y <- slice_clintable(x, 20:32, c(1:3, 5:8))
 #' z <- flextable::flextable(mtcars[20:32, c(1:3, 5:8)])
 #' @noRd
-slice_clintable <- function(x, rows, columns, skip_spans=FALSE) {
+slice_clintable <- function(x, rows, columns, skip_spans = FALSE) {
   out <- new_clinpage()
 
   if (!is.null(names(columns))) {
     columns <- eval_select(names(columns), x$body$dataset)
   }
-  
+
   out$header <- slice_complex_tabpart(x$header, 1:nrow(x$header$dataset), columns)
   out$footer <- slice_complex_tabpart(x$footer, 1:nrow(x$footer$dataset), columns)
   out$body <- slice_complex_tabpart(x$body, rows, columns)
@@ -38,11 +38,11 @@ slice_clintable <- function(x, rows, columns, skip_spans=FALSE) {
   out$blanks <- x$blanks
   out$properties <- x$properties
 
-  # If the column headers have spanners, then it's possible 
+  # If the column headers have spanners, then it's possible
   # the horizontal span is too wide for the vector
   if (!skip_spans) {
     for (i in seq_along(dim(out$header$spans$rows)[1])) {
-      out$header$spans$rows[i,] <- adjust_span_row(out$header$spans$rows[i, ], out$header$dataset[i, ])
+      out$header$spans$rows[i, ] <- adjust_span_row(out$header$spans$rows[i, ], out$header$dataset[i, ])
     }
   }
 
@@ -51,8 +51,8 @@ slice_clintable <- function(x, rows, columns, skip_spans=FALSE) {
 
 #' Adjust Row Spanning Over Page Breaks
 #'
-#' This function modifies a vector `v` representing row spans in a table. It ensures that 
-#' spans are correctly adjusted over page breaks by identifying cases where data values exist (`d`), 
+#' This function modifies a vector `v` representing row spans in a table. It ensures that
+#' spans are correctly adjusted over page breaks by identifying cases where data values exist (`d`),
 #' but spans are incorrectly set to 0. The function updates such cases to maintain consistency.
 #'
 #' @param v A numeric vector representing row spans.
@@ -61,7 +61,7 @@ slice_clintable <- function(x, rows, columns, skip_spans=FALSE) {
 #' @examples
 #' v <- c(0, 0, 2, 0, 0)
 #' d <- c("A", "A", "B", "B", "B")
-#' adjust_span_row(v, d)  # Corrects the spans accordingly
+#' adjust_span_row(v, d) # Corrects the spans accordingly
 #' @noRd
 adjust_span_row <- function(v, d) {
   # Find and update spans over page breaks by finding
@@ -69,10 +69,10 @@ adjust_span_row <- function(v, d) {
   not_empty <- !(d %in% c(" ", ""))
   if (any(not_empty)) {
     ne_ind <- which(not_empty)
-    
-    indices <- which(diff(ne_ind) == 1)  # Find indices where the difference is 1
+
+    indices <- which(diff(ne_ind) == 1) # Find indices where the difference is 1
     unique_starts <- indices[which(diff(indices) != 1)]
-    
+
     # Include the first element if it starts a sequence
     if (length(indices) > 0 && indices[1] == 1) {
       unique_starts <- c(ne_ind[1], unique_starts)
@@ -83,20 +83,20 @@ adjust_span_row <- function(v, d) {
       if (v[i] == 0) v[i] <- 2
     }
   }
-  
+
   for (i in seq_along(v)) {
     if (
       (
         # Contains multi span and not the last element and not, or
-        (v[i] > 0 && i < length(v) && v[i] != 1) || 
-        # The last element is 1 but this one is 0, so this is spanned
-        (i == 1 || v[i-1] == 1) && v[i] == 0
-      ) && 
+        (v[i] > 0 && i < length(v) && v[i] != 1) ||
+          # The last element is 1 but this one is 0, so this is spanned
+          (i == 1 || v[i - 1] == 1) && v[i] == 0
+      ) &&
         # Followed by 0
-      v[i + 1] == 0
+        v[i + 1] == 0
     ) {
       # Count consecutive zeros after v[i]
-      count_zeros <- sum(cumsum(v[-(1:i)]) == 0)  
+      count_zeros <- sum(cumsum(v[-(1:i)]) == 0)
       v[i] <- count_zeros + 1
     } else {
       # For the last element don't span extra

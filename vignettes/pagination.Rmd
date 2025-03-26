@@ -26,32 +26,32 @@ Let's prep some data and provide an example.
 library(clinify)
 
 dat <- mtcars
-dat['page'] <- c(
+dat["page"] <- c(
   rep(1, 10),
   rep(2, 10),
   rep(3, 10),
   c(4, 4)
 )
 dat2 <- rbind(dat, dat)
-dat2['groups1'] <- c(
-  rep('a', 32),
-  rep('b', 32)
+dat2["groups1"] <- c(
+  rep("a", 32),
+  rep("b", 32)
 )
-dat2['groups2'] <- c(
-  rep('1', 16),
-  rep('2', 16),
-  rep('1', 16),
-  rep('2', 16)
+dat2["groups2"] <- c(
+  rep("1", 16),
+  rep("2", 16),
+  rep("1", 16),
+  rep("2", 16)
 )
-dat2['captions'] <- c(
-  rep('Caption 1', 16),
-  rep('Caption 2', 16),
-  rep('Caption 3', 16),
-  rep('Caption 4', 16)
+dat2["captions"] <- c(
+  rep("Caption 1", 16),
+  rep("Caption 2", 16),
+  rep("Caption 3", 16),
+  rep("Caption 4", 16)
 )
 
 clintable(dat2) |>
-  clin_page_by('page')
+  clin_page_by("page")
 ```
 
 An alternative to using a paging variable, another shortcut option is to specify the maximum rows you want to print to a specific page.
@@ -71,9 +71,9 @@ Another specific form of available is the function `clin_group_by()`. This funct
 The data within variables provided in `group_by` will be extracted to lines that are printed **above** the header and in the table body. Similarly, the `caption_by` data will be pulled into footnotes attached below the table body but above the footer. 
 
 ```{r}
-clintable(dat2) |> 
-  clin_page_by('page') |> 
-  clin_group_by(c('groups1', 'groups2'), caption_by = "captions")
+clintable(dat2) |>
+  clin_page_by("page") |>
+  clin_group_by(c("groups1", "groups2"), caption_by = "captions")
 ```
 
 `clin_group_by()` can be used in combination with `clin_page_by()`, but this is not required. When these two functions are used together, page breaks will occur when **any of** the group, caption, or page variables change. 
@@ -88,16 +88,16 @@ The most complex pagination method is `clin_alt_pages()`. This function allows y
 - `col_groups`: The sets of columns differing from page to page
 
 ```{r}
-clintable(dat2) |> 
-  clin_page_by('page') |> 
+clintable(dat2) |>
+  clin_page_by("page") |>
   clin_alt_pages(
-    key_cols = c('mpg', 'cyl', 'hp'),
+    key_cols = c("mpg", "cyl", "hp"),
     col_groups = list(
-      c('disp', 'drat', 'wt'),
-      c('qsec', 'vs', 'am'),
-      c('gear', 'carb')
-    ) 
-  ) 
+      c("disp", "drat", "wt"),
+      c("qsec", "vs", "am"),
+      c("gear", "carb")
+    )
+  )
 ```
 
 One thing to note about this function is that it should be paired with `clin_page_by()`. This function works by chunking the input clintable into individual pages and separating those pages using page breaks - so the number of rows printed to each page is necessary for the page splits to work effectively. If `clin_page_by()` is not provided, a warning will appear and the table will default to 20 rows per page.

@@ -1,8 +1,8 @@
 #' Apply Default Clinical Styling to Clintables
 #'
-#' These functions apply default styling to `clintable` objects used for 
-#' clinical tables, including titles and footnotes. The styling includes 
-#' removing borders, setting font properties, and adjusting table width, 
+#' These functions apply default styling to `clintable` objects used for
+#' clinical tables, including titles and footnotes. The styling includes
+#' removing borders, setting font properties, and adjusting table width,
 #' line spacing, and padding.
 #'
 #' @param x A `clintable` object representing the table (title or footnote).
@@ -12,22 +12,22 @@
 #' @family Clinify Defaults
 #' @rdname clinify_defaults
 #' @export
-#' 
+#'
 #' @examples
-#' 
+#'
 #' op <- options()
-#' 
+#'
 #' sect <- clinify_docx_default()
-#' 
+#'
 #' # Save out options to grab defaults
 #' options(
 #'   clinify_docx_default = sect,
 #'   clinify_titles_default = clinify_titles_default,
 #'   clinify_footnotes_default = clinify_footnotes_default,
-#'   clinify_table_default = clinify_table_default, 
+#'   clinify_table_default = clinify_table_default,
 #'   clinify_caption_default = clinify_caption_default
 #' )
-#' 
+#'
 #' options(op)
 clinify_titles_default <- function(x, ...) {
   # Remove all borders as heading does not need any.
@@ -81,7 +81,7 @@ clinify_footnotes_default <- function(x, ...) {
 
 #' @family Clinify Defaults
 #' @rdname clinify_defaults
-#' @export 
+#' @export
 clinify_table_default <- function(x, ...) {
   # Clear all borders first and apply them just for the header
   # (as horizontal lines).
@@ -159,12 +159,12 @@ clinify_docx_default <- function() {
 
 #' Get the Default Table Width for Clinical Documents
 #'
-#' This function calculates the default table width based on the page width 
+#' This function calculates the default table width based on the page width
 #' and margins specified in the `clinify_docx_default` option.
 #'
 #' @return An rdocx object from the officer package
 #' @export
-#' 
+#'
 #' @examples
 #' clin_default_table_width()
 clin_default_table_width <- function() {

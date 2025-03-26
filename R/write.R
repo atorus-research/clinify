@@ -23,7 +23,7 @@
 #'     c("gear", "carb")
 #'   )
 #' )
-#' 
+#'
 #' # Get document object directly
 #' doc <- clindoc(ct)
 #'
@@ -31,7 +31,7 @@
 #' write_clintable(ct, file.path(tempdir(), "demo.docx"))
 #'
 write_clintable <- function(x, file, apply_defaults = TRUE) {
-  if (inherits(x, 'clindoc')) {
+  if (inherits(x, "clindoc")) {
     doc <- x
   } else {
     doc <- as_clindoc(x, apply_defaults)
@@ -39,4 +39,3 @@ write_clintable <- function(x, file, apply_defaults = TRUE) {
 
   print(doc, target = file)
 }
-

@@ -23,21 +23,21 @@ Let's look at an example:
 ```{r setup}
 library(clinify)
 
-clintable(mtcars) |> 
+clintable(mtcars) |>
   clin_add_titles(
     list(
       c("Left", "Center", "Right"),
       c("Just the middle")
     )
-  ) |> 
+  ) |>
   clin_add_footnotes(
-      list(
-        c(
-          "Here's a footnote.", 
-          format(Sys.time(), "%H:%M %A, %B %d, %Y")
-        )
+    list(
+      c(
+        "Here's a footnote.",
+        format(Sys.time(), "%H:%M %A, %B %d, %Y")
       )
     )
+  )
 ```
 
 Both `clin_add_titles()` and `clin_add_footnotes()` take a list of character vectors. Each element of the list will be applied as a row of the title or footnote. The number of elements of the list determines how those elements are aligned:
@@ -60,24 +60,24 @@ While this particular example is obscure, this opens up the possibility to speci
 Another circumstance that **{clinify}** allows for is the creation of a specific footnote pages. This can be used in circumstances where there are too many required footnotes for the table, and rather than putting in the footer you can place them into their own specific preceding page of the table itself.
 
 ```{r}
-clintable(mtcars) |> 
+clintable(mtcars) |>
   clin_add_titles(
     list(
       c("Left", "Center", "Right"),
       c("Just the middle")
     )
-  ) |> 
+  ) |>
   clin_add_footnotes(
-      list(
-        c(
-          "Here's a footnote.", 
-          format(Sys.time(), "%H:%M %A, %B %d, %Y")
-        )
+    list(
+      c(
+        "Here's a footnote.",
+        format(Sys.time(), "%H:%M %A, %B %d, %Y")
       )
-    ) |>
+    )
+  ) |>
   clin_add_footnote_page(
     list(
-      c("One very long footnote full of text"), 
+      c("One very long footnote full of text"),
       c("Two very long footnote full of text"),
       c("Three very long footnote full of text"),
       c("Four very long footnote full of text"),

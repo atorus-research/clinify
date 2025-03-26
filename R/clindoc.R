@@ -1,30 +1,29 @@
 #' Convert a Clintable to a Word Document
 #'
-#' These functions convert a `clintable` object into a Word document using 
-#' officer and flextable formatting. They apply default styles for titles, 
+#' These functions convert a `clintable` object into a Word document using
+#' officer and flextable formatting. They apply default styles for titles,
 #' footnotes, and table settings while supporting pagination options.
 #'
-#' - `clindoc()` ensures that the input is a `clintable` and then converts it 
+#' - `clindoc()` ensures that the input is a `clintable` and then converts it
 #'   to a Word document.
-#' - `as_clindoc()` performs the conversion, applying default formatting and 
+#' - `as_clindoc()` performs the conversion, applying default formatting and
 #'   handling pagination if specified.
 #'
 #' @param x A `clintable` object to be converted.
-#' @param apply_defaults Logical, whether to apply default title, footnote, 
+#' @param apply_defaults Logical, whether to apply default title, footnote,
 #'   and table formatting. Defaults to `TRUE`.
 #' @param ... Additional arguments (currently unused).
 #'
 #' @return An `officer::rdocx` object representing the formatted Word document.
 #' @export
 #' @name clindoc
-#' 
+#'
 #' @examples
-#' 
+#'
 #' ct <- clintable(mtcars)
-#' 
+#'
 #' clindoc(ct)
-#' 
-#' 
+#'
 clindoc <- function(x, ...) {
   stopifnot(inherits(x, "clintable"))
   as_clindoc(x)
@@ -32,7 +31,7 @@ clindoc <- function(x, ...) {
 
 #' @rdname clindoc
 #' @export
-as_clindoc <- function(x, apply_defaults=TRUE) {
+as_clindoc <- function(x, apply_defaults = TRUE) {
   pg_method <- x$clinify_config$pagination_method
   titles <- x$clinify_config$titles
   footnotes <- x$clinify_config$footnotes
@@ -74,7 +73,7 @@ as_clindoc <- function(x, apply_defaults=TRUE) {
     doc <- doc_alternating(doc, x)
   }
 
-  class(doc) <- c('clindoc', class(doc))
+  class(doc) <- c("clindoc", class(doc))
   doc
 }
 

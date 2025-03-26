@@ -103,38 +103,43 @@ test_that("Spanning header adjustment function works", {
   # simulate a split two split pages and one circumstance
   # where a spanner is cut midway through
   in_v <- t(matrix(
-    c(9, 0, 0, 5, 0, 5,
+    c(
+      9, 0, 0, 5, 0, 5,
       9, 0, 0, 5, 0, 5,
       0, 0, 0, 5, 0, 5,
       1, 0, 0, 5, 0, 5,
-      4, 0, 0, 0, 0, 0),
-      nrow=6, ncol=5
+      4, 0, 0, 0, 0, 0
+    ),
+    nrow = 6, ncol = 5
   ))
 
   in_d <- t(matrix(
-    c(rep("",  6),
-    rep("",  6),
-    rep("",  6),
-    rep("",  6),
-    c("", "", "A", "A", "A", "A")),
-    nrow=6, ncol=5
+    c(
+      rep("", 6),
+      rep("", 6),
+      rep("", 6),
+      rep("", 6),
+      c("", "", "A", "A", "A", "A")
+    ),
+    nrow = 6, ncol = 5
   ))
 
   # All the outputs should be the same
   exp_out_v <- t(matrix(
-    c(3, 0, 0, 2, 0, 1,
+    c(
+      3, 0, 0, 2, 0, 1,
       3, 0, 0, 2, 0, 1,
       3, 0, 0, 2, 0, 1,
       1, 2, 0, 2, 0, 1,
-      2, 0, 4, 0, 0, 0 
+      2, 0, 4, 0, 0, 0
     ),
-      nrow=6, ncol=5
+    nrow = 6, ncol = 5
   ))
-  
-  adjusted_v <- matrix(NA_real_, nrow=5, ncol=6)
+
+  adjusted_v <- matrix(NA_real_, nrow = 5, ncol = 6)
 
   for (i in 1:5) {
-    adjusted_v[i, ] <- adjust_span_row(in_v[i, ], in_d[i,])
+    adjusted_v[i, ] <- adjust_span_row(in_v[i, ], in_d[i, ])
   }
 
   expect_equal(adjusted_v, exp_out_v)

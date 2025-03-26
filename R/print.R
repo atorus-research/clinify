@@ -81,7 +81,7 @@ clintable_as_html <- function(x, n = 3, nrows = 15, apply_defaults = TRUE, ...) 
     nrows <- min(c(nrows, nrow(refdat)))
     pg <- slice_clintable(x, 1:nrows, eval_select(x$col_keys, refdat))
     if (!is.null(footnote_page)) {
-      out <- print_alternating(pg, n=1, titles, footnotes, footnote_page)
+      out <- print_alternating(pg, n = 1, titles, footnotes, footnote_page)
     } else {
       out <- print_clinpage(pg, titles, footnotes)
     }
@@ -149,15 +149,15 @@ print_alternating <- function(x, n, titles = NULL, footnotes = NULL, footnote_pa
   } else {
     n <- 1
   }
-  
+
   # Render the footnote page
   ft_page <- NULL
   if (!is.null(footnote_page)) {
-    n <- n-1
+    n <- n - 1
     ft_page <- print_clinpage(
       footnote_page,
       titles = titles,
-      footnotes=footnotes
+      footnotes = footnotes
     )
   }
 
@@ -185,7 +185,7 @@ print_alternating <- function(x, n, titles = NULL, footnotes = NULL, footnote_pa
 
   # Put the footnote page up front
   if (!is.null(ft_page)) {
-    pgs <- append(pgs, list(ft_page), after=0)
+    pgs <- append(pgs, list(ft_page), after = 0)
   }
 
   # Create the arguments and page selectors for the pages being printed
