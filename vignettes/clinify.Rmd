@@ -292,7 +292,7 @@ write_clintable(doc, file="example_table.docx")
 write_clintable(ct, file="example_table.docx")
 ```
 
-<p align="center"><img src="table.png" width="800px"></p>
+<p align="center"><img src="table.png" width="675px"></p>
 
 
 

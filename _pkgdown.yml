@@ -30,6 +30,7 @@ reference:
 - contents:
   - clintable
   - as_clintable
+  - clindoc
 - title: Titles and Footnotes
   desc: Attach titles or footnotes to a clintable
 - contents:
@@ -66,3 +67,4 @@ articles:
   - defaults
   - pagination
   - titles_footnotes
+  
