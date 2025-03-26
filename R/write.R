@@ -30,6 +30,7 @@ write_clintable <- function(x, file, apply_defaults = TRUE) {
   pg_method <- x$clinify_config$pagination_method
   titles <- x$clinify_config$titles
   footnotes <- x$clinify_config$footnotes
+  footnote_page <- x$clinify_config$footnote_page
 
   doc <- officer::read_docx()
   settings_ <- getOption("clinify_docx_default")
@@ -38,6 +39,9 @@ write_clintable <- function(x, file, apply_defaults = TRUE) {
     if (!is.null(titles)) titles <- getOption("clinify_titles_default")(titles)
     if (!is.null(footnotes)) footnotes <- getOption("clinify_footnotes_default")(footnotes)
     x <- getOption("clinify_table_default")(x)
+    if (!is.null(x$clinify_config$footnote_page)) {
+      footnote_page <- getOption("clinify_footnotes_default")(footnote_page)
+    }
   }
 
   if (!is.null(titles)) {
@@ -50,9 +54,15 @@ write_clintable <- function(x, file, apply_defaults = TRUE) {
   # apply settings to doc
   doc <- body_set_default_section(doc, settings_)
 
+  if (!is.null(footnote_page)) {
+    doc <- flextable::body_add_flextable(doc, footnote_page)
+    doc <- officer::body_add_break(doc)
+  }
+
   # This point down from print method directly ----
   if (pg_method == "default") {
     doc <- flextable::body_add_flextable(doc, x)
+    doc <- officer::body_add_break(doc)
   } else if (pg_method == "custom") {
     x <- prep_pagination_(x)
     doc <- write_alternating(doc, x)
