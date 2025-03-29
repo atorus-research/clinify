@@ -77,6 +77,12 @@ clintable_as_html <- function(x, n = 3, nrows = 15, apply_defaults = TRUE, ...) 
         flextable::width(width = flextable::flextable_dim(x)$widths / 2)
     }
   }
+
+  # Keep with next paging
+  if (!is.null(x$clinify_config$auto_page_var)) {
+    x <- auto_page_(x)
+  }
+
   if (pg_method == "default") {
     nrows <- min(c(nrows, nrow(refdat)))
     pg <- slice_clintable(x, 1:nrows, eval_select(x$col_keys, refdat))
@@ -114,7 +120,8 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL, group_label = NUL
 
   body <- flextable::htmltools_value(x = x)
   # Two different type of leading spaces that appear in the HTML
-  body[[3]] <- gsub("(?<!th|<td)  ", "&nbsp; ", body[[3]], perl = TRUE)
+  # body[[3]] <- gsub("(?<!th|<td)  ", "&nbsp; ", body[[3]], perl = TRUE)
+  body[[3]] <- gsub("(?<!th)  ", "&nbsp; ", body[[3]], perl=TRUE)
   body[[3]] <- gsub("(<span\\b[^>]*>) ", "\\1&nbsp;", body[[3]], perl = TRUE)
   # Concurrent spaces
   body[[3]] <- gsub("&nbsp;  ", "&nbsp;&nbsp; ", body[[3]], perl = TRUE)

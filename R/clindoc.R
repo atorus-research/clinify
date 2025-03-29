@@ -56,6 +56,11 @@ as_clindoc <- function(x, apply_defaults = TRUE) {
     settings_$footer_default <- block_list(footnotes)
   }
 
+    # Keep with next paging
+    if (!is.null(x$clinify_config$auto_page_var)) {
+      x <- auto_page_(x)
+    }
+
   # apply settings to doc
   doc <- body_set_default_section(doc, settings_)
 
@@ -67,7 +72,6 @@ as_clindoc <- function(x, apply_defaults = TRUE) {
   # This point down from print method directly ----
   if (pg_method == "default") {
     doc <- flextable::body_add_flextable(doc, x)
-    doc <- officer::body_add_break(doc)
   } else if (pg_method == "custom") {
     x <- prep_pagination_(x)
     doc <- doc_alternating(doc, x)

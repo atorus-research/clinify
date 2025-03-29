@@ -117,6 +117,7 @@ make_page_vecs <- function(starts, ends) {
 #'
 #' @noRd
 make_ind_list <- function(col_vecs, page_vecs) {
+
   page_nums <- seq(1, length(col_vecs) * length(page_vecs))
   rows <- unlist(
     lapply(page_vecs, \(x) rep(list(x), length(col_vecs))),
@@ -163,6 +164,7 @@ make_ind_list <- function(col_vecs, page_vecs) {
 #' @return Group start indices
 #' @noRd
 group_by_ <- function(refdat, group_by, caption_by = NULL) {
+
   # Mock a matrix to catch each split of the group by
   splits <- matrix(
     TRUE,
@@ -173,6 +175,7 @@ group_by_ <- function(refdat, group_by, caption_by = NULL) {
 
   # For each group in the splits,
   for (g in c(group_by, caption_by)) {
+    
     splits[, g] <- refdat[[g]] == c(NA, head(refdat[[g]], -1))
     splits[1, g] <- FALSE
   }
@@ -185,7 +188,7 @@ group_by_ <- function(refdat, group_by, caption_by = NULL) {
 
   rownames(group_vals) <- NULL # I hate rownames
   colnames(group_vals) <- c(group_by, caption_by)
-
+ 
   list(group_starts = group_starts, group_vals = group_vals)
 }
 
@@ -341,9 +344,11 @@ prep_pagination_ <- function(x) {
     page_vecs <- max_rows_(refdat, config$max_rows, group_by = config$group_by, caption_by = config$caption_by)
   }
 
-  # Slice the page by and group by out of the clintable
+  # Slice any unnecessary vars out of the clintable
   if (any(c(config$page_by, config$group_by, config$caption_by) %in% x$col_keys)) {
-    key_idx <- eval_select(c(config$page_by, config$group_by, config$caption_by), refdat)
+    key_idx <- eval_select(
+      c(config$page_by, config$group_by, config$caption_by), refdat
+    )
     cols <- seq(1:ncol(refdat))[-key_idx]
     x <- slice_clintable(x, 1:nrow(refdat), cols, skip_spans = TRUE)
   }
@@ -358,5 +363,57 @@ prep_pagination_ <- function(x) {
   }
 
   x$clinify_config$pagination_idx <- make_ind_list(col_vecs, page_vecs)
+  x
+}
+
+#' Enable Word Auto-Pagination Using Group Variable
+#' 
+#' This function uses the applies the functionality `flextable::keep_with_next()`
+#' by automatically building the row indices using some grouping variable. Each group 
+#' identified by the variable (i.e. when the value of the variable changes) will be set
+#' as a "keep_with_next" group in Word. Using this functionality, Word will attempt not to 
+#' break that group across pages, enabling smoother pagination without having to do specific
+#' calculations of page breaks. 
+#' 
+#' @param x A clintable object
+#' @param group_var A string containing a variable name of the input dataset used to 
+#'   calculate groups
+#' 
+#' @return A clintable object
+#' @export
+#' 
+#' @examples
+#' 
+#' clintable(mtcars) |>
+#'   clin_auto_page('gear')
+#' 
+clin_auto_page <- function(x, group_var) {
+   x$clinify_config$auto_page_var <- group_var
+  x
+}
+
+#' Identify the group indices of a variable and flag keep_with_next
+#' 
+#' This leverages Word's keep_with_next functionality to make sure that variables
+#' in the specified indices don't insert page breaks in between
+#' 
+#' @param x the clintable object
+#' 
+#' @return A clintable object
+#' @noRd
+auto_page_ <- function(x) {
+  group_var <- x$clinify_config$auto_page_var
+  refdat <- x$body$dataset
+  refvar <- refdat[,group_var]
+
+  dont_keep <- which(refvar[-length(refvar)] != refvar[-1])
+  keep <- (1:length(refvar))[-dont_keep]
+
+  key_idx <- eval_select(x$clinify_config$auto_page_var, refdat)
+
+  cols <- seq(1:ncol(refdat))[-key_idx]
+  x <- slice_clintable(x, 1:nrow(refdat), cols, reapply_config = TRUE)
+  x <- keep_with_next(x, i=keep)
+
   x
 }
