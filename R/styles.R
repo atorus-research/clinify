@@ -49,6 +49,9 @@ clinify_titles_default <- function(x, ...) {
     x,
     layout = "fixed"
   )
+  # Automatically find and update a pagenum string
+  x <- replace_with_pagenums(x)
+  x
 }
 
 #' @family Clinify Defaults
@@ -77,6 +80,9 @@ clinify_footnotes_default <- function(x, ...) {
     x,
     layout = "fixed"
   )
+  # Automatically find and update a pagenum string
+  x <- replace_with_pagenums(x)
+  x
 }
 
 #' @family Clinify Defaults
@@ -102,7 +108,7 @@ clinify_table_default <- function(x, ...) {
   )
 
   # Remove blank bottoms
-  blk_inds <- which(x$header$dataset == "", arr.ind = TRUE)
+  blk_inds <- which(x$header$dataset == "" | x$header$dataset == " ", arr.ind = TRUE)
   x <- flextable::hline(x,
     i = blk_inds[, "row"], j = blk_inds[, "col"],
     part = "header",
@@ -128,6 +134,7 @@ clinify_table_default <- function(x, ...) {
   # Many other options are also available.
   x <- flextable::padding(x, i = 1, part = "header", padding.top = 9)
   x <- flextable::padding(x, i = flextable::nrow_part(x, part = "header"), part = "header", padding.bottom = 9)
+  x
 }
 
 #' @family Clinify Defaults
@@ -138,6 +145,7 @@ clinify_caption_default <- function(x, ...) {
   x <- flextable::font(x, part = "footer", fontname = "Courier New")
   # Set fontsize for both table header and table body.
   x <- flextable::fontsize(x, part = "footer", size = 9)
+  x
 }
 
 #' @family Clinify Defaults
