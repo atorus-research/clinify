@@ -97,6 +97,13 @@ dat2['groups2'] <- c(
   rep('2', 16)
 )
 
+dat2["captions"] <- c(
+  rep("Caption 1", 16),
+  rep("Caption 2", 16),
+  rep("Caption 3", 16),
+  rep("Caption 4", 16)
+)
+
 # Create a basic table
 ct <- clintable(dat2) |> 
   clin_page_by('page') |> 
@@ -293,8 +300,6 @@ write_clintable(ct, file="example_table.docx")
 ```
 
 <p align="center"><img src="table.png" width="675px"></p>
-
-
 
 ## Why this framework? 
 

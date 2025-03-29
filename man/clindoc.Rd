@@ -39,5 +39,4 @@ ct <- clintable(mtcars)
 
 clindoc(ct)
 
-
 }

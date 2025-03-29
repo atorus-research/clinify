@@ -1,0 +1,117 @@
+---
+title: "End-to-End Example"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{End-to-End Example}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(clinify)
+library(Tplyr)
+library(dplyr)
+
+tplyr_adsl <- tplyr_adsl |> 
+  mutate(
+    SEX = recode(SEX, M = "Male", F = "Female"), 
+    RACE = factor(RACE, c("AMERICAN INDIAN OR ALASKA NATIVE", "ASIAN", "BLACK OR AFRICAN AMERICAN", 
+                          "NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER", "WHITE", "MULTIPLE"))
+  )
+
+t <- tplyr_table(tplyr_adsl, TRT01P) |> 
+  add_layer(name = 'Sex', 
+    group_count(SEX, by = "Sex n (%)") |> 
+      set_missing_count(f_str('xx', n), Missing=NA, denom_ignore=TRUE)
+  ) |> 
+  add_layer(name = 'Age',
+    group_desc(AGE, by = "Age (Years)")
+  ) |> 
+  add_layer(name = 'Age group', 
+    group_count(AGEGR1, by = "Age Categories n (%)") |> 
+      set_missing_count(f_str('xx', n), Missing=NA, denom_ignore=TRUE)
+  ) |> 
+  add_layer(name = 'Race', 
+    group_count(RACE, by = "Race n (%)") |> 
+      set_missing_count(f_str('xx', n), Missing=NA, denom_ignore=TRUE) |> 
+      set_order_count_method("byfactor")
+  ) |> 
+  add_layer(name = 'Ethnic', 
+    group_count(ETHNIC, by = "Ethnicity n (%)") |> 
+      set_missing_count(f_str('xx', n), Missing=NA, denom_ignore=TRUE)
+  ) |> 
+  add_layer(name = 'Age',
+    group_desc(HEIGHTBL, by = "Height at Baseline")
+  )  |> 
+  add_layer(name = 'Age',
+    group_desc(WEIGHTBL, by = "Weight at Baseline")
+  ) 
+  
+
+dat <- build(t) |> 
+  mutate(
+    across(starts_with('var'),
+    ~ if_else(
+      ord_layer_index %in% c(1, 3:5),
+      apply_conditional_format(
+        string = .,
+        format_group = 2,
+        condition = x == 0,
+        replacement = ""
+      ),
+      .
+      )
+    )
+  )
+
+dat <- dat |> 
+  arrange(ord_layer_index, ord_layer_1, ord_layer_2) |> 
+  apply_row_masks(row_breaks = TRUE) |> 
+  select(
+    starts_with("row_label"), var1_Placebo, `var1_Xanomeline Low Dose`,
+    `var1_Xanomeline High Dose`, ord_layer_index
+    )
+
+header_n <- t$header_n$n
+names(header_n) <- t$header_n$TRT01P
+
+ct <- clintable(dat) |> 
+  clin_auto_page('ord_layer_index') |> 
+  clin_column_headers(
+    row_label1 = "",
+    row_label2 = "",
+    var1_Placebo = sprintf("Placebo\n(N=%s)", header_n['Placebo']),
+    `var1_Xanomeline Low Dose`  = c("Xanomeline", sprintf("Low Dose\n(N=%s)", header_n['Xanomeline Low Dose'])),
+    `var1_Xanomeline High Dose` = c("Xanomeline", sprintf("High Dose\n(N=%s)", header_n['Xanomeline High Dose']))
+  ) |> 
+  flextable::align(align="center", part="header") |>
+  flextable::align(j = c('var1_Placebo', 'var1_Xanomeline Low Dose', 'var1_Xanomeline High Dose'), align="center") |>
+  clin_col_widths(row_label1 = .3, row_label2=.1)|> 
+  # Add titles here is using new_header_footer to allow flextable functions
+  # to customize the titles block
+  clin_add_titles(
+    list(
+      # We'll add tools to automate paging
+      c("Protocol: CDISCPILOT01", "Page X of Y"),
+      c("Table 14-2.01"),
+      c("Summary of Demographic and Baseline Characteristics")
+    ) 
+  ) |> 
+  clin_add_footnotes(
+    list(
+      c(
+        "Source: /my/file/path.R", 
+        format(Sys.time(), "%H:%M %A, %B %d, %Y")
+      )
+    )
+  )
+
+write_clintable(ct, "test_table.docx")
+```
