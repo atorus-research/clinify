@@ -8,6 +8,8 @@
 #' @param x A clintable or flextable object
 #' @param rows Subset of rows to extract
 #' @param columns Subset of columns to extract
+#' @param skip_spans Don't readjust spanners in the header
+#' @param reapply_config Carry the clinify config to the sliced page
 #'
 #' @return A clinpage object
 #'
@@ -16,8 +18,12 @@
 #' y <- slice_clintable(x, 20:32, c(1:3, 5:8))
 #' z <- flextable::flextable(mtcars[20:32, c(1:3, 5:8)])
 #' @noRd
-slice_clintable <- function(x, rows, columns, skip_spans = FALSE) {
+slice_clintable <- function(x, rows, columns, skip_spans = FALSE, reapply_config=FALSE) {
   out <- new_clinpage()
+
+  if (reapply_config) {
+    out$clinify_config <- x$clinify_config
+  }
 
   if (!is.null(names(columns))) {
     columns <- eval_select(names(columns), x$body$dataset)
