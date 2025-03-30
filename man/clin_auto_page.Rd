@@ -26,6 +26,6 @@ calculations of page breaks.
 \examples{
 
 clintable(mtcars) |>
-  clin_auto_page('gear')
+  clin_auto_page("gear")
 
 }

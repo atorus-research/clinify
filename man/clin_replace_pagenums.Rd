@@ -15,8 +15,8 @@ A clintable object
 \description{
 This helper function will find placeholder text and replace the fields of
 the flextable object with the appropriate page number fields. The function
-will search for the text {PAGE} and replace with the word field for current
-pages, and {NUMPAGES} for total pages. This allows you to current and total
+will search for the text \code{{PAGE}} and replace with the word field for current
+pages, and \code{{NUMPAGES}} for total pages. This allows you to current and total
 page fields within Word documents.  Note that this is intended to be used in
 the defaults for clinify_titles_default or clinify_footnotes_default.
 }
@@ -31,7 +31,7 @@ title <- new_title_footnote(
   ),
   "titles"
 )
-  
+
 title <- clin_replace_pagenums(title)
 
 footnote <- new_title_footnote(
@@ -41,7 +41,7 @@ footnote <- new_title_footnote(
   ),
   "footnotes"
 )
-  
+
 footnote <- clin_replace_pagenums(footnote)
 
 }
