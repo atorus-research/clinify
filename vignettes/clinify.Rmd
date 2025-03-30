@@ -149,7 +149,7 @@ Next we've used `clin_alt_pages()`. This has been one of the most requested feat
 If we look at that function specifically:
 
 ```{r, eval=FALSE}
-  [...] |>
+ct |>
   clin_alt_pages(
     key_cols = c('mpg', 'cyl', 'hp'),
     col_groups = list(
@@ -177,9 +177,8 @@ To make things easier for the developer, while developing interactively the prin
 From the previous example, another **{clinify}** function we used was `clin_col_width()`. The goal of this function is simply to make setting your column widths for a table straightforward. By default, in {flextable} your column widths are based on a unit such as inches or centimeters. In `clin_col_width()` we allow you to use the proportion of the page that you'd like that column to fill. From the syntax above:
 
 ```{r, eval=FALSE}
-[...] |>
+ct |>
   clin_col_widths(mpg = .2, cyl=.2, disp=.15, vs=.15) |>
-[...]
 ```
 
 In this case, we're saying that:

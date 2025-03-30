@@ -972,3 +972,9 @@ test_that("Test using max rows", {
   expect_true("groups" %in% ct$col_keys)
   expect_false("groups" %in% ct2$col_keys)
 })
+
+test_that("Auto paging is applied", {
+  ct <- clintable(mtcars) 
+  ct <- auto_page_(ct)
+  expect_snapshot(ct$body$styles$pars$keep_with_next)
+})
