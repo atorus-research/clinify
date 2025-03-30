@@ -50,7 +50,7 @@ clinify_titles_default <- function(x, ...) {
     layout = "fixed"
   )
   # Automatically find and update a pagenum string
-  x <- replace_with_pagenums(x)
+  x <- clin_replace_pagenums(x)
   x
 }
 
@@ -81,7 +81,7 @@ clinify_footnotes_default <- function(x, ...) {
     layout = "fixed"
   )
   # Automatically find and update a pagenum string
-  x <- replace_with_pagenums(x)
+  x <- clin_replace_pagenums(x)
   x
 }
 
@@ -89,6 +89,7 @@ clinify_footnotes_default <- function(x, ...) {
 #' @rdname clinify_defaults
 #' @export
 clinify_table_default <- function(x, ...) {
+
   # Clear all borders first and apply them just for the header
   # (as horizontal lines).
   x <- flextable::border_remove(x)
@@ -109,11 +110,20 @@ clinify_table_default <- function(x, ...) {
 
   # Remove blank bottoms
   blk_inds <- which(x$header$dataset == "" | x$header$dataset == " ", arr.ind = TRUE)
-  x <- flextable::hline(x,
-    i = blk_inds[, "row"], j = blk_inds[, "col"],
-    part = "header",
-    border = officer::fp_border(style = "none", width = 0)
-  )
+  # Want to ignore bottom row
+  blk_inds <- blk_inds[blk_inds[,'row'] < nrow(x$header$dataset),]
+
+  if (nrow(blk_inds > 0)) {
+    # Loop all except very bottom row
+    for (i in 1:nrow(blk_inds)) {
+      x <- flextable::hline(x,
+        i = blk_inds[i, "row"], j = blk_inds[i, "col"],
+        part = "header",
+        border = officer::fp_border(style = "none", width = 0)
+      )
+    }
+  }
+  # Bottom border
   x <- flextable::hline_bottom(x, part = "header")
 
   # Set font properties for the table header.
