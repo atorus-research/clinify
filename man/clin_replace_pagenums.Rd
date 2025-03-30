@@ -39,7 +39,7 @@ footnote <- new_title_footnote(
     # We'll add tools to automate paging
     c("Page {PAGE}", "Total Pages: {NUMPAGES}")
   ),
-  "footnote"
+  "footnotes"
 )
   
 footnote <- clin_replace_pagenums(footnote)

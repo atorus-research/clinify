@@ -75,7 +75,7 @@ clin_column_headers <- function(x, ...) {
   mheaders <- as.matrix(apply(mheaders, 2, \(x) {
     # Play games with  whitespace to get cell merging to work
     # for bottom borders
-    if (all(is.na(x)) || any(x != "", na.rm=TRUE)) {
+    if (all(is.na(x)) || any(x != "", na.rm = TRUE)) {
       x[is.na(x)] <- " "
     } else {
       x[is.na(x)] <- ""

@@ -121,7 +121,7 @@ print_clinpage <- function(x, titles = NULL, footnotes = NULL, group_label = NUL
   body <- flextable::htmltools_value(x = x)
   # Two different type of leading spaces that appear in the HTML
   # body[[3]] <- gsub("(?<!th|<td)  ", "&nbsp; ", body[[3]], perl = TRUE)
-  body[[3]] <- gsub("(?<!th)  ", "&nbsp; ", body[[3]], perl=TRUE)
+  body[[3]] <- gsub("(?<!th)  ", "&nbsp; ", body[[3]], perl = TRUE)
   body[[3]] <- gsub("(<span\\b[^>]*>) ", "\\1&nbsp;", body[[3]], perl = TRUE)
   # Concurrent spaces
   body[[3]] <- gsub("&nbsp;  ", "&nbsp;&nbsp; ", body[[3]], perl = TRUE)

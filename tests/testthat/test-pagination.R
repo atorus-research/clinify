@@ -974,7 +974,7 @@ test_that("Test using max rows", {
 })
 
 test_that("Auto paging is applied", {
-  ct <- clintable(mtcars) 
+  ct <- clintable(mtcars)
   ct <- auto_page_(ct)
   expect_snapshot(ct$body$styles$pars$keep_with_next)
 })

@@ -56,10 +56,10 @@ as_clindoc <- function(x, apply_defaults = TRUE) {
     settings_$footer_default <- block_list(footnotes)
   }
 
-    # Keep with next paging
-    if (!is.null(x$clinify_config$auto_page_var)) {
-      x <- auto_page_(x)
-    }
+  # Keep with next paging
+  if (!is.null(x$clinify_config$auto_page_var)) {
+    x <- auto_page_(x)
+  }
 
   # apply settings to doc
   doc <- body_set_default_section(doc, settings_)

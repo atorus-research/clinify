@@ -23,8 +23,9 @@ The most simple method of pagination is to let Word take the reins and do most o
 `clin_auto_page()` works by taking a grouping variable, which will be pulled out of the table, and using that to determine the appropriate `keep_with_next` groupings. Note that when using this function, you're not specifying a variable to _insert_ page breaks, but rather saying "do not split rows within this group across pages". It's also important to note that the effect of this function won't be apparent when printing to the screen, and only within a word document itself. `keep_with_next` is a feature of Word, so in an HTML view there's nothing much to see.
 
 ```{r}
+library(clinify)
 clintable(mtcars) |>
-  clin_auto_page(gear)
+  clin_auto_page("gear")
 ```
 
  If you can accomplish what you need using this function, we recommend it because it takes the least effort on behalf of the programmer. The other functions that `clinify` has to offer give you more specific control, but rely more on the inputs that you provide.
@@ -36,8 +37,6 @@ One method of pagination for clinical tables that's been used for a long time is
 Let's prep some data and provide an example.
 
 ```{r setup}
-library(clinify)
-
 dat <- mtcars
 dat["page"] <- c(
   rep(1, 10),

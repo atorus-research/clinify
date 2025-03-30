@@ -39,6 +39,7 @@ reference:
 - title: Pagination
   desc: Control table pagination
 - contents:
+  - clin_auto_page
   - clin_alt_pages
   - clin_page_by
   - clin_group_by
@@ -47,6 +48,7 @@ reference:
 - contents:
   - clin_col_widths
   - clin_column_headers
+  - clin_replace_pagenums
 - title: Style defaults
   desc: Default style functions
 - contents:
@@ -67,4 +69,5 @@ articles:
   - defaults
   - pagination
   - titles_footnotes
+  - end_to_end
   

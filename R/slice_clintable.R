@@ -18,7 +18,7 @@
 #' y <- slice_clintable(x, 20:32, c(1:3, 5:8))
 #' z <- flextable::flextable(mtcars[20:32, c(1:3, 5:8)])
 #' @noRd
-slice_clintable <- function(x, rows, columns, skip_spans = FALSE, reapply_config=FALSE) {
+slice_clintable <- function(x, rows, columns, skip_spans = FALSE, reapply_config = FALSE) {
   out <- new_clinpage()
 
   if (reapply_config) {

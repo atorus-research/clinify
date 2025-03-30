@@ -89,7 +89,6 @@ clinify_footnotes_default <- function(x, ...) {
 #' @rdname clinify_defaults
 #' @export
 clinify_table_default <- function(x, ...) {
-
   # Clear all borders first and apply them just for the header
   # (as horizontal lines).
   x <- flextable::border_remove(x)
@@ -111,7 +110,7 @@ clinify_table_default <- function(x, ...) {
   # Remove blank bottoms
   blk_inds <- which(x$header$dataset == "" | x$header$dataset == " ", arr.ind = TRUE)
   # Want to ignore bottom row
-  blk_inds <- blk_inds[blk_inds[,'row'] < nrow(x$header$dataset),]
+  blk_inds <- blk_inds[blk_inds[, "row"] < nrow(x$header$dataset), ]
 
   if (nrow(blk_inds > 0)) {
     # Loop all except very bottom row
