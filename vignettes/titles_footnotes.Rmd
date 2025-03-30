@@ -26,7 +26,7 @@ library(clinify)
 clintable(mtcars) |>
   clin_add_titles(
     list(
-      c("Left", "Center", "Right"),
+      c("Left", "Center", "Page {PAGE} of {NUMPAGES}"),
       c("Just the middle")
     )
   ) |>
@@ -45,6 +45,8 @@ Both `clin_add_titles()` and `clin_add_footnotes()` take a list of character vec
 - For a single element, in the titles it will be aligned center and in a footnote it will be bound left.
 - Two elements will bind left and right
 - Three elements will bind left, center, and right.
+
+Note the text field `"Page {PAGE} of {NUMPAGES}"`. **{clinify}** has a special helper function `clin_replace_pagenums()` that will find cells within a flextable containing `{PAGE}` or `{NUMPAGES}` and replace them with the word auto field for current and total pages respectively. By default within **{clinify}** this actual takes places during the default styling functions (see `vignette("defaults")`). Note that when you print to HTML, the `{PAGE}` and `{NUMPAGES}` portions of the string will appear blank.
 
 Another option for setting titles and footnotes is to create your own flextable object.
 

@@ -16,6 +16,19 @@ knitr::opts_chunk$set(
 
 A major piece of the advantage that **{clinify}** offers is control over pagination. Clinical tables can get fairly specific in how pagination is handled, requiring page breaks to occur in specific places, data driven content to be pulled into different portions of the table, or overflowing columns into multiple pages. **{clinify}** offers a few different function to help with this process. 
 
+## `clin_auto_page()`
+
+The most simple method of pagination is to let Word take the reins and do most of the work for you. Word has a feature called `keep_with_next` where you can specify groups of rows that _shouldn't_ be broken by page breaks. {flextable} implements this using the function `keep_with_next`, and in **{clinify}** we've added a simple wrapper called `clin_auto_page()`. 
+
+`clin_auto_page()` works by taking a grouping variable, which will be pulled out of the table, and using that to determine the appropriate `keep_with_next` groupings. Note that when using this function, you're not specifying a variable to _insert_ page breaks, but rather saying "do not split rows within this group across pages". It's also important to note that the effect of this function won't be apparent when printing to the screen, and only within a word document itself. `keep_with_next` is a feature of Word, so in an HTML view there's nothing much to see.
+
+```{r}
+clintable(mtcars) |>
+  clin_auto_page(gear)
+```
+
+ If you can accomplish what you need using this function, we recommend it because it takes the least effort on behalf of the programmer. The other functions that `clinify` has to offer give you more specific control, but rely more on the inputs that you provide.
+
 ## `clin_page_by()`
 
 One method of pagination for clinical tables that's been used for a long time is to pre-program a variable that specifies where page breaks should occur. When default page break methods don't suffice, this can be one way that you ensure breaks happen in the appropriate places. The `clin_page_by()` function allows you to target a variable in the table that will be used to drive this. 

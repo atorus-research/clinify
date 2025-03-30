@@ -49,7 +49,9 @@ clinify_docx_default <- function() {
 }
 ```
 
-## `clinify_titles_default`
+## `clinify_titles_default` and `clin_footnotes_default()`
+
+Note the function `clin_replace_pagenums()`. All of this styling applies during either print or the creation of the `rdocx` object so the table can be rendered to word. The `clin_replace_pagenums()` function will look for the fields `{PAGE}` and `{NUMPAGES}` and replace them with the Word auto fields for current page and total pages respectively. This allows you to be flexible with how you specify the page numbers should look.
 
 ```{r, eval=FALSE}
 clinify_titles_default <- function(x, ...) {
@@ -72,11 +74,11 @@ clinify_titles_default <- function(x, ...) {
     x,
     layout = "fixed"
   )
+  # Automatically find and update a pagenum string
+  x <- clin_replace_pagenums(x)
+  x
 }
-```
-## `clinify_footnotes_default`
 
-```{r, eval=FALSE}
 clinify_footnotes_default <- function(x, ...) {
   # Remove all borders.
   x <- flextable::border_remove(x)
@@ -100,6 +102,9 @@ clinify_footnotes_default <- function(x, ...) {
     x,
     layout = "fixed"
   )
+  # Automatically find and update a pagenum string
+  x <- clin_replace_pagenums(x)
+  x
 }
 ```
 

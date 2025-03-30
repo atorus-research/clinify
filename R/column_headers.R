@@ -83,9 +83,6 @@ clin_column_headers <- function(x, ...) {
     x
   }))
 
-  # Catch row and column that has empty text 
-  # bdr_rmv <- which(mheaders[-nrow(mheaders), ,drop=FALSE] == " ", arr.ind=TRUE)
-
   # Single column headers will read as a column
   # Multi row need to be transposed
   if (dim(mheaders)[2] > 1) {
@@ -99,11 +96,7 @@ clin_column_headers <- function(x, ...) {
   # Apply to the clintable
   x |>
     flextable::set_header_df(typology) |>
-    flextable::merge_v(part = "header") |>
     flextable::merge_h(part = "header")
-    # Remove border where no spanning header
-    # flextable::border(part = "header", i = bdr_rmv[,'row'], j=bdr_rmv[,'col'], border.bottom = fp_border(width = 0)) |>
-    # border_remove()
 }
 
 #' Convert column labels into column headers
