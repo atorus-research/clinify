@@ -18,7 +18,8 @@ test_that("Headers apply as expected", {
       Sepal.Length = c("Flowers", "Sepal", "Length"),
       Sepal.Width = c("Flowers", "Sepal", "Width"),
       Petal.Length = c("Petal", "Length"),
-      Petal.Width = c("Petal", "Width")
+      Petal.Width = c("Petal", "Width"),
+      Species = ""
     )
 
   # These snapshots capture the major factors of interest

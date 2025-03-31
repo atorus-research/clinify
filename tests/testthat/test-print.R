@@ -12,6 +12,21 @@ test_that("Single page standard print", {
   expect_equal(extracted_data, comp)
 })
 
+test_that("Single page standard print with auto page on", {
+  x <- knit_print(clintable(mtcars) |> 
+    clin_auto_page('gear'))
+
+  tab_html <- rvest::read_html(as.character(x)) |>
+    rvest::html_elements(".tabwid")
+
+  expect_equal(length(tab_html), 1)
+
+  extracted_data <- as.data.frame(rvest::html_table(tab_html))
+  comp <- mtcars[1:15, -10]
+  rownames(comp) <- NULL
+  expect_equal(extracted_data, comp)
+})
+
 test_that("Footnote page for no alternating pages renders properly", {
   ct <- clintable(mtcars) |>
     clin_add_footnote_page(

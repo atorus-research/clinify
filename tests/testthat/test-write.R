@@ -2,7 +2,8 @@ test_that("Single table write", {
   temp_file1 <- withr::local_tempfile(fileext = ".docx")
   temp_file2 <- withr::local_tempfile(fileext = ".docx")
 
-  ct <- clintable(mtcars)
+  ct <- clintable(mtcars) |>
+    clin_auto_page("gear")
   doc <- clindoc(ct)
 
   write_clintable(ct, file = temp_file2)
