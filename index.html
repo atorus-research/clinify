@@ -13,6 +13,7 @@
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Clinical Table Styling Tools and Utilities">
 <meta name="description" content="The primary motivation of this package is to take the things that are great about the R packages flextable &lt;https://davidgohel.github.io/flextable/&gt; and officer &lt;https://davidgohel.github.io/officer/&gt;, take the standard and complex pieces of formatting clinical tables for regulatory use, and simplify the tedious pieces.">
 <meta property="og:description" content="The primary motivation of this package is to take the things that are great about the R packages flextable &lt;https://davidgohel.github.io/flextable/&gt; and officer &lt;https://davidgohel.github.io/officer/&gt;, take the standard and complex pieces of formatting clinical tables for regulatory use, and simplify the tedious pieces.">
+<meta property="og:image" content="https://atorus-research.github.io/clinify/logo.svg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@AtorusR">
 <meta name="twitter:site" content="@AtorusR">
@@ -32,7 +33,7 @@
 
     <a class="navbar-brand me-2" href="index.html">clinify</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +44,17 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="articles/clinify.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Vignettes</h6></li>
+    <li><a class="dropdown-item" href="articles/defaults.html">Setting Clinify Defaults</a></li>
+    <li><a class="dropdown-item" href="articles/pagination.html">Pagination</a></li>
+    <li><a class="dropdown-item" href="articles/titles_footnotes.html">Titles and Footnotes</a></li>
+    <li><a class="dropdown-item" href="articles/end_to_end.html">End-to-End Example</a></li>
+  </ul>
+</li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -58,9 +70,11 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="clinify">
-<strong>{clinify}</strong><a class="anchor" aria-label="anchor" href="#clinify"></a>
-</h1></div>
+<div class="page-header">
+<img src="logo.svg" class="logo" alt=""><h1 id="clinify-">
+<strong>clinify</strong> <a class="anchor" aria-label="anchor" href="#clinify-"></a>
+</h1>
+</div>
 <!-- badges: start -->
 
 <p><strong>{clinify}</strong> is direct extension of the <a href="https://davidgohel.github.io/flextable/" class="external-link">{flextable}</a> and <a href="https://davidgohel.github.io/officer/" class="external-link">{officer}</a> packages, aimed at supplementing some functionality and simplifying some common tasks in the creation of clinical tables, listings and figures.</p>
@@ -72,7 +86,7 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"clinify"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Install the development version:</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/atorus-research/clinify.git"</span>, ref<span class="op">=</span><span class="st">"development"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/atorus-research/clinify.git"</span>, ref <span class="op">=</span> <span class="st">"development"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="motivation">Motivation<a class="anchor" aria-label="anchor" href="#motivation"></a>
@@ -109,38 +123,38 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://atorus-research.github.io/clinify/">clinify</a></span><span class="op">)</span></span>
 <span><span class="co"># Mock some data</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span>
-<span><span class="va">dat</span><span class="op">[</span><span class="st">'page'</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span><span class="va">dat</span><span class="op">[</span><span class="st">"page"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">10</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">10</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">dat2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">dat</span>, <span class="va">dat</span><span class="op">)</span></span>
-<span><span class="va">dat2</span><span class="op">[</span><span class="st">'groups'</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'a'</span>, <span class="fl">32</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'b'</span>, <span class="fl">32</span><span class="op">)</span></span>
+<span><span class="va">dat2</span><span class="op">[</span><span class="st">"groups"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="fl">32</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"b"</span>, <span class="fl">32</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create a basic table</span></span>
-<span><span class="va">ct</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/clintable.html">clintable</a></span><span class="op">(</span><span class="va">dat2</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">ct</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/clintable.html">clintable</a></span><span class="op">(</span><span class="va">dat2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># Break pages by the "page" variable</span></span>
-<span>  <span class="fu"><a href="reference/clin_page_by.html">clin_page_by</a></span><span class="op">(</span><span class="st">'page'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/clin_page_by.html">clin_page_by</a></span><span class="op">(</span><span class="st">"page"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># Add header lines using the "groups" variable</span></span>
-<span>  <span class="fu"><a href="reference/clin_group_by.html">clin_group_by</a></span><span class="op">(</span><span class="st">'groups'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="co"># For overflowing columns, alternate pages with </span></span>
+<span>  <span class="fu"><a href="reference/clin_group_by.html">clin_group_by</a></span><span class="op">(</span><span class="st">"groups"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="co"># For overflowing columns, alternate pages with</span></span>
 <span>  <span class="co"># fixed variables for each page</span></span>
 <span>  <span class="fu"><a href="reference/clin_alt_pages.html">clin_alt_pages</a></span><span class="op">(</span></span>
-<span>    key_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'mpg'</span>, <span class="st">'cyl'</span>, <span class="st">'hp'</span><span class="op">)</span>,</span>
+<span>    key_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"cyl"</span>, <span class="st">"hp"</span><span class="op">)</span>,</span>
 <span>    col_groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'disp'</span>, <span class="st">'drat'</span>, <span class="st">'wt'</span><span class="op">)</span>,</span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'qsec'</span>, <span class="st">'vs'</span>, <span class="st">'am'</span><span class="op">)</span>,</span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'gear'</span>, <span class="st">'carb'</span><span class="op">)</span></span>
-<span>    <span class="op">)</span> </span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"disp"</span>, <span class="st">"drat"</span>, <span class="st">"wt"</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"qsec"</span>, <span class="st">"vs"</span>, <span class="st">"am"</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gear"</span>, <span class="st">"carb"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># Apply column widths as a proportion of the total page</span></span>
 <span>  <span class="co"># For alternating pages, the proportion allocated to key columns</span></span>
 <span>  <span class="co"># is carried to each page group</span></span>
-<span>  <span class="fu"><a href="reference/clin_col_widths.html">clin_col_widths</a></span><span class="op">(</span>mpg <span class="op">=</span> <span class="fl">.2</span>, cyl<span class="op">=</span><span class="fl">.2</span>, disp<span class="op">=</span><span class="fl">.15</span>, vs<span class="op">=</span><span class="fl">.15</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/clin_col_widths.html">clin_col_widths</a></span><span class="op">(</span>mpg <span class="op">=</span> <span class="fl">.2</span>, cyl <span class="op">=</span> <span class="fl">.2</span>, disp <span class="op">=</span> <span class="fl">.15</span>, vs <span class="op">=</span> <span class="fl">.15</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># Add titles here is using new_header_footer to allow flextable functions</span></span>
 <span>  <span class="co"># to customize the titles block</span></span>
 <span>  <span class="fu"><a href="reference/add_titles_footnotes.html">clin_add_titles</a></span><span class="op">(</span></span>
@@ -148,15 +162,15 @@
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Left"</span>, <span class="st">"Center"</span>, <span class="st">"Right"</span><span class="op">)</span>,</span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Just the middle"</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/add_titles_footnotes.html">clin_add_footnotes</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>          <span class="st">"Here's a footnote."</span>, </span>
-<span>          <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"%H:%M %A, %B %d, %Y"</span><span class="op">)</span></span>
-<span>        <span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>        <span class="st">"Here's a footnote."</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"%H:%M %A, %B %d, %Y"</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
-<span>    <span class="op">)</span>  </span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Print pages (by default 3 pages) to the viewer of the IDE</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ct</span><span class="op">)</span></span></code></pre></div>
@@ -208,6 +222,9 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://app.codecov.io/gh/atorus-research/clinify" class="external-link"><img src="https://codecov.io/gh/atorus-research/clinify/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://github.com/atorus-research/clinify/blob/main/LICENSE.md" class="external-link"><img src="https://img.shields.io/badge/License-APACHE2-blue.svg"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://github.com/atorus-research/clinify/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/atorus-research/clinify/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
 
