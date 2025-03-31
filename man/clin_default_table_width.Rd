@@ -2,7 +2,7 @@
 % Please edit documentation in R/styles.R
 \name{clin_default_table_width}
 \alias{clin_default_table_width}
-\title{Helper function to get the total page width}
+\title{Get the Default Table Width for Clinical Documents}
 \usage{
 clin_default_table_width()
 }
@@ -10,7 +10,9 @@ clin_default_table_width()
 An rdocx object from the officer package
 }
 \description{
-Using the document dimensions stored in options, calculate the
-width that can be used in table body, titles, and footnotes. Calculation
-uses the page width subtracting right and left margins.
+This function calculates the default table width based on the page width
+and margins specified in the \code{clinify_docx_default} option.
+}
+\examples{
+clin_default_table_width()
 }

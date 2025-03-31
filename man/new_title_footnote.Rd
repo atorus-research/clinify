@@ -4,7 +4,7 @@
 \alias{new_title_footnote}
 \title{Create a new title or footnote flextable}
 \usage{
-new_title_footnote(x, sect = c("titles", "footnotes"))
+new_title_footnote(x, sect = c("titles", "footnotes", "footnote_page"))
 }
 \arguments{
 \item{x}{a list of character vectors, no more than 3 elements to a vector.}
@@ -18,5 +18,5 @@ A flextable object
 Create a new title or footnote flextable
 }
 \examples{
-#TODO:
+# TODO:
 }

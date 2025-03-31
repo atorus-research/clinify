@@ -1,0 +1,91 @@
+---
+title: "Titles and Footnotes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Titles and Footnotes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+A specific thing that **{clinify}** helps users with is the application of titles and footnotes to a document. In clinical tables, it's common that you need to use the header and the footer of the word document to apply titles and footnotes. There are several functions available within **{clinify}** to help you here. 
+
+## Titles and Footnotes
+
+Let's look at an example:
+
+```{r setup}
+library(clinify)
+
+clintable(mtcars) |>
+  clin_add_titles(
+    list(
+      c("Left", "Center", "Page {PAGE} of {NUMPAGES}"),
+      c("Just the middle")
+    )
+  ) |>
+  clin_add_footnotes(
+    list(
+      c(
+        "Here's a footnote.",
+        format(Sys.time(), "%H:%M %A, %B %d, %Y")
+      )
+    )
+  )
+```
+
+Both `clin_add_titles()` and `clin_add_footnotes()` take a list of character vectors. Each element of the list will be applied as a row of the title or footnote. The number of elements of the list determines how those elements are aligned:
+
+- For a single element, in the titles it will be aligned center and in a footnote it will be bound left.
+- Two elements will bind left and right
+- Three elements will bind left, center, and right.
+
+Note the text field `"Page {PAGE} of {NUMPAGES}"`. **{clinify}** has a special helper function `clin_replace_pagenums()` that will find cells within a flextable containing `{PAGE}` or `{NUMPAGES}` and replace them with the word auto field for current and total pages respectively. By default within **{clinify}** this actual takes places during the default styling functions (see `vignette("defaults")`). Note that when you print to HTML, the `{PAGE}` and `{NUMPAGES}` portions of the string will appear blank.
+
+Another option for setting titles and footnotes is to create your own flextable object.
+
+```{r}
+clintable(mtcars) |>
+  clin_add_titles(ft = flextable::flextable(head(iris, 2)))
+```
+
+While this particular example is obscure, this opens up the possibility to specifically craft your own title or footnote.
+
+## Footnote Pages
+
+Another circumstance that **{clinify}** allows for is the creation of a specific footnote pages. This can be used in circumstances where there are too many required footnotes for the table, and rather than putting in the footer you can place them into their own specific preceding page of the table itself.
+
+```{r}
+clintable(mtcars) |>
+  clin_add_titles(
+    list(
+      c("Left", "Center", "Right"),
+      c("Just the middle")
+    )
+  ) |>
+  clin_add_footnotes(
+    list(
+      c(
+        "Here's a footnote.",
+        format(Sys.time(), "%H:%M %A, %B %d, %Y")
+      )
+    )
+  ) |>
+  clin_add_footnote_page(
+    list(
+      c("One very long footnote full of text"),
+      c("Two very long footnote full of text"),
+      c("Three very long footnote full of text"),
+      c("Four very long footnote full of text"),
+      c("Five very long footnote full of text")
+    )
+  )
+```
+
+The interface to `clin_add_footnote_page()` is identical to `clin_add_titles()` and `clin_add_footnotes()`, so the same capabilities exist for this function as well. 
