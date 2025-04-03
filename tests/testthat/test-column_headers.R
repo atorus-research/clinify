@@ -38,6 +38,19 @@ test_that("Headers apply as expected", {
   ct3 <- headers_from_labels_(ct3)
   expect_snapshot(ct3$header$dataset) # Dup values applied in right spots
   expect_snapshot(ct3$header$spans) # Blank column spans don't merge with horizontals
+
+  # Test labels but also only use a single level
+  refdat <- iris
+  attr(refdat$Sepal.Length, "label") <- "Sepal Length"
+  attr(refdat$Sepal.Width, "label") <- "Sepal Width"
+  attr(refdat$Petal.Length, "label") <- "Petal Length"
+  attr(refdat$Petal.Width, "label") <- "Petal Width"
+
+  ct3 <- clintable(refdat)
+  has_labels_(ct3$body$dataset)
+  ct3 <- headers_from_labels_(ct3)
+  expect_snapshot(ct3$header$dataset) # Dup values applied in right spots
+  expect_snapshot(ct3$header$spans) # Blank column spans don't merge with horizontals
 })
 
 test_that("Overflowing page headers update appropriately", {
