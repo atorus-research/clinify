@@ -7,7 +7,7 @@ articles:
   end_to_end: end_to_end.html
   pagination: pagination.html
   titles_footnotes: titles_footnotes.html
-last_built: 2025-03-31T14:58Z
+last_built: 2025-04-03T17:16Z
 urls:
   reference: https://atorus-research.github.io/clinify/reference
   article: https://atorus-research.github.io/clinify/articles
