@@ -87,6 +87,8 @@ clin_column_headers <- function(x, ...) {
   # Multi row need to be transposed
   if (dim(mheaders)[2] > 1) {
     tmheaders <- t(mheaders)
+  } else {
+    tmheaders <- mheaders
   }
 
   typology <- as.data.frame(tmheaders, row.names = FALSE)

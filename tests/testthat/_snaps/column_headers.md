@@ -54,6 +54,28 @@
       [3,]    1    1    1    1    1
       
 
+---
+
+    Code
+      ct3$header$dataset
+    Output
+        Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+      1 Sepal Length Sepal Width Petal Length Petal Width        
+
+---
+
+    Code
+      ct3$header$spans
+    Output
+      $rows
+           [,1] [,2] [,3] [,4] [,5]
+      [1,]    1    1    1    1    1
+      
+      $columns
+           [,1] [,2] [,3] [,4] [,5]
+      [1,]    1    1    1    1    1
+      
+
 # Overflowing page headers update appropriately
 
     Code
