@@ -42,7 +42,8 @@ as_clindoc <- function(x, apply_defaults = TRUE) {
 
   if (apply_defaults) {
     if (!is.null(titles)) titles <- getOption("clinify_titles_default")(titles)
-    if (!is.null(footnotes)) footnotes <- getOption("clinify_footnotes_default")(footnotes)
+    if (!is.null(footnotes))
+      footnotes <- getOption("clinify_footnotes_default")(footnotes)
     x <- getOption("clinify_table_default")(x)
     if (!is.null(x$clinify_config$footnote_page)) {
       footnote_page <- getOption("clinify_footnotes_default")(footnote_page)
@@ -87,17 +88,16 @@ as_clindoc <- function(x, apply_defaults = TRUE) {
 #' @noRd
 doc_alternating <- function(doc, x) {
   pag_idx <- x$clinify_config$pagination_idx
-  n <- length(pag_idx)
 
   # Page breaks up to last page
-  for (p in pag_idx[1:n - 1]) {
-    doc <- add_table_(doc, x, p)
-    doc <- officer::body_add_break(doc)
-  }
+  wml <- unlist(lapply(
+    pag_idx,
+    \(p, x) c(get_table_wml(x, p), pagebreak),
+    x = x
+  ))
 
-  # Write last page
-  doc <- add_table_(doc, x, pag_idx[[n]])
-  doc
+  # Add pages to rdocx and strip final pagebreak
+  doc <- officer::body_add_xml_multi(doc, wml[-length(wml)])
 }
 
 #' Method to add table to document
@@ -105,18 +105,24 @@ doc_alternating <- function(doc, x) {
 #' @param x a clintable object
 #' @param doc An officer word document object
 #' @noRd
-add_table_ <- function(doc, x, p) {
+get_table_wml <- function(x, p) {
   tbl <- slice_clintable(x, p$rows, p$cols)
   if (!is.null(p$label)) {
-    tbl <- flextable::add_header_lines(tbl, values = paste(p$label, collapse = "\n"))
+    tbl <- flextable::add_header_lines(
+      tbl,
+      values = paste(p$label, collapse = "\n")
+    )
     tbl <- flextable::align(tbl, 1, 1, "left", part = "header")
   }
 
   if (!is.null(p$captions)) {
     # TODO: Allow formatting on this
-    tbl <- flextable::add_footer_lines(tbl, values = paste(p$captions, collapse = "\n"))
+    tbl <- flextable::add_footer_lines(
+      tbl,
+      values = paste(p$captions, collapse = "\n")
+    )
     # This has to be applied after the footer is added
     tbl <- getOption("clinify_caption_default")(tbl)
   }
-  doc <- flextable::body_add_flextable(doc, tbl)
+  flextable::get_flextable_wml(tbl)
 }

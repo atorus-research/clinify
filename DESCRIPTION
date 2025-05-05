@@ -18,8 +18,8 @@ Authors@R: c(
 Depends:
     R (>= 4.2)
 Imports: 
-    flextable,
-    officer,
+    flextable (>= 0.9.8.9),
+    officer (>= 0.6.8.9000),
     magrittr,
     dplyr,
     knitr,
@@ -42,3 +42,6 @@ Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 URL: https://atorus-research.github.io/clinify/
+Remotes:  
+    mstackhouse/flextable,
+    mstackhouse/officer
