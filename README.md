@@ -27,7 +27,19 @@ You can install the development version of **{clinify}** like so:
 install.packages("clinify")
 
 # Install the development version:
-devtools::install_github("https://github.com/atorus-research/clinify.git", ref = "development")
+# NOTE: Current version relies on forked versions of {flextable} and {officer}
+devtools::install_github(
+  "https://github.com/mstackhouse/officer.git",
+  ref = "body_add_xml_multi"
+)
+devtools::install_github(
+  "https://github.com/mstackhouse/flextable.git",
+  ref = "681_bulk_add_flextables"
+)
+devtools::install_github(
+  "https://github.com/atorus-research/clinify.git",
+  ref = "development"
+)
 ```
 
 ## Motivation
@@ -135,6 +147,7 @@ print(ct)
 ```
 
 <p align="center">
+
 <img src="man/figures/print.gif" width="800px">
 </p>
 
@@ -147,5 +160,6 @@ write_clintable(ct, "demo_table.docx")
 ```
 
 <p align="center">
+
 <img src="vignettes/table.png" width="800px">
 </p>
