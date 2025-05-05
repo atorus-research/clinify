@@ -16,3 +16,4 @@
 ^NEWS\.md$
 ^CRAN-SUBMISSION$
 ^\.lintr$
+^data-raw$
