@@ -45,31 +45,31 @@ write_rdocx_ <- function(x, target) {
   # process_footnotes(x) # Not using Word's concept of footnotes
   # process_stylenames(x$doc_obj, x$styles) # Seem to be able to get away without this
   # process_links(x$doc_obj, type = "wml") # No built in links
-  process_docx_poured(
-    doc_obj = x$doc_obj,
-    relationships = x$doc_obj$relationship(),
-    content_type = x$content_type,
-    package_dir = x$package_dir
-  )
-  process_images(x$doc_obj, x$doc_obj$relationship(), x$package_dir)
-  process_images(x$footnotes, x$footnotes$relationship(), x$package_dir)
+  # process_docx_poured(
+  #   doc_obj = x$doc_obj,
+  #   relationships = x$doc_obj$relationship(),
+  #   content_type = x$content_type,
+  #   package_dir = x$package_dir
+  # )
+  # process_images(x$doc_obj, x$doc_obj$relationship(), x$package_dir)
+  # process_images(x$footnotes, x$footnotes$relationship(), x$package_dir)
 
-  x$headers <- update_hf_list(
-    part_list = x$headers,
-    type = "header",
-    package_dir = x$package_dir
-  )
-  x$footers <- update_hf_list(
-    part_list = x$footers,
-    type = "footer",
-    package_dir = x$package_dir
-  )
-  for (header in x$headers) process_links(header, type = "wml")
-  for (footer in x$footers) process_links(footer, type = "wml")
-  for (header in x$headers)
-    process_images(header, header$relationship(), x$package_dir)
-  for (footer in x$footers)
-    process_images(footer, footer$relationship(), x$package_dir)
+  # x$headers <- update_hf_list(
+  #   part_list = x$headers,
+  #   type = "header",
+  #   package_dir = x$package_dir
+  # )
+  # x$footers <- update_hf_list(
+  #   part_list = x$footers,
+  #   type = "footer",
+  #   package_dir = x$package_dir
+  # )
+  # for (header in x$headers) process_links(header, type = "wml")
+  # for (footer in x$footers) process_links(footer, type = "wml")
+  # for (header in x$headers)
+  #   process_images(header, header$relationship(), x$package_dir)
+  # for (footer in x$footers)
+  #   process_images(footer, footer$relationship(), x$package_dir)
 
   # Opens fine without the IDs
   # int_id <- 1 # unique id identifier
