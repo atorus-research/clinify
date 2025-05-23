@@ -37,5 +37,5 @@ write_clintable <- function(x, file, apply_defaults = TRUE) {
     doc <- as_clindoc(x, apply_defaults)
   }
 
-  write_rdocx_(doc, target = file)
+  print(doc, target = file)
 }
