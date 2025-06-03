@@ -1,5 +1,6 @@
 #' @import flextable
 #' @import officer
+#' @import xml2
 #' @importFrom htmltools browsable tags tagList div HTML
 #' @importFrom dplyr bind_rows
 #' @importFrom magrittr `%>%`
