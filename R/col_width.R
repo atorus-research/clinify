@@ -40,7 +40,8 @@ clin_col_widths <- function(x, ...) {
   cw <- unlist(args)
 
   if (any(cw > 1)) {
-    stop("Width arguments represent percent width of page. and cannot be >1")
+    stop("Width arguments represent percent width of page. and cannot be >1\n",
+         "Are you using alternating pages? Make sure to call clin_alt_pages() first.")
   }
 
   # Make sure the cols exist
@@ -66,7 +67,7 @@ clin_col_widths <- function(x, ...) {
     # Set the widths for
     for (i in seq_along(col_groups)) {
       cg_wd <- cw[names(cw) %in% col_groups[[i]]]
-      if (sum(c(key_col_wd, cg_wd)) > 1) {
+      if (round(sum(c(key_col_wd, cg_wd)), digits=10) > 1) {
         stop("Key columns + alternating page column widths sum to >1. Width arguments represent percent width of page.")
       }
       x <- flextable::width(x, j = names(cg_wd), cg_wd * wd)
