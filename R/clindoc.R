@@ -90,22 +90,30 @@ doc_alternating <- function(doc, x) {
   pag_idx <- x$clinify_config$pagination_idx
 
   # Page breaks up to last page
-  wml <- unlist(lapply(
-    pag_idx,
-    \(p, x) c(get_table_wml(x, p), pagebreak),
-    x = x
-  ))
+  tbs <- unlist(
+    lapply(
+      pag_idx,
+      \(p, x) list(get_table_(x, p), officer::fpar(officer::run_pagebreak())),
+      x = x
+    ),
+    recursive = FALSE
+  )
 
-  # Add pages to rdocx and strip final pagebreak
-  doc <- officer::body_add_xml_multi(doc, wml[-length(wml)])
+  ctx <- officer::body_append_start_context(doc)
+  for (t in tbs[-length(tbs)]) {
+    officer::write_elements_to_context(context = ctx, t)
+  }
+  doc <- officer::body_append_stop_context(ctx)
+  doc
 }
+
 
 #' Method to add table to document
 #'
 #' @param x a clintable object
 #' @param doc An officer word document object
 #' @noRd
-get_table_wml <- function(x, p) {
+get_table_ <- function(x, p) {
   tbl <- slice_clintable(x, p$rows, p$cols)
   if (!is.null(p$label)) {
     tbl <- flextable::add_header_lines(
@@ -124,5 +132,6 @@ get_table_wml <- function(x, p) {
     # This has to be applied after the footer is added
     tbl <- getOption("clinify_caption_default")(tbl)
   }
-  flextable::get_flextable_wml(tbl)
+
+  tbl
 }
