@@ -131,6 +131,7 @@ print_clinpage <- function(
       x,
       values = paste(group_label, collapse = "\n")
     )
+    x <- getOption("clinify_grouplabel_default")(x)
     x <- flextable::align(x, 1, 1, "left", part = "header")
   }
   if (!is.null(captions)) {

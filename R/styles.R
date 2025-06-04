@@ -25,7 +25,8 @@
 #'   clinify_titles_default = clinify_titles_default,
 #'   clinify_footnotes_default = clinify_footnotes_default,
 #'   clinify_table_default = clinify_table_default,
-#'   clinify_caption_default = clinify_caption_default
+#'   clinify_caption_default = clinify_caption_default,
+#'   clinify_grouplabel_default = clinify_grouplabel_default
 #' )
 #'
 #' options(op)
@@ -155,6 +156,16 @@ clinify_caption_default <- function(x, ...) {
   # Set fontsize for both table header and table body.
   x <- flextable::fontsize(x, part = "footer", size = 9)
   x
+}
+
+#' @family Clinify Defaults
+#' @rdname clinify_defaults
+#' @export
+clinify_grouplabel_default <- function(x, ...) {
+  # Remove 
+  x <- flextable::hline_top(x,
+    part = "header", border = officer::fp_border(style = "none", width = 0)
+  )
 }
 
 #' @family Clinify Defaults

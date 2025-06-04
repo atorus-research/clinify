@@ -170,6 +170,19 @@ clinify_table_default <- function(x, ...) {
 }
 ```
 
+## `clinify_grouplabel_default`
+
+Note that this option is only necessary because of how captions are applied by `clin_group_by()`. The caption doesn't bind to the table object until the pagination is being processed. 
+
+```{r, eval=FALSE}
+clinify_grouplabel_default <- function(x, ...) {
+  # Remove top line above group label
+  x <- flextable::hline_top(x,
+    part = "header", border = officer::fp_border(style = "none", width = 0)
+  )
+}
+```
+
 ## `clinify_caption_default`
 
 Note that this option is only necessary because of how captions are applied by `clin_group_by()`. The caption doesn't bind to the table object until the pagination is being processed. As such, the "footer" of the flextable object itself can't have styles applied until the footer is set. 
