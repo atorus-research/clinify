@@ -120,6 +120,7 @@ get_table_ <- function(x, p) {
       tbl,
       values = paste(p$label, collapse = "\n")
     )
+    tbl <- getOption("clinify_grouplabel_default")(tbl)
     tbl <- flextable::align(tbl, 1, 1, "left", part = "header")
   }
 
