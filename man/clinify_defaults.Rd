@@ -5,6 +5,7 @@
 \alias{clinify_footnotes_default}
 \alias{clinify_table_default}
 \alias{clinify_caption_default}
+\alias{clinify_grouplabel_default}
 \alias{clinify_docx_default}
 \title{Apply Default Clinical Styling to Clintables}
 \usage{
@@ -15,6 +16,8 @@ clinify_footnotes_default(x, ...)
 clinify_table_default(x, ...)
 
 clinify_caption_default(x, ...)
+
+clinify_grouplabel_default(x, ...)
 
 clinify_docx_default()
 }
@@ -44,7 +47,8 @@ options(
   clinify_titles_default = clinify_titles_default,
   clinify_footnotes_default = clinify_footnotes_default,
   clinify_table_default = clinify_table_default,
-  clinify_caption_default = clinify_caption_default
+  clinify_caption_default = clinify_caption_default,
+  clinify_grouplabel_default = clinify_grouplabel_default
 )
 
 options(op)

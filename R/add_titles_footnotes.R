@@ -1,12 +1,18 @@
-#' Add page footer
+#' Add titles, footnotes, or a footnote page to a clintable or clindoc
 #'
-#' This function adds a text, passed as argument, into .docx bottom colontitle (page footer). As a
-#' result, the text is repeated on each page of the document. Takes a list of lists as an input parameter,
-#' where each sublist represents a separate line (or row) of text. There is also a possibility to add a row
-#' with both left- and right-aligned text. To do so - simply pass two items to a sublist instead of one.
+#' This function allows you to attach specified titles, footnotes, or a footnote page 
+#' into clintable or clindoc object. The input can be provided either as a list of character
+#' vectors, or pre-built flextable. 
+#' 
+#' When using the `ls` parameter, each element of the list can contain no more than two 
+#' elements within each character vector. In a title, a single element will align center. 
+#' In a footnote, a single element will align to the left. For both titles and footnotes,
+#' two elements will align split down the middle, with the left side element aligning left
+#' and the right side element aligning right. In a title, a single left aligned element, 
+#' provide a 2 element character vector with duplicate values. 
 #'
 #' @param x a clintable object
-#' @param ls a list of character vectors, no more than 3 elements to a vector
+#' @param ls a list of character vectors, no more than 2 elements to a vector
 #' @param ft A flextable object to use as the header
 #'
 #' @return A clintable object
@@ -20,7 +26,7 @@
 #' clintable(mtcars) |>
 #'   clin_add_titles(
 #'     list(
-#'       c("Left", "Center", "Right"),
+#'       c("Left", "Right"),
 #'       c("Just the middle")
 #'     )
 #'   ) |>
@@ -67,6 +73,8 @@ clin_add_footnote_page <- function(x, ls = NULL, ft = NULL) {
 #' Called by clin_add_titles and clin_add_footnotes
 #' @noRd
 add_titles_footnotes_ <- function(x, sect, ls = NULL, ft = NULL) {
+  stopifnot(inherits(x, 'clintable') || inherits(x, 'clindoc'))
+
   if (all(is.null(ls), is.null(ft)) || all(!is.null(ls), !is.null(ft))) {
     stop("One of, and only one of, ls or ft must be populated")
   }
@@ -93,8 +101,8 @@ new_title_footnote <- function(x, sect = c("titles", "footnotes", "footnote_page
   sect <- match.arg(sect)
 
   # Check if all lists have length <=3
-  if (any(sapply(x, length) > 3)) {
-    stop("All sublists must have length <= 3")
+  if (any(sapply(x, length) > 2)) {
+    stop("All sublists must have length <= 2")
   }
 
   # List to hold all data frames
@@ -104,13 +112,13 @@ new_title_footnote <- function(x, sect = c("titles", "footnotes", "footnote_page
     elements <- x[[i]]
 
     # Create a vector of length 3 filled with the last element
-    row <- rep(tail(elements, 1), 3)
+    row <- rep(tail(elements, 1), 2)
     # Replace the first n elements of the vector with the elements of the list
     row[seq_along(elements)] <- elements
 
-    # Create a dataframe with 1 row and 3 columns
+    # Create a dataframe with 1 row and 2 columns
     df <- data.frame(t(row))
-    names(df) <- c("Left", "Center", "Right")
+    names(df) <- c("Left", "Right")
 
     # Add the data frame to the list
     dfs[[i]] <- df
@@ -124,7 +132,7 @@ new_title_footnote <- function(x, sect = c("titles", "footnotes", "footnote_page
 
   # Apply the common styling
   ft <- ft |>
-    flextable::set_header_labels(Left = "", Center = "", Right = "") |>
+    flextable::set_header_labels(Left = "", Right = "") |>
     flextable::delete_part(part = "header") |>
     flextable::delete_part(part = "footer")
 
@@ -147,12 +155,6 @@ new_title_footnote <- function(x, sect = c("titles", "footnotes", "footnote_page
         flextable::merge_h(i = i, part = "body") |>
         flextable::align(j = 1, i = i, align = "left", part = "body") |>
         flextable::align(j = 2, i = i, align = "right", part = "body")
-    } else if (length(elements) == 3) {
-      ft <- ft |>
-        flextable::merge_h(i = i, part = "body") |>
-        flextable::align(j = 1, i = i, align = "left", part = "body") |>
-        flextable::align(j = 2, i = i, align = "center", part = "body") |>
-        flextable::align(j = 3, i = i, align = "right", part = "body")
     }
   }
 

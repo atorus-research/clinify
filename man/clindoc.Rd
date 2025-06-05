@@ -5,14 +5,14 @@
 \alias{as_clindoc}
 \title{Convert a Clintable to a Word Document}
 \usage{
-clindoc(x, ...)
+clindoc(...)
 
-as_clindoc(x, apply_defaults = TRUE)
+as_clindoc(x)
 }
 \arguments{
-\item{x}{A \code{clintable} object to be converted.}
-
 \item{...}{Additional arguments (currently unused).}
+
+\item{x}{A \code{clintable} object to be converted.}
 
 \item{apply_defaults}{Logical, whether to apply default title, footnote,
 and table formatting. Defaults to \code{TRUE}.}

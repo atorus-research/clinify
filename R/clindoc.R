@@ -24,50 +24,71 @@
 #'
 #' clindoc(ct)
 #'
-clindoc <- function(x, ...) {
-  stopifnot(inherits(x, "clintable"))
-  as_clindoc(x)
+clindoc <- function(...) {
+  tabs <- list(...)
+
+  for (x in tabs) {
+    stopifnot(inherits(x, "clintable"))
+  }
+  
+  # TODO: Add message if titles/footnotes/footnote pages are on more than one input table
+  # TODO: It would also be beneficial to add those three options to clindoc instead of just a clintable
+  if (length(tabs) == 1) {
+    doc <- as_clindoc(tabs[[1]])
+  }
+  else {
+    doc <- new_clindoc(settings = settings)
+    for (x in tabs) {
+      doc <- add_clintable_(doc, x)
+    }
+  }
+
+  doc
+}
+
+#' Object generator for clindocs
+#'
+#' @param settings Objects for titles, footnotes, or footnote page
+#' 
+#' @noRd
+new_clindoc <- function() {
+  doc <- officer::read_docx()
+  doc$clinify_config <- NULL
+  class(doc) <- c("clindoc", class(doc))
+  doc
 }
 
 #' @rdname clindoc
 #' @export
-as_clindoc <- function(x, apply_defaults = TRUE) {
-  pg_method <- x$clinify_config$pagination_method
-  titles <- x$clinify_config$titles
-  footnotes <- x$clinify_config$footnotes
+as_clindoc <- function(x) {
   footnote_page <- x$clinify_config$footnote_page
 
-  doc <- officer::read_docx()
-  settings_ <- getOption("clinify_docx_default")
-
-  if (apply_defaults) {
-    if (!is.null(titles)) titles <- getOption("clinify_titles_default")(titles)
-    if (!is.null(footnotes))
-      footnotes <- getOption("clinify_footnotes_default")(footnotes)
-    x <- getOption("clinify_table_default")(x)
-    if (!is.null(x$clinify_config$footnote_page)) {
-      footnote_page <- getOption("clinify_footnotes_default")(footnote_page)
-    }
-  }
-
-  if (!is.null(titles)) {
-    settings_$header_default <- block_list(titles)
-  }
-  if (!is.null(footnotes)) {
-    settings_$footer_default <- block_list(footnotes)
-  }
-
-  # Keep with next paging
-  if (!is.null(x$clinify_config$auto_page_var)) {
-    x <- auto_page_(x)
-  }
-
-  # apply settings to doc
-  doc <- body_set_default_section(doc, settings_)
+  doc <- new_clindoc()
+  doc$clinify_config$titles <- x$clinify_config$titles
+  doc$clinify_config$footnotes <- x$clinify_config$footnotes
 
   if (!is.null(footnote_page)) {
     doc <- flextable::body_add_flextable(doc, footnote_page)
     doc <- officer::body_add_break(doc)
+  }
+
+  doc <- add_clintable_(doc, x)
+
+  doc
+}
+
+#' Add a clintable into a clindoc object
+#'
+#' @param x a clintable object
+#' @noRd
+add_clintable_ <- function(doc, x) {
+
+  pg_method <- x$clinify_config$pagination_method
+  x <- getOption("clinify_table_default")(x) 
+  
+  # Keep with next paging
+  if (!is.null(x$clinify_config$auto_page_var)) {
+    x <- auto_page_(x)
   }
 
   # This point down from print method directly ----
@@ -77,16 +98,13 @@ as_clindoc <- function(x, apply_defaults = TRUE) {
     x <- prep_pagination_(x)
     doc <- doc_alternating(doc, x)
   }
-
-  class(doc) <- c("clindoc", class(doc))
-  doc
 }
 
 #' Method for printing alternating pages
 #'
 #' @param x a clintable object
 #' @noRd
-doc_alternating <- function(doc, x) {
+doc_alternating_ <- function(doc, x) {
   pag_idx <- x$clinify_config$pagination_idx
 
   # Page breaks up to last page
