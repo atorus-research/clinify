@@ -111,9 +111,9 @@ clinify_table_default <- function(x, ...) {
   # Remove blank bottoms
   blk_inds <- which(x$header$dataset == "" | x$header$dataset == " ", arr.ind = TRUE)
   # Want to ignore bottom row
-  blk_inds <- blk_inds[blk_inds[, "row"] < nrow(x$header$dataset), ]
+  blk_inds <- blk_inds[blk_inds[, "row"] < nrow(x$header$dataset), , drop = FALSE]
 
-  if (nrow(blk_inds > 0)) {
+  if (nrow(blk_inds) > 0) {
     # Loop all except very bottom row
     for (i in 1:nrow(blk_inds)) {
       x <- flextable::hline(x,

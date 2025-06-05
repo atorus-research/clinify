@@ -31,16 +31,23 @@ clindoc <- function(...) {
     stopifnot(inherits(x, "clintable"))
   }
   
-  # TODO: Add message if titles/footnotes/footnote pages are on more than one input table
-  # TODO: It would also be beneficial to add those three options to clindoc instead of just a clintable
+  # If it's just a clintable then convert to doc
   if (length(tabs) == 1) {
     doc <- as_clindoc(tabs[[1]])
   }
   else {
-    doc <- new_clindoc(settings = settings)
-    for (x in tabs) {
+    doc <- new_clindoc()
+
+    # Tables with page breaks separating
+    for (x in tabs[-length(tabs)]) {
       doc <- add_clintable_(doc, x)
+      ctx <- officer::body_append_start_context(doc)
+      officer::write_elements_to_context(context = ctx, officer::fpar(officer::run_pagebreak()))
+      doc <- officer::body_append_stop_context(ctx)
     }
+
+    # Add last so no page break follows
+    doc <- add_clintable_(doc, tabs[[length(tabs)]])
   }
 
   doc
@@ -96,7 +103,7 @@ add_clintable_ <- function(doc, x) {
     doc <- flextable::body_add_flextable(doc, x)
   } else if (pg_method == "custom") {
     x <- prep_pagination_(x)
-    doc <- doc_alternating(doc, x)
+    doc <- doc_alternating_(doc, x)
   }
 }
 
