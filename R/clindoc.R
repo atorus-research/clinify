@@ -75,6 +75,7 @@ as_clindoc <- function(x) {
   doc$clinify_config$footnotes <- x$clinify_config$footnotes
 
   if (!is.null(footnote_page)) {
+    footnote_page <- getOption("clinify_footnotes_default")(footnote_page)
     doc <- flextable::body_add_flextable(doc, footnote_page)
     doc <- officer::body_add_break(doc)
   }
