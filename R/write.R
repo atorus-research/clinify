@@ -50,6 +50,8 @@ write_clintable <- function(x, file) {
     footnote_page <- getOption("clinify_footnotes_default")(footnote_page)
     doc <- officer::cursor_begin(doc)
     doc <- body_add_flextable(doc, footnote_page, pos="before")
+    # Page break after footnote page
+    doc <- body_add_break(doc)
   }
 
   if (!is.null(titles)) {
