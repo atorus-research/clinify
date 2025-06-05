@@ -71,7 +71,7 @@ test_that("Alt pages write", {
     clin_col_widths(mpg = .2, cyl = .2, disp = .15, vs = .15) |>
     clin_add_titles(
       list(
-        c("Left", "Center", "Right"),
+        c("Left", "Right"),
         c("Just the middle")
       )
     ) |>

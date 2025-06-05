@@ -7,7 +7,7 @@ test_that("Error messages", {
   )
 
   expect_error(
-    clin_add_titles(ct, ls = list(c("1", "2", "3", "4"))),
+    clin_add_titles(ct, ls = list(c("1", "2", "3"))),
     "All sublists must"
   )
 })
@@ -20,7 +20,6 @@ test_that("Titles and footnotes can be attached", {
     clin_add_titles(
       ft = new_title_footnote(
         list(
-          c("left aligned", "centered", "right aligned"),
           c("left aligned", "right aligned"),
           c("Single element")
         ),
@@ -32,9 +31,8 @@ test_that("Titles and footnotes can be attached", {
     # be automatically converted
     clin_add_footnotes(
       list(
-        c("left aligned", "centered", "right aligned"),
         c("left aligned", "right aligned"),
-        c("", "", "Single element")
+        c("", "Single element")
       )
     )
 

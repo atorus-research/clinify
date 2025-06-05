@@ -59,7 +59,7 @@ test_that("Styles apply", {
     ) |>
     clin_add_titles(
       list(
-        c("Left", "Center", "Right"),
+        c("Left", "Right"),
         c("Just the middle")
       )
     ) |>

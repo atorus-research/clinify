@@ -84,7 +84,7 @@ test_that("Alternating pages print 3 pages", {
     clin_col_widths(mpg = .2, cyl = .2, disp = .15, vs = .15) |>
     clin_add_titles(
       list(
-        c("Left", "Center", "Right"),
+        c("Left", "Right"),
         c("Just the middle")
       )
     ) |>
@@ -161,7 +161,7 @@ test_that("Alternating pages print 3 pages with footnote page", {
     clin_col_widths(mpg = .2, cyl = .2, disp = .15, vs = .15) |>
     clin_add_titles(
       list(
-        c("Left", "Center", "Right"),
+        c("Left", "Right"),
         c("Just the middle")
       )
     ) |>
