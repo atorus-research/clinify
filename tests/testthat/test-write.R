@@ -98,3 +98,69 @@ test_that("Alt pages write", {
 
   expect_snapshot(x)
 })
+
+test_that("Multi-table documents write appropriately", {
+
+  ct1 <- clintable(head(iris, 20)) |> 
+    clin_col_widths(
+      Sepal.Length = 0.175,
+      Sepal.Width = 0.175,
+      Petal.Length = 0.175,
+      Petal.Width = 0.175,
+      Species = .3
+    ) |> 
+    clin_column_headers(
+      Sepal.Length = c("Sepal", "Length"),
+      Sepal.Width = c("Sepal", "Width"),
+      Petal.Length = c("Petal", "Length"),
+      Petal.Width = c("Petal", "Width"),
+      Species = "Species"
+    )
+
+  ct2 <- clintable(head(mtcars[1:5], 20)) |> 
+    clin_col_widths(
+      mpg = 0.2,
+      cyl = 0.2,
+      disp = 0.2,
+      hp = 0.2,
+      drat = 0.2
+    ) |> 
+    clin_column_headers(
+      mpg = "MPG",
+      cyl = "Cylinders",
+      disp = "Displacement",
+      hp = "HP",
+      drat = "Rear Axel Ratio"
+    )
+
+  doc <- clindoc(ct1, ct2) |> 
+    clin_add_titles(
+      list(
+        c("PROTOCOL: XYZ", "(Page {PAGE} of {NUMPAGES})"),
+        "Table X.X.X",
+        "Summary of Stuff",
+        "Full Analysis Set)",
+        c("")
+      )
+    ) |> 
+    clin_add_footnotes(
+      list(
+        c("left", "right"),
+        "blah")
+    ) |>
+    clin_add_footnote_page(
+        list(
+          c("One very long footnote full of text"),
+          c("Two very long footnote full of text"),
+          c("Three very long footnote full of text"),
+          c("Four very long footnote full of text"),
+          c("Five very long footnote full of text")
+        )
+    )
+
+  temp_file <- withr::local_tempfile(fileext = ".docx")
+  write_clintable(doc, temp_file)
+  x <- officer::read_docx(temp_file)
+
+  expect_snapshot(x)
+})

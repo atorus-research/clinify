@@ -26,18 +26,17 @@
 #'
 #' @export
 make_grouped_pagenums <- function(var, rows) {
-  # Get the groups 
-  fvar <- as.factor(var)
-  groups <- split(var, fvar)
 
-  # Check if the values were pre-sorted
-  if (!all(var == unsplit(groups, fvar))) {
-    stop("Input data should be presorted by group")
-  }
+  # Mark when the vector changes value
+  group_id <- cumsum(c(TRUE, var[-1] != var[-length(var)]))
 
+  # Split into groups
+  fvar <- as.factor(group_id)
+  groups <- split(group_id, fvar)
+
+  # Loop each group and increment the page based on rows
   cur_page <- 1
   out <- integer()
-
   for (g in groups) {
     page_list <- cur_page:((cur_page - 1) + ceiling(length(g)/rows))
     page_vec <- rep(page_list, each = rows)[1:length(g)]
