@@ -4,7 +4,7 @@
 \alias{write_clintable}
 \title{Clintable write method}
 \usage{
-write_clintable(x, file, apply_defaults = TRUE)
+write_clintable(x, file)
 }
 \arguments{
 \item{x}{a clintable object}

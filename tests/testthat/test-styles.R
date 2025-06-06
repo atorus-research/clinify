@@ -18,7 +18,8 @@ test_that("Styles apply", {
     clinify_titles_default = clinify_titles_default,
     clinify_footnotes_default = clinify_footnotes_default,
     clinify_table_default = clinify_table_default,
-    clinify_caption_default = clinify_caption_default
+    clinify_caption_default = clinify_caption_default,
+    clinify_grouplabel_default = clinify_grouplabel_default
   )
 
   dat <- mtcars
@@ -59,7 +60,7 @@ test_that("Styles apply", {
     ) |>
     clin_add_titles(
       list(
-        c("Left", "Center", "Right"),
+        c("Left", "Right"),
         c("Just the middle")
       )
     ) |>

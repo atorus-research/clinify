@@ -803,3 +803,136 @@
       5.54   table cell
       5.55   table cell
 
+# Multi-table documents write appropriately
+
+    Code
+      x
+    Output
+      rdocx document with 6 element(s)
+      
+      * styles:
+                      Normal              heading 1              heading 2 
+                 "paragraph"            "paragraph"            "paragraph" 
+                   heading 3 Default Paragraph Font           Normal Table 
+                 "paragraph"            "character"                "table" 
+                     No List                 strong               centered 
+                 "numbering"            "character"            "paragraph" 
+              table_template    Light List Accent 2            Titre 1 Car 
+                     "table"                "table"            "character" 
+                 Titre 2 Car            Titre 3 Car          Image Caption 
+                 "character"            "character"            "paragraph" 
+               Table Caption     Table Professional                  toc 1 
+                 "paragraph"                "table"            "paragraph" 
+                       toc 2           Balloon Text    Texte de bulles Car 
+                 "paragraph"            "paragraph"            "character" 
+                reference_id          graphic title            table title 
+                 "character"            "paragraph"            "paragraph" 
+      
+      * Content at cursor location:
+            row_id is_header cell_id            text col_span row_span content_type
+      1.1        1      TRUE       1             MPG        1        1   table cell
+      1.6        2     FALSE       1            21.0        1        1   table cell
+      1.11       3     FALSE       1            21.0        1        1   table cell
+      1.16       4     FALSE       1            22.8        1        1   table cell
+      1.21       5     FALSE       1            21.4        1        1   table cell
+      1.26       6     FALSE       1            18.7        1        1   table cell
+      1.31       7     FALSE       1            18.1        1        1   table cell
+      1.36       8     FALSE       1            14.3        1        1   table cell
+      1.41       9     FALSE       1            24.4        1        1   table cell
+      1.46      10     FALSE       1            22.8        1        1   table cell
+      1.51      11     FALSE       1            19.2        1        1   table cell
+      1.56      12     FALSE       1            17.8        1        1   table cell
+      1.61      13     FALSE       1            16.4        1        1   table cell
+      1.66      14     FALSE       1            17.3        1        1   table cell
+      1.71      15     FALSE       1            15.2        1        1   table cell
+      1.76      16     FALSE       1            10.4        1        1   table cell
+      1.81      17     FALSE       1            10.4        1        1   table cell
+      1.86      18     FALSE       1            14.7        1        1   table cell
+      1.91      19     FALSE       1            32.4        1        1   table cell
+      1.96      20     FALSE       1            30.4        1        1   table cell
+      1.101     21     FALSE       1            33.9        1        1   table cell
+      2.2        1      TRUE       2       Cylinders        1        1   table cell
+      2.7        2     FALSE       2               6        1        1   table cell
+      2.12       3     FALSE       2               6        1        1   table cell
+      2.17       4     FALSE       2               4        1        1   table cell
+      2.22       5     FALSE       2               6        1        1   table cell
+      2.27       6     FALSE       2               8        1        1   table cell
+      2.32       7     FALSE       2               6        1        1   table cell
+      2.37       8     FALSE       2               8        1        1   table cell
+      2.42       9     FALSE       2               4        1        1   table cell
+      2.47      10     FALSE       2               4        1        1   table cell
+      2.52      11     FALSE       2               6        1        1   table cell
+      2.57      12     FALSE       2               6        1        1   table cell
+      2.62      13     FALSE       2               8        1        1   table cell
+      2.67      14     FALSE       2               8        1        1   table cell
+      2.72      15     FALSE       2               8        1        1   table cell
+      2.77      16     FALSE       2               8        1        1   table cell
+      2.82      17     FALSE       2               8        1        1   table cell
+      2.87      18     FALSE       2               8        1        1   table cell
+      2.92      19     FALSE       2               4        1        1   table cell
+      2.97      20     FALSE       2               4        1        1   table cell
+      2.102     21     FALSE       2               4        1        1   table cell
+      3.3        1      TRUE       3    Displacement        1        1   table cell
+      3.8        2     FALSE       3           160.0        1        1   table cell
+      3.13       3     FALSE       3           160.0        1        1   table cell
+      3.18       4     FALSE       3           108.0        1        1   table cell
+      3.23       5     FALSE       3           258.0        1        1   table cell
+      3.28       6     FALSE       3           360.0        1        1   table cell
+      3.33       7     FALSE       3           225.0        1        1   table cell
+      3.38       8     FALSE       3           360.0        1        1   table cell
+      3.43       9     FALSE       3           146.7        1        1   table cell
+      3.48      10     FALSE       3           140.8        1        1   table cell
+      3.53      11     FALSE       3           167.6        1        1   table cell
+      3.58      12     FALSE       3           167.6        1        1   table cell
+      3.63      13     FALSE       3           275.8        1        1   table cell
+      3.68      14     FALSE       3           275.8        1        1   table cell
+      3.73      15     FALSE       3           275.8        1        1   table cell
+      3.78      16     FALSE       3           472.0        1        1   table cell
+      3.83      17     FALSE       3           460.0        1        1   table cell
+      3.88      18     FALSE       3           440.0        1        1   table cell
+      3.93      19     FALSE       3            78.7        1        1   table cell
+      3.98      20     FALSE       3            75.7        1        1   table cell
+      3.103     21     FALSE       3            71.1        1        1   table cell
+      4.4        1      TRUE       4              HP        1        1   table cell
+      4.9        2     FALSE       4             110        1        1   table cell
+      4.14       3     FALSE       4             110        1        1   table cell
+      4.19       4     FALSE       4              93        1        1   table cell
+      4.24       5     FALSE       4             110        1        1   table cell
+      4.29       6     FALSE       4             175        1        1   table cell
+      4.34       7     FALSE       4             105        1        1   table cell
+      4.39       8     FALSE       4             245        1        1   table cell
+      4.44       9     FALSE       4              62        1        1   table cell
+      4.49      10     FALSE       4              95        1        1   table cell
+      4.54      11     FALSE       4             123        1        1   table cell
+      4.59      12     FALSE       4             123        1        1   table cell
+      4.64      13     FALSE       4             180        1        1   table cell
+      4.69      14     FALSE       4             180        1        1   table cell
+      4.74      15     FALSE       4             180        1        1   table cell
+      4.79      16     FALSE       4             205        1        1   table cell
+      4.84      17     FALSE       4             215        1        1   table cell
+      4.89      18     FALSE       4             230        1        1   table cell
+      4.94      19     FALSE       4              66        1        1   table cell
+      4.99      20     FALSE       4              52        1        1   table cell
+      4.104     21     FALSE       4              65        1        1   table cell
+      5.5        1      TRUE       5 Rear Axel Ratio        1        1   table cell
+      5.10       2     FALSE       5            3.90        1        1   table cell
+      5.15       3     FALSE       5            3.90        1        1   table cell
+      5.20       4     FALSE       5            3.85        1        1   table cell
+      5.25       5     FALSE       5            3.08        1        1   table cell
+      5.30       6     FALSE       5            3.15        1        1   table cell
+      5.35       7     FALSE       5            2.76        1        1   table cell
+      5.40       8     FALSE       5            3.21        1        1   table cell
+      5.45       9     FALSE       5            3.69        1        1   table cell
+      5.50      10     FALSE       5            3.92        1        1   table cell
+      5.55      11     FALSE       5            3.92        1        1   table cell
+      5.60      12     FALSE       5            3.92        1        1   table cell
+      5.65      13     FALSE       5            3.07        1        1   table cell
+      5.70      14     FALSE       5            3.07        1        1   table cell
+      5.75      15     FALSE       5            3.07        1        1   table cell
+      5.80      16     FALSE       5            2.93        1        1   table cell
+      5.85      17     FALSE       5            3.00        1        1   table cell
+      5.90      18     FALSE       5            3.23        1        1   table cell
+      5.95      19     FALSE       5            4.08        1        1   table cell
+      5.100     20     FALSE       5            4.93        1        1   table cell
+      5.105     21     FALSE       5            4.22        1        1   table cell
+

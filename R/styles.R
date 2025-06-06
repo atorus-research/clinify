@@ -41,7 +41,7 @@ clinify_titles_default <- function(x, ...) {
   x <- flextable::italic(x, italic = FALSE)
 
   # Default table width
-  x <- flextable::width(x, width = clin_default_table_width() / 3)
+  x <- flextable::width(x, width = clin_default_table_width() / 2)
   # Setup the interval between rows.
   x <- flextable::line_spacing(x, space = 1, part = "all")
   # Setup the cell padding.
@@ -71,7 +71,7 @@ clinify_footnotes_default <- function(x, ...) {
   x <- flextable::italic(x, italic = FALSE)
   # One has to specify the width of the page header "table", which in this case
   # is landscape page width minus two times 1 in margin.
-  x <- flextable::width(x, width = clin_default_table_width() / 3)
+  x <- flextable::width(x, width = clin_default_table_width() / 2)
   # Setup the interval between rows.
   x <- flextable::line_spacing(x, space = 1, part = "all")
   # Setup the cell padding.
@@ -111,9 +111,9 @@ clinify_table_default <- function(x, ...) {
   # Remove blank bottoms
   blk_inds <- which(x$header$dataset == "" | x$header$dataset == " ", arr.ind = TRUE)
   # Want to ignore bottom row
-  blk_inds <- blk_inds[blk_inds[, "row"] < nrow(x$header$dataset), ]
+  blk_inds <- blk_inds[blk_inds[, "row"] < nrow(x$header$dataset), , drop = FALSE]
 
-  if (nrow(blk_inds > 0)) {
+  if (nrow(blk_inds) > 0) {
     # Loop all except very bottom row
     for (i in 1:nrow(blk_inds)) {
       x <- flextable::hline(x,
