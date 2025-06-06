@@ -131,7 +131,8 @@ make_ind_list <- function(col_vecs, page_vecs) {
   if (!is.null(attr(page_vecs, "group_labels"))) {
     nms <- unlist(
       apply(
-        attr(page_vecs, "group_labels"), 1,
+        attr(page_vecs, "group_labels"),
+        1,
         \(x) rep(list(as.character(x)), length(col_vecs))
       ),
       recursive = FALSE
@@ -141,7 +142,8 @@ make_ind_list <- function(col_vecs, page_vecs) {
   if (!is.null(attr(page_vecs, "captions"))) {
     caps <- unlist(
       apply(
-        attr(page_vecs, "captions"), 1,
+        attr(page_vecs, "captions"),
+        1,
         \(x) rep(list(as.character(x)), length(col_vecs))
       ),
       recursive = FALSE
@@ -149,7 +151,12 @@ make_ind_list <- function(col_vecs, page_vecs) {
   }
 
   out <- lapply(page_nums, \(i) {
-    list(rows = rows[[i]], cols = cols[[i]], label = nms[[i]], captions = caps[[i]])
+    list(
+      rows = rows[[i]],
+      cols = cols[[i]],
+      label = nms[[i]],
+      captions = caps[[i]]
+    )
   })
 
   out
@@ -223,8 +230,12 @@ page_by_ <- function(refdat, page_by, group_by = NULL, caption_by = NULL) {
     )
 
     # Bring the group names over and carry them forward
-    group_labels[which(page_starts %in% gs$group_starts), ] <- gs$group_vals[, group_by]
-    captions[which(page_starts %in% gs$group_starts), ] <- gs$group_vals[, caption_by]
+    group_labels[which(page_starts %in% gs$group_starts), ] <- gs$group_vals[,
+      group_by
+    ]
+    captions[which(page_starts %in% gs$group_starts), ] <- gs$group_vals[,
+      caption_by
+    ]
     attr(page_starts, "group_labels") <- zoo::na.locf(group_labels)
     attr(page_starts, "captions") <- zoo::na.locf(captions)
   }
@@ -252,13 +263,19 @@ max_rows_ <- function(refdat, max_rows, group_by = NULL, caption_by = NULL) {
   }
 
   # Approximate the total pages so I can avoid appends
-  page_starts <- integer(max(ceiling(tot_rows / max_rows), length(gs$group_starts)))
+  page_starts <- integer(max(
+    ceiling(tot_rows / max_rows),
+    length(gs$group_starts)
+  ))
   page_starts[1] <- 1
   ps <- 1L
 
   # Start iterating at second index until pages are done
   i <- 2
-  while ((ps + max_rows) <= tot_rows || (!is.na(gs$group_starts[i]) && (gs$group_starts[i] < tot_rows))) {
+  while (
+    (ps + max_rows) <= tot_rows ||
+      (!is.na(gs$group_starts[i]) && (gs$group_starts[i] < tot_rows))
+  ) {
     # Increment page start by max rows or the group start is next in line
     ps <- min(
       ps + max_rows,
@@ -277,7 +294,9 @@ max_rows_ <- function(refdat, max_rows, group_by = NULL, caption_by = NULL) {
       dimnames = list(NULL, group_by)
     )
     # Bring the group names over and carry them forward
-    group_labels[which(page_starts %in% gs$group_starts), ] <- gs$group_vals[, group_by]
+    group_labels[which(page_starts %in% gs$group_starts), ] <- gs$group_vals[,
+      group_by
+    ]
     attr(page_starts, "group_labels") <- zoo::na.locf(group_labels)
   }
   if (!is.null(caption_by)) {
@@ -287,7 +306,9 @@ max_rows_ <- function(refdat, max_rows, group_by = NULL, caption_by = NULL) {
       ncol = length(caption_by),
       dimnames = list(NULL, caption_by)
     )
-    captions[which(page_starts %in% gs$group_starts), ] <- gs$group_vals[, caption_by]
+    captions[which(page_starts %in% gs$group_starts), ] <- gs$group_vals[,
+      caption_by
+    ]
     attr(page_starts, "captions") <- zoo::na.locf(captions)
   }
 
@@ -327,24 +348,49 @@ prep_pagination_ <- function(x) {
   page_vecs <- NULL
 
   # If alternating and no paging set, apply max rows
-  if (!is.null(config$col_groups) && is.null(config$page_by) && is.null(config$max_rows)) {
+  if (
+    !is.null(config$col_groups) &&
+      is.null(config$page_by) &&
+      is.null(config$max_rows)
+  ) {
     message(
       "NOTE: Alternating pages were set, but no selection for row wise pagination was configured",
       " Defaulting to 20 rows per page."
     )
     config$max_rows <- 20
-    page_vecs <- max_rows_(refdat, config$max_rows, group_by = config$group_by, caption_by = config$caption_by)
+    page_vecs <- max_rows_(
+      refdat,
+      config$max_rows,
+      group_by = config$group_by,
+      caption_by = config$caption_by
+    )
     # Establish page by and group by first because page var will strip out of clintable
-  } else if (is.null(config$max_rows) && (!is.null(config$page_by) || !is.null(config$group_by))) {
-    page_vecs <- page_by_(refdat, config$page_by, group_by = config$group_by, caption_by = config$caption_by)
+  } else if (
+    is.null(config$max_rows) &&
+      (!is.null(config$page_by) || !is.null(config$group_by))
+  ) {
+    page_vecs <- page_by_(
+      refdat,
+      config$page_by,
+      group_by = config$group_by,
+      caption_by = config$caption_by
+    )
   } else if (!is.null(config$max_rows)) {
-    page_vecs <- max_rows_(refdat, config$max_rows, group_by = config$group_by, caption_by = config$caption_by)
+    page_vecs <- max_rows_(
+      refdat,
+      config$max_rows,
+      group_by = config$group_by,
+      caption_by = config$caption_by
+    )
   }
 
   # Slice any unnecessary vars out of the clintable
-  if (any(c(config$page_by, config$group_by, config$caption_by) %in% x$col_keys)) {
+  if (
+    any(c(config$page_by, config$group_by, config$caption_by) %in% x$col_keys)
+  ) {
     key_idx <- eval_select(
-      c(config$page_by, config$group_by, config$caption_by), refdat
+      c(config$page_by, config$group_by, config$caption_by),
+      refdat
     )
     cols <- seq(1:ncol(refdat))[-key_idx]
     x <- slice_clintable(x, 1:nrow(refdat), cols, skip_spans = TRUE)
@@ -406,11 +452,6 @@ auto_page_ <- function(x) {
   dont_keep <- which(refvar[-length(refvar)] != refvar[-1])
   keep <- (1:length(refvar))[-dont_keep]
 
-  key_idx <- eval_select(x$clinify_config$auto_page_var, refdat)
-
-  cols <- seq(1:ncol(refdat))[-key_idx]
-  x <- slice_clintable(x, 1:nrow(refdat), cols, reapply_config = TRUE)
   x <- keep_with_next(x, i = keep)
-
   x
 }
