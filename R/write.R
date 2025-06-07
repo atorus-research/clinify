@@ -28,10 +28,9 @@
 #' doc <- clindoc(ct)
 #'
 #' # Write out docx file
-#' write_clintable(ct, file.path(tempdir(), "demo.docx"))
+#' write_clindoc(ct, file.path(tempdir(), "demo.docx"))
 #'
-write_clintable <- function(x, file) {
-  
+write_clindoc <- function(x, file) {
   if (inherits(x, "clindoc")) {
     doc <- x
   } else {
@@ -39,7 +38,7 @@ write_clintable <- function(x, file) {
   }
 
   clinify_config <- doc$clinify_config
-  settings <- getOption('clinify_docx_default') 
+  settings <- getOption('clinify_docx_default')
 
   titles <- doc$clinify_config$titles
   footnotes <- doc$clinify_config$footnotes
@@ -49,7 +48,7 @@ write_clintable <- function(x, file) {
   if (!is.null(footnote_page)) {
     footnote_page <- getOption("clinify_footnotes_default")(footnote_page)
     doc <- officer::cursor_begin(doc)
-    doc <- body_add_flextable(doc, footnote_page, pos="before")
+    doc <- body_add_flextable(doc, footnote_page, pos = "before")
     # Page break after footnote page
     doc <- body_add_break(doc)
   }

@@ -4,7 +4,7 @@
 \alias{clin_auto_page}
 \title{Enable Word Auto-Pagination Using Group Variable}
 \usage{
-clin_auto_page(x, group_var)
+clin_auto_page(x, group_var, when = c("change", "notempty"))
 }
 \arguments{
 \item{x}{A clintable object}

@@ -113,3 +113,12 @@ clintable(dat2) |>
 ```
 
 One thing to note about this function is that it should be paired with `clin_page_by()`. This function works by chunking the input clintable into individual pages and separating those pages using page breaks - so the number of rows printed to each page is necessary for the page splits to work effectively. If `clin_page_by()` is not provided, a warning will appear and the table will default to 20 rows per page.
+
+As another option for creating a data driven paging variable, we've added the helper function `make_grouped_pagenums()`. This function could be helpful when creating tables using alternating pages that also using `clin_group_by()` for header labels. Alternating page tables require manual management of paging variables, since each page is technically a new table within the word document. `make_grouped_pagenums()` allows you to use a group variable and then generate a page variable that will appropriately change when the group changes. Consider this example:
+
+```{r}
+head(ToothGrowth, 20) |>
+  mutate(page = make_grouped_pagenums(dose, 7))
+```
+
+Note in the output that the `page` variable either every 7 rows, or when the value of `dose` changes.

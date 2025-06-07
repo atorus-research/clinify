@@ -62,7 +62,11 @@ clinify_footnotes_default <- function(x, ...) {
   # Remove all borders.
   x <- flextable::border_remove(x)
   # Page footer should have single top border over the top row.
-  x <- flextable::hline_top(x, part = "body", border = officer::fp_border(color = "black", width = 1))
+  x <- flextable::hline_top(
+    x,
+    part = "body",
+    border = officer::fp_border(color = "black", width = 1)
+  )
   # Setup font properties.
   x <- flextable::color(x, color = "black")
   x <- flextable::fontsize(x, size = 9)
@@ -93,7 +97,8 @@ clinify_table_default <- function(x, ...) {
   # Clear all borders first and apply them just for the header
   # (as horizontal lines).
   x <- flextable::border_remove(x)
-  x <- flextable::hline(x,
+  x <- flextable::hline(
+    x,
     part = "header",
     border = officer::fp_border(
       color = "black",
@@ -103,21 +108,27 @@ clinify_table_default <- function(x, ...) {
   )
   # Top horizontal line for the table header.
   x <- flextable::hline_top(x, part = "header")
-  x <- flextable::hline(x,
-    part = "header",
-    border = officer::fp_border()
-  )
+  x <- flextable::hline(x, part = "header", border = officer::fp_border())
 
   # Remove blank bottoms
-  blk_inds <- which(x$header$dataset == "" | x$header$dataset == " ", arr.ind = TRUE)
+  blk_inds <- which(
+    x$header$dataset == "" | x$header$dataset == " ",
+    arr.ind = TRUE
+  )
   # Want to ignore bottom row
-  blk_inds <- blk_inds[blk_inds[, "row"] < nrow(x$header$dataset), , drop = FALSE]
+  blk_inds <- blk_inds[
+    blk_inds[, "row"] < nrow(x$header$dataset),
+    ,
+    drop = FALSE
+  ]
 
   if (nrow(blk_inds) > 0) {
     # Loop all except very bottom row
     for (i in 1:nrow(blk_inds)) {
-      x <- flextable::hline(x,
-        i = blk_inds[i, "row"], j = blk_inds[i, "col"],
+      x <- flextable::hline(
+        x,
+        i = blk_inds[i, "row"],
+        j = blk_inds[i, "col"],
         part = "header",
         border = officer::fp_border(style = "none", width = 0)
       )
@@ -138,12 +149,6 @@ clinify_table_default <- function(x, ...) {
     layout = "fixed"
   )
 
-  # Setup the cell padding for table body.
-  x <- flextable::padding(x, part = "body", padding.bottom = 0.1, padding.top = 0.1)
-
-  # Many other options are also available.
-  x <- flextable::padding(x, i = 1, part = "header", padding.top = 9)
-  x <- flextable::padding(x, i = flextable::nrow_part(x, part = "header"), part = "header", padding.bottom = 9)
   x
 }
 
@@ -162,9 +167,11 @@ clinify_caption_default <- function(x, ...) {
 #' @rdname clinify_defaults
 #' @export
 clinify_grouplabel_default <- function(x, ...) {
-  # Remove 
-  x <- flextable::hline_top(x,
-    part = "header", border = officer::fp_border(style = "none", width = 0)
+  # Remove
+  x <- flextable::hline_top(
+    x,
+    part = "header",
+    border = officer::fp_border(style = "none", width = 0)
   )
 }
 
@@ -199,7 +206,9 @@ clin_default_table_width <- function() {
   sect <- getOption("clinify_docx_default")
 
   if (is.null(sect)) {
-    stop("clin_default_table_width() cannot be used if the option 'clinify_docx_default' is not set.")
+    stop(
+      "clin_default_table_width() cannot be used if the option 'clinify_docx_default' is not set."
+    )
   }
 
   # Table width is page width - margins.

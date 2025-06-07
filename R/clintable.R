@@ -25,6 +25,23 @@ as_clintable <- function(x, page_by = NULL, group_by = NULL) {
     x$clinify_config$pagination_method <- "custom"
   }
 
+  # It helps to have padding settings in here so they can be overriden
+  # both other functions like clin_group_pad()
+  # Setup the cell padding for table body.
+  x <- flextable::padding(
+    x,
+    part = "body",
+    padding.bottom = 0.1,
+    padding.top = 0.1
+  )
+  x <- flextable::padding(x, i = 1, part = "header", padding.top = 9)
+  x <- flextable::padding(
+    x,
+    i = flextable::nrow_part(x, part = "header"),
+    part = "header",
+    padding.bottom = 9
+  )
+
   class(x) <- c("clintable", "flextable")
   x
 }
@@ -49,7 +66,13 @@ as_clintable <- function(x, page_by = NULL, group_by = NULL) {
 #'
 #' @examples
 #' clintable(mtcars)
-clintable <- function(x, page_by = NULL, group_by = NULL, use_labels = TRUE, ...) {
+clintable <- function(
+  x,
+  page_by = NULL,
+  group_by = NULL,
+  use_labels = TRUE,
+  ...
+) {
   ct <- as_clintable(
     flextable::flextable(x, ...),
     page_by = page_by,

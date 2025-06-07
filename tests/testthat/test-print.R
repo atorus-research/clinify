@@ -13,8 +13,10 @@ test_that("Single page standard print", {
 })
 
 test_that("Single page standard print with auto page on", {
-  x <- knit_print(clintable(mtcars) |> 
-    clin_auto_page('gear'))
+  x <- knit_print(
+    clintable(mtcars) |>
+      clin_auto_page('gear')
+  )
 
   tab_html <- rvest::read_html(as.character(x)) |>
     rvest::html_elements(".tabwid")
@@ -22,7 +24,7 @@ test_that("Single page standard print with auto page on", {
   expect_equal(length(tab_html), 1)
 
   extracted_data <- as.data.frame(rvest::html_table(tab_html))
-  comp <- mtcars[1:15, -10]
+  comp <- mtcars[1:15, ]
   rownames(comp) <- NULL
   expect_equal(extracted_data, comp)
 })
@@ -154,7 +156,10 @@ test_that("Alternating pages print 3 pages with footnote page", {
       wt = c("Span multiple pages", "Weight (1000 lbs)"),
       qsec = c("Span multiple pages", "1/4 mile time"),
       vs = c("Span multiple pages", "Engine\n(0 = V-shaped, 1 = straight)"),
-      am = c("Span multiple pages", "Transmission\n(0 = automatic, 1 = manual)"),
+      am = c(
+        "Span multiple pages",
+        "Transmission\n(0 = automatic, 1 = manual)"
+      ),
       gear = c("Some Spanner", "Number of forward gears"),
       carb = c("Some Spanner", "Number of carburetors")
     ) |>
