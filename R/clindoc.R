@@ -10,11 +10,9 @@
 #'   handling pagination if specified.
 #'
 #' @param x A `clintable` object to be converted.
-#' @param apply_defaults Logical, whether to apply default title, footnote,
-#'   and table formatting. Defaults to `TRUE`.
-#' @param ... Additional arguments (currently unused).
+#' @param ... `clintable` objects to be converted. Or separately, a list of clintable objects
 #'
-#' @return An `officer::rdocx` object representing the formatted Word document.
+#' @return a `clindoc` object, inherited from an `officer::rdocx` object
 #' @export
 #' @name clindoc
 #'
@@ -27,22 +25,28 @@
 clindoc <- function(...) {
   tabs <- list(...)
 
+  if (inherits(tabs[[1]], 'list')) {
+    tabs <- tabs[[1]]
+  }
+
   for (x in tabs) {
     stopifnot(inherits(x, "clintable"))
   }
-  
+
   # If it's just a clintable then convert to doc
   if (length(tabs) == 1) {
     doc <- as_clindoc(tabs[[1]])
-  }
-  else {
+  } else {
     doc <- new_clindoc()
 
     # Tables with page breaks separating
     for (x in tabs[-length(tabs)]) {
       doc <- add_clintable_(doc, x)
       ctx <- officer::body_append_start_context(doc)
-      officer::write_elements_to_context(context = ctx, officer::fpar(officer::run_pagebreak()))
+      officer::write_elements_to_context(
+        context = ctx,
+        officer::fpar(officer::run_pagebreak())
+      )
       doc <- officer::body_append_stop_context(ctx)
     }
 
@@ -56,7 +60,7 @@ clindoc <- function(...) {
 #' Object generator for clindocs
 #'
 #' @param settings Objects for titles, footnotes, or footnote page
-#' 
+#'
 #' @noRd
 new_clindoc <- function() {
   doc <- officer::read_docx()
@@ -90,10 +94,9 @@ as_clindoc <- function(x) {
 #' @param x a clintable object
 #' @noRd
 add_clintable_ <- function(doc, x) {
-
   pg_method <- x$clinify_config$pagination_method
-  x <- getOption("clinify_table_default")(x) 
-  
+  x <- getOption("clinify_table_default")(x)
+
   # Keep with next paging
   if (!is.null(x$clinify_config$auto_page_var)) {
     x <- auto_page_(x)
