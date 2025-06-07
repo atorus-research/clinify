@@ -29,7 +29,7 @@ presorted by group, the function will throw an error.
 }
 \examples{
 library(dplyr)
-iris |> 
+iris |>
   mutate(
     page = make_grouped_pagenums(Species, 5)
   )

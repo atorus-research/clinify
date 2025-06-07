@@ -10,15 +10,12 @@ clindoc(...)
 as_clindoc(x)
 }
 \arguments{
-\item{...}{Additional arguments (currently unused).}
+\item{...}{\code{clintable} objects to be converted. Or separately, a list of clintable objects}
 
 \item{x}{A \code{clintable} object to be converted.}
-
-\item{apply_defaults}{Logical, whether to apply default title, footnote,
-and table formatting. Defaults to \code{TRUE}.}
 }
 \value{
-An \code{officer::rdocx} object representing the formatted Word document.
+a \code{clindoc} object, inherited from an \code{officer::rdocx} object
 }
 \description{
 These functions convert a \code{clintable} object into a Word document using

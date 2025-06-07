@@ -156,7 +156,7 @@ a docx file.
 
 ``` r
 # Write the table out to docx
-write_clintable(ct, "demo_table.docx")
+write_clindoc(ct, "demo_table.docx")
 ```
 
 <p align="center">

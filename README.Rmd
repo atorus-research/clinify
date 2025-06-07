@@ -136,7 +136,7 @@ Built of {flextable} and {officer}, you can then write the table out to a docx f
 
 ```{r write_table, eval=FALSE}
 # Write the table out to docx
-write_clintable(ct, "demo_table.docx")
+write_clindoc(ct, "demo_table.docx")
 ``` 
 
 <p align="center"><img src="vignettes/table.png" width="800px"></p>
