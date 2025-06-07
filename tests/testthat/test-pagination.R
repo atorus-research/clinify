@@ -242,7 +242,7 @@ test_that("Alternating with page by with groups", {
     )
   ) |>
     clin_page_by("page") |>
-    clin_group_by("groups")
+    clin_group_by("groups", when = 'change')
 
   ct2 <- prep_pagination_(ct)
 
@@ -404,7 +404,7 @@ test_that("Alternating with page by with groups", {
 test_that("Page by no alternating with groups", {
   ct <- clintable(refdat2) |>
     clin_page_by("page") |>
-    clin_group_by("groups")
+    clin_group_by("groups", when = 'change')
 
   ct2 <- prep_pagination_(ct)
 
@@ -469,7 +469,7 @@ test_that("Page by no alternating with groups", {
 
 test_that("Groups no page by", {
   ct <- clintable(refdat2[-13]) |>
-    clin_group_by("groups")
+    clin_group_by("groups", when = "change")
 
   ct2 <- prep_pagination_(ct)
 
@@ -504,7 +504,7 @@ test_that("Alternating pages with groups", {
       c("gear", "carb")
     )
   ) |>
-    clin_group_by("groups")
+    clin_group_by("groups", when = 'change')
 
   expect_message(ct2 <- prep_pagination_(ct), "NOTE: Alternating")
 
@@ -592,7 +592,11 @@ test_that("Alternating pages with groups", {
 test_that("Multiple groups are pulled out properly", {
   ct <- clintable(refdat3) |>
     clin_page_by("page") |>
-    clin_group_by(c("groups", "groups2"), caption_by = "captions")
+    clin_group_by(
+      c("groups", "groups2"),
+      caption_by = "captions",
+      when = 'change'
+    )
 
   ct2 <- prep_pagination_(ct)
 
@@ -672,7 +676,7 @@ test_that("Multiple groups are pulled out properly", {
 test_that("Multiple group by with alternating pages", {
   ct <- clintable(refdat3) |>
     clin_page_by("page") |>
-    clin_group_by(c("groups", "groups2")) |>
+    clin_group_by(c("groups", "groups2"), when = 'change') |>
     clin_alt_pages(
       key_cols = c("mpg", "cyl", "hp"),
       col_groups = list(
@@ -880,7 +884,7 @@ test_that("Multiple group by with alternating pages", {
 test_that("Test using max rows", {
   ct <- clintable(refdat3[, -13]) |>
     clin_page_by(max_rows = 36) |>
-    clin_group_by("groups", caption_by = "captions") |>
+    clin_group_by("groups", caption_by = "captions", when = 'change') |>
     clin_alt_pages(
       key_cols = c("mpg", "cyl", "hp"),
       col_groups = list(
@@ -975,6 +979,108 @@ test_that("Test using max rows", {
 
 test_that("Auto paging is applied", {
   ct <- clintable(mtcars)
+  ct <- clin_auto_page(ct, 'gear', when = 'change')
   ct <- auto_page_(ct)
-  expect_snapshot(ct$body$styles$pars$keep_with_next)
+
+  mtcars2 <- mtcars
+  # Mock blank repeats
+  mtcars2[!find_split_inds(mtcars2$gear, 'change'), 'gear'] <- ''
+  ct2 <- clintable(mtcars2)
+  ct2 <- clin_auto_page(ct2, 'gear', when = 'notempty')
+  ct2 <- auto_page_(ct2)
+
+  exp_out <- c(3, 7, 11, 17, 20, 25, 26, 31)
+  expect_equal(which(!ct$body$styles$pars$keep_with_next$data[, 1]), exp_out)
+  expect_equal(which(!ct2$body$styles$pars$keep_with_next$data[, 1]), exp_out)
+})
+
+# Prep a complex example to do 'notempty' indices
+
+refdat4 <- refdat3
+refdat4[!find_split_inds(refdat4$groups, 'change'), 'groups'] <- ''
+refdat4[!find_split_inds(refdat4$groups2, 'change'), 'groups2'] <- ''
+refdat4[!find_split_inds(refdat4$captions, 'change'), 'captions'] <- ''
+
+test_that("Multiple groups are pulled out properly with notempty indexing", {
+  ct <- clintable(refdat4) |>
+    clin_page_by("page") |>
+    clin_group_by(
+      c("groups", "groups2"),
+      caption_by = "captions",
+      when = "notempty"
+    )
+
+  ct2 <- prep_pagination_(ct)
+
+  exp_out <- list(
+    list(
+      rows = 1:10,
+      cols = pages,
+      label = c("a", "1"),
+      captions = "Caption 1"
+    ),
+    list(
+      rows = 11:16,
+      cols = pages,
+      label = c("a", "1"),
+      captions = "Caption 1"
+    ),
+    list(
+      rows = 17:20,
+      cols = pages,
+      label = c("a", "2"),
+      captions = "Caption 2"
+    ),
+    list(
+      rows = 21:30,
+      cols = pages,
+      label = c("a", "2"),
+      captions = "Caption 2"
+    ),
+    list(
+      rows = 31:32,
+      cols = pages,
+      label = c("a", "2"),
+      captions = "Caption 2"
+    ),
+    list(
+      rows = 33:40,
+      cols = pages,
+      label = c("b", "1"),
+      captions = "Caption 3"
+    ),
+    list(
+      rows = 41:48,
+      cols = pages,
+      label = c("b", "1"),
+      captions = "Caption 3"
+    ),
+    list(
+      rows = 49:50,
+      cols = pages,
+      label = c("b", "2"),
+      captions = "Caption 4"
+    ),
+    list(
+      rows = 51:60,
+      cols = pages,
+      label = c("b", "2"),
+      captions = "Caption 4"
+    ),
+    list(
+      rows = 61:64,
+      cols = pages,
+      label = c("b", "2"),
+      captions = "Caption 4"
+    )
+  )
+
+  expect_equal(ct2$clinify_config$pagination_idx, exp_out)
+  # 'page' variable should be stripped when applying pagination
+  expect_true("groups" %in% ct$col_keys)
+  expect_false("groups" %in% ct2$col_keys)
+  expect_true("groups2" %in% ct$col_keys)
+  expect_false("groups2" %in% ct2$col_keys)
+  expect_true("page" %in% ct$col_keys)
+  expect_false("page" %in% ct2$col_keys)
 })

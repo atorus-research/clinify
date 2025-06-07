@@ -48,3 +48,16 @@ make_grouped_pagenums <- function(var, rows) {
 
   out
 }
+
+#' Find non-empty values of a vector or when a value changes
+#' @noRd
+find_split_inds <- function(x, when) {
+  if (when == "change") {
+    splits <- !(x == c(NA, head(x, -1)))
+    splits[1] <- TRUE
+  } else {
+    splits <- x != ""
+    splits[is.na(splits)] <- FALSE
+  }
+  splits
+}
