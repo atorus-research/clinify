@@ -226,9 +226,9 @@ Note that after headers are applied, additional styling can be done. In this cas
 
 ## Writing to DOCX
 
-While printing the table during development helps you with the development process, ultimately **{clinify}** lets you write the document to a docx file. This was a primary reason why we wanted to build on top of {flextable}; with {flextable} and {officer} we're able to have a great amount of control over how things are written specifically written into the word document. We try to make this process rather seamless and comparable to the `print()` method. To write the document out to docx, use the `write_clintable()` function. Let's revisit our table from before.
+While printing the table during development helps you with the development process, ultimately **{clinify}** lets you write the document to a docx file. This was a primary reason why we wanted to build on top of {flextable}; with {flextable} and {officer} we're able to have a great amount of control over how things are written specifically written into the word document. We try to make this process rather seamless and comparable to the `print()` method. To write the document out to docx, use the `write_clindoc()` function. Let's revisit our table from before.
 
-```{r write_clintable, eval=FALSE}
+```{r write_clindoc, eval=FALSE}
 # Create a basic table
 ct <- clintable(dat2) |>
   clin_page_by("page") |>
@@ -283,10 +283,10 @@ ct <- clintable(dat2) |>
 doc <- clindoc(ct)
 
 # Write the clindoc
-write_clintable(doc, file = "example_table.docx")
+write_clindoc(doc, file = "example_table.docx")
 
 # Alternately just write the clintable directly
-write_clintable(ct, file = "example_table.docx")
+write_clindoc(ct, file = "example_table.docx")
 ```
 
 <p align="center"><img src="table.png" width="675px"></p>

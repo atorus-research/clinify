@@ -139,10 +139,10 @@ ct <- clintable(dat) |>
 print(ct)
 ```
 
-With everything ready to go, we can write our table out to its destination using `write_clintable()`.
+With everything ready to go, we can write our table out to its destination using `write_clindoc()`.
 
 ```{r, eval=FALSE}
-write_clintable(ct, "demo_table.docx")
+write_clindoc(ct, "demo_table.docx")
 ```
 
 <p align="center"><img src="e2e.png" width="675px"></p>
