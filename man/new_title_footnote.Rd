@@ -18,5 +18,23 @@ A flextable object
 Create a new title or footnote flextable
 }
 \examples{
-# TODO:
+
+title <- new_title_footnote(
+  list(
+    # We'll add tools to automate paging
+    c("Protocol: CDISCPILOT01", "Page {PAGE} of {NUMPAGES}"),
+    c("Table 14-2.01"),
+    c("Summary of Demographic and Baseline Characteristics")
+  ),
+  "titles"
+)
+
+footnote <- new_title_footnote(
+  list(
+    # We'll add tools to automate paging
+    c("Page {PAGE}", "Total Pages: {NUMPAGES}")
+  ),
+  "footnotes"
+)
+
 }

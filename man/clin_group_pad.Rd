@@ -4,7 +4,13 @@
 \alias{clin_group_pad}
 \title{Add Padding Between Groups in a Clinical Flextable}
 \usage{
-clin_group_pad(x, pad_by, size = 9, when = c("change", "notempty"))
+clin_group_pad(
+  x,
+  pad_by,
+  size = 9,
+  when = c("change", "notempty"),
+  drop = FALSE
+)
 }
 \arguments{
 \item{x}{A clintable}
@@ -18,6 +24,8 @@ clin_group_pad(x, pad_by, size = 9, when = c("change", "notempty"))
 \item \code{"notempty"}: Add padding when the value in \code{pad_by} is not empty.
 \item \code{"change"}: Add padding when the value in \code{pad_by} changes from the previous row.
 }}
+
+\item{drop}{Keep or drop the padding variable used to identify padding locations}
 }
 \value{
 A \code{clintable} object with modified padding.

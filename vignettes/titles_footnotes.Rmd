@@ -26,7 +26,7 @@ library(clinify)
 clintable(mtcars) |>
   clin_add_titles(
     list(
-      c("Left", "Center", "Page {PAGE} of {NUMPAGES}"),
+      c("Left", "Page {PAGE} of {NUMPAGES}"),
       c("Just the middle")
     )
   ) |>
@@ -44,7 +44,6 @@ Both `clin_add_titles()` and `clin_add_footnotes()` take a list of character vec
 
 - For a single element, in the titles it will be aligned center and in a footnote it will be bound left.
 - Two elements will bind left and right
-- Three elements will bind left, center, and right.
 
 Note the text field `"Page {PAGE} of {NUMPAGES}"`. **{clinify}** has a special helper function `clin_replace_pagenums()` that will find cells within a flextable containing `{PAGE}` or `{NUMPAGES}` and replace them with the word auto field for current and total pages respectively. By default within **{clinify}** this actual takes places during the default styling functions (see `vignette("defaults")`). Note that when you print to HTML, the `{PAGE}` and `{NUMPAGES}` portions of the string will appear blank.
 
@@ -59,13 +58,13 @@ While this particular example is obscure, this opens up the possibility to speci
 
 ## Footnote Pages
 
-Another circumstance that **{clinify}** allows for is the creation of a specific footnote pages. This can be used in circumstances where there are too many required footnotes for the table, and rather than putting in the footer you can place them into their own specific preceding page of the table itself.
+Another circumstance that **{clinify}** allows for is the creation of a specific footnote pages. This can be used in circumstances where there are too many required footnotes for the table, and rather than putting in the footer you can place them into their own specific preceding page of the table itself. Also, note in this example that if you want to add a single left aligned title, you can provide duplicate text, which keeps the left alignment and merges the duplicate values.
 
 ```{r}
 clintable(mtcars) |>
   clin_add_titles(
     list(
-      c("Left", "Center", "Right"),
+      c("Left", "Left"),
       c("Just the middle")
     )
   ) |>

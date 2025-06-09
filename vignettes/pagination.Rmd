@@ -30,6 +30,20 @@ clintable(mtcars) |>
 
  If you can accomplish what you need using this function, we recommend it because it takes the least effort on behalf of the programmer. The other functions that `clinify` has to offer give you more specific control, but rely more on the inputs that you provide.
 
+ `clin_auto_page()` can use two different triggers using the `when` argument to determine the break points within paging:
+  
+  - `"change"`: When the value of the the `group_var` changes, a page break may be inserted, and
+  - `"notempty"`: When the value of `group_var` is populated (i.e. not `NA` or `""`), a page break may be inserted.
+
+The `when` argument is a common interface available within `clin_group_by()` and `clin_pad_by()` as well. 
+
+Additionally, `clin_auto_page()` has the `drop` argument to specify whether the paging variable should be dropped from the table.
+
+```{r, eval=FALSE}
+clintable(mtcars) |>
+  clin_auto_page("gear", when = 'notempty', drop = TRUE)
+```
+
 ## `clin_page_by()`
 
 One method of pagination for clinical tables that's been used for a long time is to pre-program a variable that specifies where page breaks should occur. When default page break methods don't suffice, this can be one way that you ensure breaks happen in the appropriate places. The `clin_page_by()` function allows you to target a variable in the table that will be used to drive this. 
@@ -90,6 +104,8 @@ clintable(dat2) |>
 
 `clin_group_by()` can be used in combination with `clin_page_by()`, but this is not required. When these two functions are used together, page breaks will occur when **any of** the group, caption, or page variables change. 
 
+Much the same as `clin_auto_page()`, the `clin_group_by()` function can identify groups using the `when` argument. In the `clin_group_by()`, using `when = "notempty"` will mark a group whenever any of the `group_by` variables or the `caption_by` variables are populated. When using `when = "change"` groups are marked whenever any of those variables change.
+
 ## `clin_alt_pages()`
 
 The most complex pagination method is `clin_alt_pages()`. This function allows you to split one table across multiple pages. This is specifically reserved for circumstances in which you have a table that has too many columns to fit on one page. For example, a study may have many different treatment groups that need to be presented, or perhaps a listing needs to present a large number of columns. This isn't an ideal case for a table, but it's still a common situation. 
@@ -117,6 +133,7 @@ One thing to note about this function is that it should be paired with `clin_pag
 As another option for creating a data driven paging variable, we've added the helper function `make_grouped_pagenums()`. This function could be helpful when creating tables using alternating pages that also using `clin_group_by()` for header labels. Alternating page tables require manual management of paging variables, since each page is technically a new table within the word document. `make_grouped_pagenums()` allows you to use a group variable and then generate a page variable that will appropriately change when the group changes. Consider this example:
 
 ```{r}
+library(dplyr)
 head(ToothGrowth, 20) |>
   mutate(page = make_grouped_pagenums(dose, 7))
 ```

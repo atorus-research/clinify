@@ -47,7 +47,7 @@ Let's expand some features of the table.
 ct <- clintable(mtcars) |>
   clin_add_titles(
     list(
-      c("Left", "Center", "Right"),
+      c("Left", "Right"),
       c("Just the middle")
     )
   ) |>
@@ -119,7 +119,7 @@ ct <- clintable(dat2) |>
   clin_col_widths(mpg = .2, cyl = .2, disp = .15, vs = .15) |>
   clin_add_titles(
     list(
-      c("Left", "Center", "Right"),
+      c("Left", "Right"),
       c("Just the middle")
     )
   ) |>
@@ -257,7 +257,7 @@ ct <- clintable(dat2) |>
   clin_col_widths(mpg = .2, cyl = .2, disp = .15, vs = .15) |>
   clin_add_titles(
     list(
-      c("Left", "Center", "Right"),
+      c("Left", "Right"),
       c("Just the middle")
     )
   ) |>

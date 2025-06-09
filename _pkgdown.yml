@@ -63,6 +63,10 @@ reference:
   - contents:
       - print.clintable
       - write_clindoc
+  - titles: Other Helpers
+    desc: Other helper functions
+  - contents:
+      - make_grouped_pagenums
 articles:
   - title: Vignettes
     navbar: Vignettes
@@ -70,4 +74,5 @@ articles:
       - defaults
       - pagination
       - titles_footnotes
+      - write
       - end_to_end

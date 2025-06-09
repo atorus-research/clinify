@@ -10,10 +10,6 @@ write_clindoc(x, file)
 \item{x}{a clintable object}
 
 \item{file}{The file path to which the file should be written}
-
-\item{apply_defaults}{Apply default styles. These styles are stored in the
-options clinify_header_default, clinify_footer_default, and
-clinify_table_default respectively. Defaults to true.}
 }
 \value{
 Invisible

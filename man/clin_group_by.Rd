@@ -17,8 +17,8 @@ attached below the table body and above in the footer. Defaults to NULL.}
 
 \item{when}{Character string indicating how to identify groups and captions:
 \itemize{
-\item \code{"notempty"}: Add padding when the value in \code{group_by} or \code{caption_by} is not empty.
 \item \code{"change"}: Add padding when the value in \code{group_by} or \code{caption_by} changes from the previous row.
+\item \code{"notempty"}: Add padding when the value in \code{group_by} or \code{caption_by} is not empty.
 }}
 }
 \value{

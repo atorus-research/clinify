@@ -3,14 +3,14 @@
 \name{clindoc}
 \alias{clindoc}
 \alias{as_clindoc}
-\title{Convert a Clintable to a Word Document}
+\title{Create a \code{clindoc} object}
 \usage{
 clindoc(...)
 
 as_clindoc(x)
 }
 \arguments{
-\item{...}{\code{clintable} objects to be converted. Or separately, a list of clintable objects}
+\item{...}{\code{clintable} objects to be converted. Or separately, a list of \code{clintable} objects}
 
 \item{x}{A \code{clintable} object to be converted.}
 }
@@ -18,17 +18,22 @@ as_clindoc(x)
 a \code{clindoc} object, inherited from an \code{officer::rdocx} object
 }
 \description{
-These functions convert a \code{clintable} object into a Word document using
-officer and flextable formatting. They apply default styles for titles,
-footnotes, and table settings while supporting pagination options.
+These functions handle the conversion of a \code{clintable} object into a \code{clindoc}
+object.
 }
 \details{
 \itemize{
-\item \code{clindoc()} ensures that the input is a \code{clintable} and then converts it
-to a Word document.
-\item \code{as_clindoc()} performs the conversion, applying default formatting and
-handling pagination if specified.
+\item \code{as_clindoc()} is intended for a single clintable object and extracts all
+necessary title and footnote information to apply to the document
+\item \code{clindoc()} can accept \code{clintable} objects as separate parameters or as a
+list of \code{clintable} objects. If a single \code{clintable} is passed, this function
+simply calls \code{as_clindoc()} internally.
 }
+
+When a multiple \code{clintable} objects are passed to \code{clindoc()}, titles and footnotes
+should be applied directly to the \code{clindoc} object using \code{clin_add_title()},
+\code{clin_add_footnote()}, or \code{clin_add_footnote_page()}. Title and footnote information
+on the individual \code{clintable} objects will be ignored.
 }
 \examples{
 

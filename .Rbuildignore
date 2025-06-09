@@ -10,7 +10,7 @@
 ^\.vscode$
 ^archive$
 ^data\-raw$
-^scratch\.R$
+^scratch.*\.R$
 ^demos$
 ^cran-comments\.md$
 ^NEWS\.md$
