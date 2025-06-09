@@ -1,16 +1,21 @@
-#' Convert a Clintable to a Word Document
+#' Create a `clindoc` object
 #'
-#' These functions convert a `clintable` object into a Word document using
-#' officer and flextable formatting. They apply default styles for titles,
-#' footnotes, and table settings while supporting pagination options.
+#' These functions handle the conversion of a `clintable` object into a `clindoc`
+#' object.
 #'
-#' - `clindoc()` ensures that the input is a `clintable` and then converts it
-#'   to a Word document.
-#' - `as_clindoc()` performs the conversion, applying default formatting and
-#'   handling pagination if specified.
+#' - `as_clindoc()` is intended for a single clintable object and extracts all
+#'   necessary title and footnote information to apply to the document
+#' - `clindoc()` can accept `clintable` objects as separate parameters or as a
+#'   list of `clintable` objects. If a single `clintable` is passed, this function
+#'   simply calls `as_clindoc()` internally.
+#'
+#' When a multiple `clintable` objects are passed to `clindoc()`, titles and footnotes
+#' should be applied directly to the `clindoc` object using `clin_add_title()`,
+#' `clin_add_footnote()`, or `clin_add_footnote_page()`. Title and footnote information
+#' on the individual `clintable` objects will be ignored.
 #'
 #' @param x A `clintable` object to be converted.
-#' @param ... `clintable` objects to be converted. Or separately, a list of clintable objects
+#' @param ... `clintable` objects to be converted. Or separately, a list of `clintable` objects
 #'
 #' @return a `clindoc` object, inherited from an `officer::rdocx` object
 #' @export
@@ -154,7 +159,6 @@ get_table_ <- function(x, p) {
   }
 
   if (!is.null(p$captions)) {
-    # TODO: Allow formatting on this
     tbl <- flextable::add_footer_lines(
       tbl,
       values = paste(p$captions, collapse = "\n")

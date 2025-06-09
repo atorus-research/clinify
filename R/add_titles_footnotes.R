@@ -1,15 +1,15 @@
 #' Add titles, footnotes, or a footnote page to a clintable or clindoc
 #'
-#' This function allows you to attach specified titles, footnotes, or a footnote page 
+#' This function allows you to attach specified titles, footnotes, or a footnote page
 #' into clintable or clindoc object. The input can be provided either as a list of character
-#' vectors, or pre-built flextable. 
-#' 
-#' When using the `ls` parameter, each element of the list can contain no more than two 
-#' elements within each character vector. In a title, a single element will align center. 
+#' vectors, or pre-built flextable.
+#'
+#' When using the `ls` parameter, each element of the list can contain no more than two
+#' elements within each character vector. In a title, a single element will align center.
 #' In a footnote, a single element will align to the left. For both titles and footnotes,
 #' two elements will align split down the middle, with the left side element aligning left
-#' and the right side element aligning right. In a title, a single left aligned element, 
-#' provide a 2 element character vector with duplicate values. 
+#' and the right side element aligning right. In a title, a single left aligned element,
+#' provide a 2 element character vector with duplicate values.
 #'
 #' @param x a clintable object
 #' @param ls a list of character vectors, no more than 2 elements to a vector
@@ -96,8 +96,29 @@ add_titles_footnotes_ <- function(x, sect, ls = NULL, ft = NULL) {
 #' @export
 #'
 #' @examples
-#' # TODO:
-new_title_footnote <- function(x, sect = c("titles", "footnotes", "footnote_page")) {
+#'
+#' title <- new_title_footnote(
+#'   list(
+#'     # We'll add tools to automate paging
+#'     c("Protocol: CDISCPILOT01", "Page {PAGE} of {NUMPAGES}"),
+#'     c("Table 14-2.01"),
+#'     c("Summary of Demographic and Baseline Characteristics")
+#'   ),
+#'   "titles"
+#' )
+#'
+#' footnote <- new_title_footnote(
+#'   list(
+#'     # We'll add tools to automate paging
+#'     c("Page {PAGE}", "Total Pages: {NUMPAGES}")
+#'   ),
+#'   "footnotes"
+#' )
+#'
+new_title_footnote <- function(
+  x,
+  sect = c("titles", "footnotes", "footnote_page")
+) {
   sect <- match.arg(sect)
 
   # Check if all lists have length <=3
@@ -143,11 +164,9 @@ new_title_footnote <- function(x, sect = c("titles", "footnotes", "footnote_page
       ft <- ft |>
         flextable::merge_h(i = i, part = "body") |>
         flextable::align(
-          j = 1, i = i,
-          align = ifelse(sect == "titles",
-            "center",
-            "left"
-          ),
+          j = 1,
+          i = i,
+          align = ifelse(sect == "titles", "center", "left"),
           part = "body"
         )
     } else if (length(elements) == 2) {
@@ -157,7 +176,6 @@ new_title_footnote <- function(x, sect = c("titles", "footnotes", "footnote_page
         flextable::align(j = 2, i = i, align = "right", part = "body")
     }
   }
-
 
   # Return the flextable
   return(ft)

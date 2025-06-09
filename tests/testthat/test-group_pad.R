@@ -16,3 +16,10 @@ test_that("padding works", {
 
   expect_equal(pad_data2, pad_data)
 })
+
+test_that("Columns drop when specified", {
+  ct1 <- clintable(mtcars) |>
+    clin_group_pad('gear', when = 'change', drop = TRUE)
+
+  expect_false("gear" %in% ct1$body$col_keys)
+})

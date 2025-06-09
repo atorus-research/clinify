@@ -70,8 +70,8 @@ clin_page_by <- function(x, page_by, max_rows = 10) {
 #'   attached below the table body and above in the footer. Defaults to NULL.
 #' @param when Character string indicating how to identify groups and captions:
 #'   \itemize{
-#'     \item `"notempty"`: Add padding when the value in `group_by` or `caption_by` is not empty.
 #'     \item `"change"`: Add padding when the value in `group_by` or `caption_by` changes from the previous row.
+#'     \item `"notempty"`: Add padding when the value in `group_by` or `caption_by` is not empty.
 #'   }
 #'
 #' @return A clintable object
@@ -452,6 +452,14 @@ prep_pagination_ <- function(x) {
 #' @param x A clintable object
 #' @param group_var A string containing a variable name of the input dataset used to
 #'   calculate groups
+#' @param when Character string indicating when to apply padding:
+#'   \itemize{
+#'     \item `"notempty"`: Find allowable break points when the value in `group_var`
+#' is not empty.
+#'     \item `"change"`: Find allowable break points when the value in `group_var` changes
+#' from the previous row.
+#'   }
+#' @param drop Keep or drop the `group_var`` variable
 #'
 #' @return A clintable object
 #' @export
@@ -461,13 +469,17 @@ prep_pagination_ <- function(x) {
 #' clintable(mtcars) |>
 #'   clin_auto_page("gear")
 #'
-clin_auto_page <- function(x, group_var, when = c("change", "notempty")) {
+clin_auto_page <- function(
+  x,
+  group_var,
+  when = c("change", "notempty"),
+  drop = FALSE
+) {
   when <- match.arg(when)
 
-  # TODO: The default of this is more likely "notempty" so have to handle
-  # trickle effect.
   x$clinify_config$auto_page_var <- group_var
   x$clinify_config$auto_page_when <- when
+  x$clinify_config$auto_page_drop <- drop
   x
 }
 
@@ -492,6 +504,9 @@ auto_page_ <- function(x) {
 
   keep <- (1:length(refvar))[-dont_keep]
 
-  x <- keep_with_next(x, i = keep)
+  x <- flextable::keep_with_next(x, i = keep)
+  if (x$clinify_config$auto_page_drop) {
+    x <- flextable::delete_columns(x, j = group_var)
+  }
   x
 }

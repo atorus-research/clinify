@@ -153,7 +153,6 @@ print_clinpage <- function(
   body[[3]] <- gsub("&nbsp;  ", "&nbsp;&nbsp; ", body[[3]], perl = TRUE)
 
   if (!is.null(titles)) {
-    # TODO: This should take into consideration how many cells are merged within the header
     titles <- flextable::width(
       titles,
       width = flextable::flextable_dim(x)$widths / 2

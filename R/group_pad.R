@@ -12,6 +12,7 @@
 #'     \item `"notempty"`: Add padding when the value in `pad_by` is not empty.
 #'     \item `"change"`: Add padding when the value in `pad_by` changes from the previous row.
 #'   }
+#' @param drop Keep or drop the padding variable used to identify padding locations
 #'
 #' @return A `clintable` object with modified padding.
 #' @export
@@ -28,14 +29,20 @@ clin_group_pad <- function(
   x,
   pad_by,
   size = 9,
-  when = c("change", "notempty")
+  when = c("change", "notempty"),
+  drop = FALSE
 ) {
   when <- match.arg(when)
   refdat <- x$body$dataset
 
-  # TODO: This isn't tested
   # Find every index the page by variable changes
   splits <- find_split_inds(refdat[[pad_by]], when)
   splits[1] <- FALSE
-  flextable::padding(x, i = which(splits), padding.top = size + 5)
+
+  x <- flextable::padding(x, i = which(splits), padding.top = size + 5)
+
+  if (drop) {
+    x <- flextable::delete_columns(x, pad_by)
+  }
+  x
 }

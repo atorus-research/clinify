@@ -979,10 +979,11 @@ test_that("Test using max rows", {
 
 test_that("Auto paging is applied", {
   ct <- clintable(mtcars)
-  ct <- clin_auto_page(ct, 'gear', when = 'change')
+  ct <- clin_auto_page(ct, 'gear', when = 'change', drop = TRUE)
   ct <- auto_page_(ct)
 
   mtcars2 <- mtcars
+
   # Mock blank repeats
   mtcars2[!find_split_inds(mtcars2$gear, 'change'), 'gear'] <- ''
   ct2 <- clintable(mtcars2)
@@ -991,6 +992,7 @@ test_that("Auto paging is applied", {
 
   exp_out <- c(3, 7, 11, 17, 20, 25, 26, 31)
   expect_equal(which(!ct$body$styles$pars$keep_with_next$data[, 1]), exp_out)
+  expect_false("gear" %in% ct$body$col_keys)
   expect_equal(which(!ct2$body$styles$pars$keep_with_next$data[, 1]), exp_out)
 })
 
