@@ -33,15 +33,6 @@ You can install the development version of **{clinify}** like so:
 install.packages("clinify")
 
 # Install the development version:
-# NOTE: Current version relies on forked versions of {flextable} and {officer}
-devtools::install_github(
-  "https://github.com/mstackhouse/officer.git",
-  ref = "body_add_xml_multi"
-)
-devtools::install_github(
-  "https://github.com/mstackhouse/flextable.git",
-  ref = "681_bulk_add_flextables"
-)
 devtools::install_github(
   "https://github.com/atorus-research/clinify.git",
   ref = "development"
@@ -113,7 +104,7 @@ ct <- clintable(dat2) |>
   # to customize the titles block
   clin_add_titles(
     list(
-      c("Left", "Center", "Right"),
+      c("Left", "Right"),
       c("Just the middle")
     )
   ) |>
