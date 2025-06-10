@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinify</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,6 +30,7 @@
     <li><a class="dropdown-item" href="../articles/defaults.html">Setting Clinify Defaults</a></li>
     <li><a class="dropdown-item" href="../articles/pagination.html">Pagination</a></li>
     <li><a class="dropdown-item" href="../articles/titles_footnotes.html">Titles and Footnotes</a></li>
+    <li><a class="dropdown-item" href="../articles/write.html">Document Objects and Saving</a></li>
     <li><a class="dropdown-item" href="../articles/end_to_end.html">End-to-End Example</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -74,7 +75,7 @@
           <code><a href="clindoc.html">clindoc()</a></code> <code><a href="clindoc.html">as_clindoc()</a></code>
 
         </dt>
-        <dd>Convert a Clintable to a Word Document</dd>
+        <dd>Create a <code>clindoc</code> object</dd>
       </dl></div><div class="section level2">
       <h2 id="titles-and-footnotes">Titles and Footnotes<a class="anchor" aria-label="anchor" href="#titles-and-footnotes"></a></h2>
 
@@ -91,7 +92,7 @@
           <code><a href="add_titles_footnotes.html">clin_add_titles()</a></code> <code><a href="add_titles_footnotes.html">clin_add_footnotes()</a></code> <code><a href="add_titles_footnotes.html">clin_add_footnote_page()</a></code>
 
         </dt>
-        <dd>Add page footer</dd>
+        <dd>Add titles, footnotes, or a footnote page to a clintable or clindoc</dd>
       </dl><dl><dt>
 
           <code><a href="new_title_footnote.html">new_title_footnote()</a></code>
@@ -162,6 +163,12 @@
 
         </dt>
         <dd>Replace Table Cells with Word Page Number Fields</dd>
+      </dl><dl><dt>
+
+          <code><a href="clin_group_pad.html">clin_group_pad()</a></code>
+
+        </dt>
+        <dd>Add Padding Between Groups in a Clinical Flextable</dd>
       </dl></div><div class="section level2">
       <h2 id="style-defaults">Style defaults<a class="anchor" aria-label="anchor" href="#style-defaults"></a></h2>
 
@@ -175,7 +182,7 @@
 
       <dl><dt>
 
-          <code><a href="clinify_defaults.html">clinify_titles_default()</a></code> <code><a href="clinify_defaults.html">clinify_footnotes_default()</a></code> <code><a href="clinify_defaults.html">clinify_table_default()</a></code> <code><a href="clinify_defaults.html">clinify_caption_default()</a></code> <code><a href="clinify_defaults.html">clinify_docx_default()</a></code>
+          <code><a href="clinify_defaults.html">clinify_titles_default()</a></code> <code><a href="clinify_defaults.html">clinify_footnotes_default()</a></code> <code><a href="clinify_defaults.html">clinify_table_default()</a></code> <code><a href="clinify_defaults.html">clinify_caption_default()</a></code> <code><a href="clinify_defaults.html">clinify_grouplabel_default()</a></code> <code><a href="clinify_defaults.html">clinify_docx_default()</a></code>
 
         </dt>
         <dd>Apply Default Clinical Styling to Clintables</dd>
@@ -204,10 +211,21 @@
         <dd>Clintable print method</dd>
       </dl><dl><dt>
 
-          <code><a href="write_clintable.html">write_clintable()</a></code>
+          <code><a href="write_clindoc.html">write_clindoc()</a></code>
 
         </dt>
         <dd>Clintable write method</dd>
+      </dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="make_grouped_pagenums.html">make_grouped_pagenums()</a></code>
+
+        </dt>
+        <dd>Assign Page Numbers to Presorted Grouped Data</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
@@ -218,7 +236,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

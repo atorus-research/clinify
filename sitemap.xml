@@ -7,6 +7,7 @@
 <url><loc>https://atorus-research.github.io/clinify/articles/index.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/articles/pagination.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/articles/titles_footnotes.html</loc></url>
+<url><loc>https://atorus-research.github.io/clinify/articles/write.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/authors.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/index.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/news/index.html</loc></url>
@@ -18,14 +19,16 @@
 <url><loc>https://atorus-research.github.io/clinify/reference/clin_column_headers.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/reference/clin_default_table_width.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/reference/clin_group_by.html</loc></url>
+<url><loc>https://atorus-research.github.io/clinify/reference/clin_group_pad.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/reference/clin_page_by.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/reference/clin_replace_pagenums.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/reference/clindoc.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/reference/clinify_defaults.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/reference/clintable.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/reference/index.html</loc></url>
+<url><loc>https://atorus-research.github.io/clinify/reference/make_grouped_pagenums.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/reference/new_title_footnote.html</loc></url>
 <url><loc>https://atorus-research.github.io/clinify/reference/print_methods.html</loc></url>
-<url><loc>https://atorus-research.github.io/clinify/reference/write_clintable.html</loc></url>
+<url><loc>https://atorus-research.github.io/clinify/reference/write_clindoc.html</loc></url>
 </urlset>
 

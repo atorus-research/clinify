@@ -33,7 +33,7 @@
 
     <a class="navbar-brand me-2" href="index.html">clinify</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,7 @@
     <li><a class="dropdown-item" href="articles/defaults.html">Setting Clinify Defaults</a></li>
     <li><a class="dropdown-item" href="articles/pagination.html">Pagination</a></li>
     <li><a class="dropdown-item" href="articles/titles_footnotes.html">Titles and Footnotes</a></li>
+    <li><a class="dropdown-item" href="articles/write.html">Document Objects and Saving</a></li>
     <li><a class="dropdown-item" href="articles/end_to_end.html">End-to-End Example</a></li>
   </ul>
 </li>
@@ -86,7 +87,10 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"clinify"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Install the development version:</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/atorus-research/clinify.git"</span>, ref <span class="op">=</span> <span class="st">"development"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span></span>
+<span>  <span class="st">"https://github.com/atorus-research/clinify.git"</span>,</span>
+<span>  ref <span class="op">=</span> <span class="st">"development"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="motivation">Motivation<a class="anchor" aria-label="anchor" href="#motivation"></a>
@@ -159,7 +163,7 @@
 <span>  <span class="co"># to customize the titles block</span></span>
 <span>  <span class="fu"><a href="reference/add_titles_footnotes.html">clin_add_titles</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Left"</span>, <span class="st">"Center"</span>, <span class="st">"Right"</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Left"</span>, <span class="st">"Right"</span><span class="op">)</span>,</span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Just the middle"</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -179,7 +183,7 @@
 <p>Built of {flextable} and {officer}, you can then write the table out to a docx file.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Write the table out to docx</span></span>
-<span><span class="fu"><a href="reference/write_clintable.html">write_clintable</a></span><span class="op">(</span><span class="va">ct</span>, <span class="st">"demo_table.docx"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/write_clindoc.html">write_clindoc</a></span><span class="op">(</span><span class="va">ct</span>, <span class="st">"demo_table.docx"</span><span class="op">)</span></span></code></pre></div>
 <p align="center">
 <img src="articles/table.png" width="800px"></p>
 </div>
@@ -211,9 +215,9 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Mike Stackhouse <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-6030-723X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Ross Didenko <br><small class="roles"> Author </small>  </li>
-<li>Yevhenii Boiko <br><small class="roles"> Author </small>  </li>
+<li>Mike Stackhouse <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-6030-723X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Ross Didenko <br><small class="roles"> Author </small>   </li>
+<li>Yevhenii Boiko <br><small class="roles"> Author </small>   </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -237,7 +241,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

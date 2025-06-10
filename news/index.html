@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinify</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,6 +30,7 @@
     <li><a class="dropdown-item" href="../articles/defaults.html">Setting Clinify Defaults</a></li>
     <li><a class="dropdown-item" href="../articles/pagination.html">Pagination</a></li>
     <li><a class="dropdown-item" href="../articles/titles_footnotes.html">Titles and Footnotes</a></li>
+    <li><a class="dropdown-item" href="../articles/write.html">Document Objects and Saving</a></li>
     <li><a class="dropdown-item" href="../articles/end_to_end.html">End-to-End Example</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -47,6 +48,24 @@
       <small>Source: <a href="https://github.com/atorus-research/clinify/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="clinify-030">clinify 0.3.0<a class="anchor" aria-label="anchor" href="#clinify-030"></a></h2>
+<ul><li>Incorporate performance improvements from {officer} package updates</li>
+<li>Fix issue with clin_col_widths() where numeric precision issues could cause unexpected errors</li>
+<li>Add new helper function make_grouped_pagenums() to ease creation of a paging variable, which is required for clin_group_by() or it will just break every 20 rows</li>
+<li>Group labels can be formatted and by default moved above header line (<a href="https://github.com/atorus-research/clinify/issues/79" class="external-link">#79</a>)</li>
+<li>Fix numeric precision issue on <code><a href="../reference/clin_col_widths.html">clin_col_widths()</a></code>
+</li>
+<li>Added <code><a href="../reference/make_grouped_pagenums.html">make_grouped_pagenums()</a></code> helper function</li>
+<li>Added function to create <code><a href="../reference/clindoc.html">clindoc()</a></code> objects specifically, and multiple tables can be passed to <code><a href="../reference/clindoc.html">clindoc()</a></code> (<a href="https://github.com/atorus-research/clinify/issues/63" class="external-link">#63</a>, <a href="https://github.com/atorus-research/clinify/issues/80" class="external-link">#80</a>)</li>
+<li>Titles and footnotes now only split into two parts to avoid line wrapping (<a href="https://github.com/atorus-research/clinify/issues/69" class="external-link">#69</a>). This is a breaking change.</li>
+<li>Added <code><a href="../reference/clin_group_pad.html">clin_group_pad()</a></code> function (<a href="https://github.com/atorus-research/clinify/issues/72" class="external-link">#72</a>)</li>
+<li>Updated group tracking in <code><a href="../reference/clin_group_by.html">clin_group_by()</a></code>, <code><a href="../reference/clin_auto_page.html">clin_auto_page()</a></code> and <code><a href="../reference/clin_group_pad.html">clin_group_pad()</a></code> to find groups by changed values or by populated values.</li>
+<li>
+<code><a href="../reference/clin_auto_page.html">clin_auto_page()</a></code> now has an option to drop the <code>page_by</code> variable. Does not drop variable by default.</li>
+<li>New vignette on Document Objects and Saving</li>
+<li>Renamed <code>write_clintable()</code> to <code><a href="../reference/write_clindoc.html">write_clindoc()</a></code>. This is a breaking change.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="clinify-020">clinify 0.2.0<a class="anchor" aria-label="anchor" href="#clinify-020"></a></h2>
 <ul><li>Added in body captions (<a href="https://github.com/atorus-research/clinify/issues/26" class="external-link">#26</a> and <a href="https://github.com/atorus-research/clinify/issues/28" class="external-link">#28</a>)</li>
@@ -82,7 +101,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>
