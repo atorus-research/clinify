@@ -38,8 +38,8 @@ devtools::install_github(
 There’s a large assortment of table packages available, and there are
 many that are specifically catered to clinical reporting. For many
 organizations, one of these packages may very well be a great choice,
-but there are a couple of key motivators we’ve found that lead drove us
-to start writing **{clinify}**:
+but there are a couple of key motivators we’ve found that drove us to
+start writing **{clinify}**:
 
 - Clinical output standards likely exist within an organization, and
   changing those standards may not be an option
@@ -62,6 +62,7 @@ for a two key reasons:
 - {flextable} already offers most of the functionality that we’re
   looking for, particularly with the pairing of {officer}. For example,
   word documents have to be a first class priority of output support.
+
 - While creating a table is the focus, the output tends to be more than
   just a table. We need the capability to modify the underlying document
   as a whole, which is another place that {officer} is truly necessary.
