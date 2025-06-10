@@ -142,7 +142,7 @@ print(ct)
 <img src="man/figures/print.gif" width="800px">
 </p>
 
-Built of {flextable} and {officer}, you can then write the table out to
+Built off {flextable} and {officer}, you can then write the table out to
 a docx file.
 
 ``` r
