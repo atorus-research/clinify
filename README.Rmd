@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/atorus-research/clinify/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/atorus-research/clinify/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-**{clinify}** is direct extension of the [{flextable}](https://davidgohel.github.io/flextable/) and [{officer}](https://davidgohel.github.io/officer/) packages, aimed at supplementing some functionality and simplifying some common tasks in the creation of clinical tables, listings and figures. 
+**{clinify}** is direct extension of the [{flextable}](https://davidgohel.github.io/flextable/) and [{officer}](https://davidgohel.github.io/officer/) packages, aimed at supplementing some functionality and simplifying some common tasks in the creation of clinical tables, listings, and figures. 
 
 
 ## Installation
@@ -41,12 +41,12 @@ devtools::install_github(
 
 ## Motivation
 
-There's a large assortment of table packages available, and there are many that are specifically catered to clinical reporting. For many organizations, one of these packages may very well be a great choice, but there are a couple of key motivators we've found that drove us to start writing **{clinify}**:
+There's a large assortment of table packages available, and many are specifically catered to clinical reporting. For many organizations, one of these packages may very well be a great choice, but there are a couple of key motivators we've found that drove us to start writing **{clinify}**:
 
 - Clinical output standards likely exist within an organization, and changing those standards may not be an option
-- It's very likely that certain outputs will require that you deviate from those standards, so flexibility it necessary, sometimes in highly nuanced ways
+- It's very likely that certain outputs will require that you deviate from those standards, so flexibility is necessary, sometimes in highly nuanced ways
 - Organizations like Contract Research Organizations (CROs) may have to adapt to multiple clients' reporting standards, which likely don't look the same
-- Regardless of the situation, reuse and repeatability of a given configuration is critical, and changes in configuration must be easily implemented. 
+- Regardless of the situation, reuse and repeatability of a given configuration is critical, and changes in configuration must be easily implemented 
 
 Instead of building a new package from the ground up, **{clinify}** aims to extend what we see as a best choice for the situation at hand, adding new functionality where necessary and streamlining common tasks to make them more efficient for programmers to implement. We chose {flextable} for a two key reasons:
 
@@ -59,7 +59,7 @@ Instead of building a new package from the ground up, **{clinify}** aims to exte
 Here are some key principles we're using in building **{clinify}**:
 
 - **{clinify}** objects should inherit from an underlying {flextable} or {officer} object
-- **{clinify}** functionality must not interfere with {flextable} or {officer} functionality, i.e. {flextable} or {officer} functions called should operate without error. 
+- **{clinify}** functionality must not interfere with {flextable} or {officer} functionality, i.e. {flextable} or {officer} functions called should operate without error
 
 ## Example
 
