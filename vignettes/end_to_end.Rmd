@@ -26,10 +26,17 @@ library(dplyr)
 tplyr_adsl <- tplyr_adsl |>
   mutate(
     SEX = recode(SEX, M = "Male", F = "Female"),
-    RACE = factor(RACE, c(
-      "AMERICAN INDIAN OR ALASKA NATIVE", "ASIAN", "BLACK OR AFRICAN AMERICAN",
-      "NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER", "WHITE", "MULTIPLE"
-    ))
+    RACE = factor(
+      RACE,
+      c(
+        "AMERICAN INDIAN OR ALASKA NATIVE",
+        "ASIAN",
+        "BLACK OR AFRICAN AMERICAN",
+        "NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER",
+        "WHITE",
+        "MULTIPLE"
+      )
+    )
   )
 
 t <- tplyr_table(tplyr_adsl, TRT01P) |>
@@ -81,10 +88,13 @@ dat <- build(t) |>
 # Sort all the row values out, add row masks and breaks
 dat <- dat |>
   arrange(ord_layer_index, ord_layer_1, ord_layer_2) |>
-  apply_row_masks(row_breaks = TRUE) |>
+  apply_row_masks() |>
   select(
-    starts_with("row_label"), var1_Placebo, `var1_Xanomeline Low Dose`,
-    `var1_Xanomeline High Dose`, ord_layer_index
+    starts_with("row_label"),
+    var1_Placebo,
+    `var1_Xanomeline Low Dose`,
+    `var1_Xanomeline High Dose`,
+    ord_layer_index
   )
 
 # Grab the header Ns for column header help
@@ -103,19 +113,43 @@ Great - our data are presentation ready now. Using **{clinify}** we'll get every
 
 ```{r style}
 ct <- clintable(dat) |>
-  clin_auto_page("ord_layer_index") |>
+  # Use group changes to let Word naturally split pages
+  clin_auto_page("ord_layer_index", drop = TRUE) |>
+  # Add padding to changes within the group
+  # By using `notempty`, paging groups are determined by populated
+  # values of `row_label1`
+  clin_group_pad('row_label1', when = "notempty") |>
+  # Assign column headers with spanning rows
   clin_column_headers(
     row_label1 = "",
     row_label2 = "",
     var1_Placebo = sprintf("Placebo\n(N=%s)", header_n["Placebo"]),
-    `var1_Xanomeline Low Dose` = c("Xanomeline", sprintf("Low Dose\n(N=%s)", header_n["Xanomeline Low Dose"])),
-    `var1_Xanomeline High Dose` = c("Xanomeline", sprintf("High Dose\n(N=%s)", header_n["Xanomeline High Dose"]))
+    `var1_Xanomeline Low Dose` = c(
+      "Xanomeline",
+      sprintf("Low Dose\n(N=%s)", header_n["Xanomeline Low Dose"])
+    ),
+    `var1_Xanomeline High Dose` = c(
+      "Xanomeline",
+      sprintf("High Dose\n(N=%s)", header_n["Xanomeline High Dose"])
+    )
   ) |>
+  # Use flextable functions directly to set all of the alignment
   flextable::align(align = "center", part = "header") |>
-  flextable::align(j = c("var1_Placebo", "var1_Xanomeline Low Dose", "var1_Xanomeline High Dose"), align = "center") |>
+  flextable::align(
+    j = c(
+      "var1_Placebo",
+      "var1_Xanomeline Low Dose",
+      "var1_Xanomeline High Dose"
+    ),
+    align = "center"
+  ) |>
+  # Set column widths as proportion of the total document width
   clin_col_widths(
-    row_label1 = .17, row_label2 = .3, var1_Placebo = .176,
-    `var1_Xanomeline Low Dose` = .176, `var1_Xanomeline High Dose` = .176
+    row_label1 = .17,
+    row_label2 = .3,
+    var1_Placebo = .176,
+    `var1_Xanomeline Low Dose` = .176,
+    `var1_Xanomeline High Dose` = .176
   ) |>
   # Add titles here is using new_header_footer to allow flextable functions
   # to customize the titles block
@@ -139,10 +173,10 @@ ct <- clintable(dat) |>
 print(ct)
 ```
 
-With everything ready to go, we can write our table out to its destination using `write_clintable()`.
+With everything ready to go, we can write our table out to its destination using `write_clindoc()`.
 
 ```{r, eval=FALSE}
-write_clintable(ct, "demo_table.docx")
+write_clindoc(ct, "demo_table.docx")
 ```
 
 <p align="center"><img src="e2e.png" width="675px"></p>

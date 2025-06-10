@@ -5,7 +5,7 @@
 .DS_Store
 .quarto
 inst/doc
-scratch.R
+scratch*.R
 
 /.quarto/
 docs

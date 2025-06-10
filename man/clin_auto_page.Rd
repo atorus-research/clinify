@@ -4,13 +4,23 @@
 \alias{clin_auto_page}
 \title{Enable Word Auto-Pagination Using Group Variable}
 \usage{
-clin_auto_page(x, group_var)
+clin_auto_page(x, group_var, when = c("change", "notempty"), drop = FALSE)
 }
 \arguments{
 \item{x}{A clintable object}
 
 \item{group_var}{A string containing a variable name of the input dataset used to
 calculate groups}
+
+\item{when}{Character string indicating when to apply padding:
+\itemize{
+\item \code{"notempty"}: Find allowable break points when the value in \code{group_var}
+is not empty.
+\item \code{"change"}: Find allowable break points when the value in \code{group_var} changes
+from the previous row.
+}}
+
+\item{drop}{Keep or drop the `group_var`` variable}
 }
 \value{
 A clintable object

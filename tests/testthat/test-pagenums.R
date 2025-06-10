@@ -67,7 +67,6 @@ test_that("clin_replace_pagenums processes fields properly", {
 
   title <- clin_replace_pagenums(title)
 
-  expect_snapshot(title$body$content$data[1, "Center"])
   expect_snapshot(title$body$content$data[1, "Right"])
 
   footnote <- new_title_footnote(
@@ -81,6 +80,5 @@ test_that("clin_replace_pagenums processes fields properly", {
   footnote <- clin_replace_pagenums(footnote)
 
   expect_snapshot(footnote$body$content$data[1, "Left"])
-  expect_snapshot(footnote$body$content$data[1, "Center"])
   expect_snapshot(footnote$body$content$data[1, "Right"])
 })

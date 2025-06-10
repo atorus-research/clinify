@@ -27,7 +27,10 @@ You can install the development version of **{clinify}** like so:
 install.packages("clinify")
 
 # Install the development version:
-devtools::install_github("https://github.com/atorus-research/clinify.git", ref = "development")
+devtools::install_github(
+  "https://github.com/atorus-research/clinify.git",
+  ref = "development"
+)
 ```
 
 ## Motivation
@@ -117,7 +120,7 @@ ct <- clintable(dat2) |>
   # to customize the titles block
   clin_add_titles(
     list(
-      c("Left", "Center", "Right"),
+      c("Left", "Right"),
       c("Just the middle")
     )
   ) |>
@@ -135,6 +138,7 @@ print(ct)
 ```
 
 <p align="center">
+
 <img src="man/figures/print.gif" width="800px">
 </p>
 
@@ -143,9 +147,10 @@ a docx file.
 
 ``` r
 # Write the table out to docx
-write_clintable(ct, "demo_table.docx")
+write_clindoc(ct, "demo_table.docx")
 ```
 
 <p align="center">
+
 <img src="vignettes/table.png" width="800px">
 </p>

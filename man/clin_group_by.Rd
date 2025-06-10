@@ -4,7 +4,7 @@
 \alias{clin_group_by}
 \title{Configure a clintable to table by a grouping variable, which will be used as a label}
 \usage{
-clin_group_by(x, group_by, caption_by = NULL)
+clin_group_by(x, group_by, caption_by = NULL, when = c("change", "notempty"))
 }
 \arguments{
 \item{x}{A clintable object}
@@ -14,6 +14,12 @@ as a label above the table headers}
 
 \item{caption_by}{A single element string of a variable name which will be used as a caption
 attached below the table body and above in the footer. Defaults to NULL.}
+
+\item{when}{Character string indicating how to identify groups and captions:
+\itemize{
+\item \code{"change"}: Add padding when the value in \code{group_by} or \code{caption_by} changes from the previous row.
+\item \code{"notempty"}: Add padding when the value in \code{group_by} or \code{caption_by} is not empty.
+}}
 }
 \value{
 A clintable object

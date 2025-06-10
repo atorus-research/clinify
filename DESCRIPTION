@@ -1,7 +1,7 @@
 Package: clinify
 Type: Package
 Title: Clinical Table Styling Tools and Utilities
-Version: 0.2.0
+Version: 0.2.0.9004
 Authors@R: c(
     person(given = "Mike",
            family = "Stackhouse",
@@ -19,7 +19,7 @@ Depends:
     R (>= 4.2)
 Imports: 
     flextable,
-    officer,
+    officer (>= 0.6.9),
     magrittr,
     dplyr,
     knitr,

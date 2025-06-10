@@ -1,20 +1,23 @@
-#' Convert a Clintable to a Word Document
+#' Create a `clindoc` object
 #'
-#' These functions convert a `clintable` object into a Word document using
-#' officer and flextable formatting. They apply default styles for titles,
-#' footnotes, and table settings while supporting pagination options.
+#' These functions handle the conversion of a `clintable` object into a `clindoc`
+#' object.
 #'
-#' - `clindoc()` ensures that the input is a `clintable` and then converts it
-#'   to a Word document.
-#' - `as_clindoc()` performs the conversion, applying default formatting and
-#'   handling pagination if specified.
+#' - `as_clindoc()` is intended for a single clintable object and extracts all
+#'   necessary title and footnote information to apply to the document
+#' - `clindoc()` can accept `clintable` objects as separate parameters or as a
+#'   list of `clintable` objects. If a single `clintable` is passed, this function
+#'   simply calls `as_clindoc()` internally.
+#'
+#' When a multiple `clintable` objects are passed to `clindoc()`, titles and footnotes
+#' should be applied directly to the `clindoc` object using `clin_add_title()`,
+#' `clin_add_footnote()`, or `clin_add_footnote_page()`. Title and footnote information
+#' on the individual `clintable` objects will be ignored.
 #'
 #' @param x A `clintable` object to be converted.
-#' @param apply_defaults Logical, whether to apply default title, footnote,
-#'   and table formatting. Defaults to `TRUE`.
-#' @param ... Additional arguments (currently unused).
+#' @param ... `clintable` objects to be converted. Or separately, a list of `clintable` objects
 #'
-#' @return An `officer::rdocx` object representing the formatted Word document.
+#' @return a `clindoc` object, inherited from an `officer::rdocx` object
 #' @export
 #' @name clindoc
 #'
@@ -24,49 +27,84 @@
 #'
 #' clindoc(ct)
 #'
-clindoc <- function(x, ...) {
-  stopifnot(inherits(x, "clintable"))
-  as_clindoc(x)
+clindoc <- function(...) {
+  tabs <- list(...)
+
+  if (inherits(tabs[[1]], 'list')) {
+    tabs <- tabs[[1]]
+  }
+
+  for (x in tabs) {
+    stopifnot(inherits(x, "clintable"))
+  }
+
+  # If it's just a clintable then convert to doc
+  if (length(tabs) == 1) {
+    doc <- as_clindoc(tabs[[1]])
+  } else {
+    doc <- new_clindoc()
+
+    # Tables with page breaks separating
+    for (x in tabs[-length(tabs)]) {
+      doc <- add_clintable_(doc, x)
+      ctx <- officer::body_append_start_context(doc)
+      officer::write_elements_to_context(
+        context = ctx,
+        officer::fpar(officer::run_pagebreak())
+      )
+      doc <- officer::body_append_stop_context(ctx)
+    }
+
+    # Add last so no page break follows
+    doc <- add_clintable_(doc, tabs[[length(tabs)]])
+  }
+
+  doc
+}
+
+#' Object generator for clindocs
+#'
+#' @param settings Objects for titles, footnotes, or footnote page
+#'
+#' @noRd
+new_clindoc <- function() {
+  doc <- officer::read_docx()
+  doc$clinify_config <- NULL
+  class(doc) <- c("clindoc", class(doc))
+  doc
 }
 
 #' @rdname clindoc
 #' @export
-as_clindoc <- function(x, apply_defaults = TRUE) {
-  pg_method <- x$clinify_config$pagination_method
-  titles <- x$clinify_config$titles
-  footnotes <- x$clinify_config$footnotes
+as_clindoc <- function(x) {
   footnote_page <- x$clinify_config$footnote_page
 
-  doc <- officer::read_docx()
-  settings_ <- getOption("clinify_docx_default")
+  doc <- new_clindoc()
+  doc$clinify_config$titles <- x$clinify_config$titles
+  doc$clinify_config$footnotes <- x$clinify_config$footnotes
 
-  if (apply_defaults) {
-    if (!is.null(titles)) titles <- getOption("clinify_titles_default")(titles)
-    if (!is.null(footnotes)) footnotes <- getOption("clinify_footnotes_default")(footnotes)
-    x <- getOption("clinify_table_default")(x)
-    if (!is.null(x$clinify_config$footnote_page)) {
-      footnote_page <- getOption("clinify_footnotes_default")(footnote_page)
-    }
+  if (!is.null(footnote_page)) {
+    footnote_page <- getOption("clinify_footnotes_default")(footnote_page)
+    doc <- flextable::body_add_flextable(doc, footnote_page)
+    doc <- officer::body_add_break(doc)
   }
 
-  if (!is.null(titles)) {
-    settings_$header_default <- block_list(titles)
-  }
-  if (!is.null(footnotes)) {
-    settings_$footer_default <- block_list(footnotes)
-  }
+  doc <- add_clintable_(doc, x)
+
+  doc
+}
+
+#' Add a clintable into a clindoc object
+#'
+#' @param x a clintable object
+#' @noRd
+add_clintable_ <- function(doc, x) {
+  pg_method <- x$clinify_config$pagination_method
+  x <- getOption("clinify_table_default")(x)
 
   # Keep with next paging
   if (!is.null(x$clinify_config$auto_page_var)) {
     x <- auto_page_(x)
-  }
-
-  # apply settings to doc
-  doc <- body_set_default_section(doc, settings_)
-
-  if (!is.null(footnote_page)) {
-    doc <- flextable::body_add_flextable(doc, footnote_page)
-    doc <- officer::body_add_break(doc)
   }
 
   # This point down from print method directly ----
@@ -74,49 +112,60 @@ as_clindoc <- function(x, apply_defaults = TRUE) {
     doc <- flextable::body_add_flextable(doc, x)
   } else if (pg_method == "custom") {
     x <- prep_pagination_(x)
-    doc <- doc_alternating(doc, x)
+    doc <- doc_alternating_(doc, x)
   }
-
-  class(doc) <- c("clindoc", class(doc))
-  doc
 }
 
 #' Method for printing alternating pages
 #'
 #' @param x a clintable object
 #' @noRd
-doc_alternating <- function(doc, x) {
+doc_alternating_ <- function(doc, x) {
   pag_idx <- x$clinify_config$pagination_idx
-  n <- length(pag_idx)
 
   # Page breaks up to last page
-  for (p in pag_idx[1:n - 1]) {
-    doc <- add_table_(doc, x, p)
-    doc <- officer::body_add_break(doc)
-  }
+  tbs <- unlist(
+    lapply(
+      pag_idx,
+      \(p, x) list(get_table_(x, p), officer::fpar(officer::run_pagebreak())),
+      x = x
+    ),
+    recursive = FALSE
+  )
 
-  # Write last page
-  doc <- add_table_(doc, x, pag_idx[[n]])
+  ctx <- officer::body_append_start_context(doc)
+  for (t in tbs[-length(tbs)]) {
+    officer::write_elements_to_context(context = ctx, t)
+  }
+  doc <- officer::body_append_stop_context(ctx)
   doc
 }
+
 
 #' Method to add table to document
 #'
 #' @param x a clintable object
 #' @param doc An officer word document object
 #' @noRd
-add_table_ <- function(doc, x, p) {
+get_table_ <- function(x, p) {
   tbl <- slice_clintable(x, p$rows, p$cols)
   if (!is.null(p$label)) {
-    tbl <- flextable::add_header_lines(tbl, values = paste(p$label, collapse = "\n"))
+    tbl <- flextable::add_header_lines(
+      tbl,
+      values = paste(p$label, collapse = "\n")
+    )
+    tbl <- getOption("clinify_grouplabel_default")(tbl)
     tbl <- flextable::align(tbl, 1, 1, "left", part = "header")
   }
 
   if (!is.null(p$captions)) {
-    # TODO: Allow formatting on this
-    tbl <- flextable::add_footer_lines(tbl, values = paste(p$captions, collapse = "\n"))
+    tbl <- flextable::add_footer_lines(
+      tbl,
+      values = paste(p$captions, collapse = "\n")
+    )
     # This has to be applied after the footer is added
     tbl <- getOption("clinify_caption_default")(tbl)
   }
-  doc <- flextable::body_add_flextable(doc, tbl)
+
+  tbl
 }
