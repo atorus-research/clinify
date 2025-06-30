@@ -42,7 +42,12 @@ clin_group_pad <- function(
   x <- flextable::padding(x, i = which(splits), padding.top = size + 5)
 
   if (drop) {
-    x <- flextable::delete_columns(x, pad_by)
+    x <- slice_clintable(
+      x,
+      1:nrow(refdat),
+      which(x$col_keys != pad_by),
+      reapply_config = TRUE
+    )
   }
   x
 }
