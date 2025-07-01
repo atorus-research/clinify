@@ -100,11 +100,7 @@ clinify_table_default <- function(x, ...) {
   x <- flextable::hline(
     x,
     part = "header",
-    border = officer::fp_border(
-      color = "black",
-      style = "solid",
-      width = 0.2
-    )
+    border = officer::fp_border()
   )
   # Top horizontal line for the table header.
   x <- flextable::hline_top(x, part = "header")
@@ -167,11 +163,18 @@ clinify_caption_default <- function(x, ...) {
 #' @rdname clinify_defaults
 #' @export
 clinify_grouplabel_default <- function(x, ...) {
-  # Remove
+  # Remove topline above group label
   x <- flextable::hline_top(
     x,
     part = "header",
     border = officer::fp_border(style = "none", width = 0)
+  )
+  # Topline needs to shift down
+  x <- flextable::hline(
+    x,
+    i = 1,
+    part = "header",
+    border = officer::fp_border()
   )
 }
 

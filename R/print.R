@@ -81,9 +81,12 @@ clintable_as_html <- function(
 
   # Apply the default styling
   if (apply_defaults) {
-    if (!is.null(titles)) titles <- getOption("clinify_titles_default")(titles)
-    if (!is.null(footnotes))
+    if (!is.null(titles)) {
+      titles <- getOption("clinify_titles_default")(titles)
+    }
+    if (!is.null(footnotes)) {
       footnotes <- getOption("clinify_footnotes_default")(footnotes)
+    }
     x <- getOption("clinify_table_default")(x)
     if (!is.null(x$clinify_config$footnote_page)) {
       footnote_page <- getOption("clinify_footnotes_default")(footnote_page) |>

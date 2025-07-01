@@ -18,19 +18,34 @@
 #' y <- slice_clintable(x, 20:32, c(1:3, 5:8))
 #' z <- flextable::flextable(mtcars[20:32, c(1:3, 5:8)])
 #' @noRd
-slice_clintable <- function(x, rows, columns, skip_spans = FALSE, reapply_config = FALSE) {
+slice_clintable <- function(
+  x,
+  rows,
+  columns,
+  skip_spans = FALSE,
+  reapply_config = FALSE
+) {
   out <- new_clinpage()
 
   if (reapply_config) {
     out$clinify_config <- x$clinify_config
+    class(out) <- c("clintable", "flextable")
   }
 
   if (!is.null(names(columns))) {
     columns <- eval_select(names(columns), x$body$dataset)
   }
 
-  out$header <- slice_complex_tabpart(x$header, 1:nrow(x$header$dataset), columns)
-  out$footer <- slice_complex_tabpart(x$footer, 1:nrow(x$footer$dataset), columns)
+  out$header <- slice_complex_tabpart(
+    x$header,
+    1:nrow(x$header$dataset),
+    columns
+  )
+  out$footer <- slice_complex_tabpart(
+    x$footer,
+    1:nrow(x$footer$dataset),
+    columns
+  )
   out$body <- slice_complex_tabpart(x$body, rows, columns)
 
   # Pull up the formatting of the very bottom row
@@ -48,7 +63,10 @@ slice_clintable <- function(x, rows, columns, skip_spans = FALSE, reapply_config
   # the horizontal span is too wide for the vector
   if (!skip_spans) {
     for (i in seq_along(dim(out$header$spans$rows)[1])) {
-      out$header$spans$rows[i, ] <- adjust_span_row(out$header$spans$rows[i, ], out$header$dataset[i, ])
+      out$header$spans$rows[i, ] <- adjust_span_row(
+        out$header$spans$rows[i, ],
+        out$header$dataset[i, ]
+      )
     }
   }
 
@@ -148,17 +166,20 @@ slice_complex_tabpart <- function(x, rows, columns) {
   # Styles
   styles <- list(cells = NULL, pars = NULL, text = NULL)
 
-  styles$cells <- lapply(x$styles$cells,
+  styles$cells <- lapply(
+    x$styles$cells,
     slice_fpstruct,
     rows = rows,
     columns = columns
   )
-  styles$pars <- lapply(x$styles$pars,
+  styles$pars <- lapply(
+    x$styles$pars,
     slice_fpstruct,
     rows = rows,
     columns = columns
   )
-  styles$text <- lapply(x$styles$text,
+  styles$text <- lapply(
+    x$styles$text,
     slice_fpstruct,
     rows = rows,
     columns = columns
@@ -239,3 +260,13 @@ reapply_bottom_border <- function(out, x, columns) {
   }
   out
 }
+
+# TODO: This needs to be able to accept column names instead of just indices
+# Saving this for a broader switch later
+# slice_clintable2 <- function(x, rows, columns) {
+#   x <- flextable::delete_columns(x, j = x$col_keys[!(x$col_keys %in% columns)])
+#   out_rows <- 1:nrow(x$body$data)
+#   out_rows <- out_rows[!(out_rows %in% rows)]
+#   x <- flextable::delete_rows(x, i = out_rows)
+#   x
+# }

@@ -122,11 +122,7 @@ clinify_table_default <- function(x, ...) {
   x <- flextable::hline(
     x,
     part = "header",
-    border = officer::fp_border(
-      color = "black",
-      style = "solid",
-      width = 0.2
-    )
+    border = officer::fp_border()
   )
   # Top horizontal line for the table header.
   x <- flextable::hline_top(x, part = "header")
@@ -144,7 +140,7 @@ clinify_table_default <- function(x, ...) {
     drop = FALSE
   ]
 
-  if (nrow(blk_inds > 0)) {
+  if (nrow(blk_inds) > 0) {
     # Loop all except very bottom row
     for (i in 1:nrow(blk_inds)) {
       x <- flextable::hline(
@@ -181,11 +177,18 @@ Note that this option is only necessary because of how captions are applied by `
 
 ```{r, eval=FALSE}
 clinify_grouplabel_default <- function(x, ...) {
-  # Remove top line above group label
+  # Remove topline above group label
   x <- flextable::hline_top(
     x,
     part = "header",
     border = officer::fp_border(style = "none", width = 0)
+  )
+  # Topline needs to shift down
+  x <- flextable::hline(
+    x,
+    i = 1,
+    part = "header",
+    border = officer::fp_border()
   )
 }
 ```
