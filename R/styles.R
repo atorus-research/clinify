@@ -108,7 +108,7 @@ clinify_table_default <- function(x, ...) {
 
   # Remove blank bottoms
   blk_inds <- which(
-    x$header$dataset == "" | x$header$dataset == " ",
+    mapply(trimws, x$header$dataset) == "",
     arr.ind = TRUE
   )
   # Want to ignore bottom row
