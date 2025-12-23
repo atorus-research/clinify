@@ -36,25 +36,17 @@ slice_clintable <- function(
     columns <- eval_select(names(columns), x$body$dataset)
   }
 
-  if (nrow(x$header$dataset) > 0) {
-    out$header <- slice_complex_tabpart(
-      x$header,
-      1:nrow(x$header$dataset),
-      columns
-    )
-  } else {
-    out$header <- x$header
-  }
+  out$header <- slice_complex_tabpart(
+    x$header,
+    1:nrow(x$header$dataset),
+    columns
+  )
 
-  if (nrow(x$footer$dataset) > 0) {
-    out$footer <- slice_complex_tabpart(
-      x$footer,
-      1:nrow(x$footer$dataset),
-      columns
-    )
-  } else {
-    out$footer <- x$footer
-  }
+  out$footer <- slice_complex_tabpart(
+    x$footer,
+    1:nrow(x$footer$dataset),
+    columns
+  )
 
   out$body <- slice_complex_tabpart(x$body, rows, columns)
 
