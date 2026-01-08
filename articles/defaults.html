@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinify</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -232,7 +232,7 @@ look.</p>
 <span></span>
 <span>  <span class="co"># Remove blank bottoms</span></span>
 <span>  <span class="va">blk_inds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span></span>
-<span>    <span class="va">x</span><span class="op">$</span><span class="va">header</span><span class="op">$</span><span class="va">dataset</span> <span class="op">==</span> <span class="st">""</span> <span class="op">|</span> <span class="va">x</span><span class="op">$</span><span class="va">header</span><span class="op">$</span><span class="va">dataset</span> <span class="op">==</span> <span class="st">" "</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/mapply.html" class="external-link">mapply</a></span><span class="op">(</span><span class="va">trimws</span>, <span class="va">x</span><span class="op">$</span><span class="va">header</span><span class="op">$</span><span class="va">dataset</span><span class="op">)</span> <span class="op">==</span> <span class="st">""</span>,</span>
 <span>    arr.ind <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span></span>
 <span>  <span class="co"># Want to ignore bottom row</span></span>
@@ -340,7 +340,7 @@ follows.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

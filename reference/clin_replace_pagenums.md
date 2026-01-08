@@ -1,0 +1,51 @@
+# Replace Table Cells with Word Page Number Fields
+
+This helper function will find placeholder text and replace the fields
+of the flextable object with the appropriate page number fields. The
+function will search for the text `{PAGE}` and replace with the word
+field for current pages, and `{NUMPAGES}` for total pages. This allows
+you to current and total page fields within Word documents. Note that
+this is intended to be used in the defaults for clinify_titles_default
+or clinify_footnotes_default.
+
+## Usage
+
+``` r
+clin_replace_pagenums(x)
+```
+
+## Arguments
+
+- x:
+
+  A clintable object
+
+## Value
+
+A clintable object
+
+## Examples
+
+``` r
+title <- new_title_footnote(
+  list(
+    # We'll add tools to automate paging
+    c("Protocol: CDISCPILOT01", "Page {PAGE} of {NUMPAGES}"),
+    c("Table 14-2.01"),
+    c("Summary of Demographic and Baseline Characteristics")
+  ),
+  "titles"
+)
+
+title <- clin_replace_pagenums(title)
+
+footnote <- new_title_footnote(
+  list(
+    # We'll add tools to automate paging
+    c("Page {PAGE}", "Total Pages: {NUMPAGES}")
+  ),
+  "footnotes"
+)
+
+footnote <- clin_replace_pagenums(footnote)
+```
