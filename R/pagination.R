@@ -494,6 +494,7 @@ clin_auto_page <- function(
 #' @noRd
 auto_page_ <- function(x) {
   group_var <- x$clinify_config$auto_page_var
+  drop <- x$clinify_config$auto_page_drop
   refdat <- x$body$dataset
   refvar <- refdat[, group_var]
 
@@ -505,8 +506,13 @@ auto_page_ <- function(x) {
   keep <- (1:length(refvar))[-dont_keep]
 
   x <- flextable::keep_with_next(x, i = keep)
-  if (x$clinify_config$auto_page_drop) {
-    x <- flextable::delete_columns(x, j = group_var)
+  if (drop) {
+    x <- slice_clintable(
+      x,
+      1:nrow(refdat),
+      which(x$col_keys != group_var),
+      reapply_config = TRUE
+    )
   }
   x
 }

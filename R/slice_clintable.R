@@ -41,11 +41,13 @@ slice_clintable <- function(
     1:nrow(x$header$dataset),
     columns
   )
+
   out$footer <- slice_complex_tabpart(
     x$footer,
     1:nrow(x$footer$dataset),
     columns
   )
+
   out$body <- slice_complex_tabpart(x$body, rows, columns)
 
   # Pull up the formatting of the very bottom row
@@ -61,7 +63,7 @@ slice_clintable <- function(
 
   # If the column headers have spanners, then it's possible
   # the horizontal span is too wide for the vector
-  if (!skip_spans) {
+  if (!skip_spans && nrow(x$header$dataset) > 0) {
     for (i in seq_along(dim(out$header$spans$rows)[1])) {
       out$header$spans$rows[i, ] <- adjust_span_row(
         out$header$spans$rows[i, ],
@@ -148,7 +150,7 @@ slice_complex_tabpart <- function(x, rows, columns) {
     rows <- numeric()
   }
 
-  dataset <- x$dataset[rows, columns]
+  dataset <- x$dataset[rows, columns, drop = FALSE]
 
   # Content element
   content <- slice_chunkset_struct(x$content, rows, columns)

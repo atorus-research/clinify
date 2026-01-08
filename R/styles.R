@@ -108,7 +108,7 @@ clinify_table_default <- function(x, ...) {
 
   # Remove blank bottoms
   blk_inds <- which(
-    x$header$dataset == "" | x$header$dataset == " ",
+    apply(x$header$dataset, c(1, 2), trimws) == "",
     arr.ind = TRUE
   )
   # Want to ignore bottom row
@@ -176,6 +176,13 @@ clinify_grouplabel_default <- function(x, ...) {
     part = "header",
     border = officer::fp_border()
   )
+  # Font and fontsize can get lost if the header is deleted, like
+  # with figures
+  # Set font properties for the table header.
+  x <- flextable::font(x, part = "all", fontname = "Courier New")
+
+  # Set fontsize for both table header and table body.
+  x <- flextable::fontsize(x, part = "all", size = 9)
 }
 
 #' @family Clinify Defaults
