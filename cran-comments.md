@@ -14,15 +14,18 @@ styles, and headers. This release also brings compatibility with
 ## Test environments
 
 * local: macOS, R 4.5.1
+* GitHub Actions: Ubuntu 22.04 and ubuntu-latest (R-release and R-devel),
+  macOS-latest (R-release), windows-latest (R-release)
 
 ## R CMD check results
 
 0 errors | 0 warnings | 1 note
 
-* NOTE: "checking for future file timestamps ... unable to verify current
-  time" is produced because the local check environment has no network access
-  to verify the current time. It does not occur on CRAN and does not indicate
-  a package problem.
+The package checks cleanly (0 errors, 0 warnings) on all of the GitHub Actions
+environments listed above, including R-devel on Linux. The only NOTE appears
+locally: "checking for future file timestamps ... unable to verify current
+time", which is caused by the local check machine having no network access to
+verify the current time; it does not occur on CRAN.
 
 ## Reverse dependencies
 
