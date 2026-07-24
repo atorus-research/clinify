@@ -1,4 +1,4 @@
-# clinify (development version)
+# clinify 0.4.0
 
 - `clin_column_headers()` gained a `merge` argument to control the automatic merging of identical, adjacent header cells. Use `merge = "spanners"` to keep the bottom row of the header out of it, `merge = FALSE` to turn merging off entirely, or a vector of header row numbers for finer control. This lets a header row that legitimately repeats a label across adjacent columns keep those cells separate ([#95](https://github.com/atorus-research/clinify/issues/95))
 - `clin_column_headers()` can now be called with only the `merge` argument and no header text, which adjusts the merging of headers already in place - including headers built from column labels ([#95](https://github.com/atorus-research/clinify/issues/95))
