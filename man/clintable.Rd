@@ -15,8 +15,9 @@ clintable(x, page_by = NULL, group_by = NULL, use_labels = TRUE, ...)
 as a label above the table headers}
 
 \item{use_labels}{Use variable labels as column headers. Nested levels can be
-achieved using the string "||" as a delimitter. Horizontal and vertical levels
-using identical words will be merged.}
+achieved using the string "||" as a delimitter. Horizontally adjacent cells
+using identical words will be merged, which can be adjusted afterwards using
+the \code{merge} argument of \code{clin_column_headers()}.}
 
 \item{...}{Parameters to pass to \code{flextable::flextable()}}
 }

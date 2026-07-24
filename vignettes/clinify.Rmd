@@ -206,6 +206,21 @@ The first parameter of `clin_column_headers()` will be the `clintable` object fo
 
 When using spanning headers, you're also typically using cell merging so that a single string of text spans over multiple columns. To accomplish this, repeat the text that you want to merge and ensure that those elements are placed in the same row. Consider the example above. For the Sepal variable, we have two spanning headers. One for "flowers", and one for "Sepal". These cells will be merged, and the bottom row contains "Length" and "Width" separately.
 
+Sometimes a header row repeats a label across adjacent columns without those columns being one spanner - a shift table where several columns each sit under their own treatment arm but share a "Baseline" sub-label, for example. Merging those cells would be wrong, so the `merge` argument lets you say which header rows should have their identical cells merged. `merge = "spanners"` covers the common case by leaving the bottom row of the header - the one holding the individual column labels - alone.
+
+```{r}
+clintable(iris) |>
+  clin_column_headers(
+    Sepal.Length = c("Flowers", "Sepal", "Value"),
+    Sepal.Width = c("Flowers", "Sepal", "Value"),
+    Petal.Length = c("Petal", "Value"),
+    Petal.Width = c("Petal", "Value"),
+    merge = "spanners"
+  )
+```
+
+Merging can also be turned off entirely with `merge = FALSE`, or aimed at specific header rows using ordinary R subscripts, numbered from the top down - `merge = 1:2` for the top two rows, or `merge = -3` for everything except the third. Since `merge` works a row at a time, a row that needs some of its repeated cells merged but not others should be left out of `merge` and spanned with `flextable::merge_at()` instead.
+
 Another common way you may want to apply headers is by using your variable labels. By default, clintable will respect this. Furthermore, the same spanning can be achieved as well. Let's consider another example:
 
 ```{r}
@@ -220,7 +235,20 @@ clintable(iris2) |>
   align(align = "center", part = "body")
 ```
 
-The underlying logic of this example is exactly the same as using `clin_column_headers()`, and in fact `clin_column_headers()` is actually called by default. The difference is that here, to separate levels we use the delimiter `||`. Note in this example how the spanning variable have also changed so that `Flower` stretches over all four Petal and Sepal columns. 
+The underlying logic of this example is exactly the same as using `clin_column_headers()`, and in fact the same header building machinery is applied by default. The difference is that here, to separate levels we use the delimiter `||`. Note in this example how the spanning variable have also changed so that `Flower` stretches over all four Petal and Sepal columns. 
+
+Headers built this way can have their merging adjusted too. Call `clin_column_headers()` with nothing but the `merge` argument and the header text coming from the labels is left as it is:
+
+```{r}
+iris3 <- iris
+attr(iris3$Sepal.Length, "label") <- "Flower||Sepal||Value"
+attr(iris3$Sepal.Width, "label") <- "Flower||Sepal||Value"
+attr(iris3$Petal.Length, "label") <- "Flower||Petal||Value"
+attr(iris3$Petal.Width, "label") <- "Flower||Petal||Value"
+
+clintable(iris3) |>
+  clin_column_headers(merge = "spanners")
+```
 
 Note that after headers are applied, additional styling can be done. In this case, we use the `flextable::align()` function to change the alignment on both the table body and column headers to center. Note that default styles are applied when the table is written out or printed, so these might potentially override some settings depending on how those functions are applied.
 

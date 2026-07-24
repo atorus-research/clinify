@@ -4,7 +4,7 @@
 \alias{clin_column_headers}
 \title{Set the column headers of the output clintable}
 \usage{
-clin_column_headers(x, ...)
+clin_column_headers(x, ..., merge = TRUE)
 }
 \arguments{
 \item{x}{A clintable object}
@@ -12,6 +12,21 @@ clin_column_headers(x, ...)
 \item{...}{Named arguments providing the column header text.
 Separate levels of the header are determined using separate
 elements of a character vector.}
+
+\item{merge}{Controls the automatic merging of identical, adjacent
+header cells, which is what forms spanners. \code{TRUE} (the default) or
+\code{"all"} merges every header row, \code{FALSE} or \code{"none"} merges none of
+them, and \code{"spanners"} merges every row except the bottom one - the
+row holding the individual column labels. Merging can also be
+limited to specific header rows, numbered from the top down, using
+ordinary R subscripts: \code{merge = 1:2} merges the top two rows only,
+\code{merge = -3} merges every row except the third, and a logical vector
+as long as the header is deep toggles each row individually. Only
+the header is ever merged - the table body is left alone.
+
+One thing to know: a custom \code{clinify_table_default()} that calls
+\code{flextable::merge_h()} on the header will merge it again when the
+table renders, overriding whatever is set here.}
 }
 \value{
 A clintable object
@@ -28,13 +43,25 @@ one or two, the columns with less levels to the header will bind
 to the bottom. So a column with two levels will apply to the
 second and third row, and a column with one level with apply
 the bottom row. Spanners are determined using cells of the same
-text value, where horizontal and vertical merging is performed.
+text value, where horizontally adjacent cells holding the same
+text are merged. Use the \code{merge} argument when a header row
+legitimately repeats a label across adjacent columns and those
+cells should be left alone. \code{merge} works a row at a time, so if a
+single row needs some of its repeated cells merged but not others,
+leave that row out of \code{merge} and span the intended cells with
+\code{flextable::merge_at()}.
 }
 \details{
 The same result can be achieved using column labels on the
 input dataframe to the clintable. If labels are present,
 header levels will be separated using the delimitter "||" within
-the label string.
+the label string. Headers built that way can have their merging
+adjusted by calling \code{clin_column_headers()} with no header text and
+only the \code{merge} argument, which leaves the header text as it is.
+Called that way, any merging already on the header is cleared first -
+including merges applied by hand with \code{flextable::merge_at()} or
+\code{flextable::merge_v()} - so the rows named in \code{merge} end up being the
+only merged rows.
 }
 \examples{
 
@@ -45,5 +72,25 @@ clintable(iris) |>
     Petal.Length = c("Petal", "Length"),
     Petal.Width = c("Petal", "Width")
   )
+
+# Keep the repeated bottom row cells separate, but still span
+# "Flowers" and "Petal" across the columns above them
+clintable(iris) |>
+  clin_column_headers(
+    Sepal.Length = c("Flowers", "Sepal", "Value"),
+    Sepal.Width = c("Flowers", "Sepal", "Value"),
+    Petal.Length = c("Petal", "Value"),
+    Petal.Width = c("Petal", "Value"),
+    merge = "spanners"
+  )
+
+# Headers coming from column labels can have their merging adjusted
+# without restating the header text
+iris2 <- iris
+attr(iris2$Sepal.Length, "label") <- "Flowers||Value"
+attr(iris2$Sepal.Width, "label") <- "Flowers||Value"
+
+clintable(iris2) |>
+  clin_column_headers(merge = 1)
 
 }
