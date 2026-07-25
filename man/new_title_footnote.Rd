@@ -4,12 +4,20 @@
 \alias{new_title_footnote}
 \title{Create a new title or footnote flextable}
 \usage{
-new_title_footnote(x, sect = c("titles", "footnotes", "footnote_page"))
+new_title_footnote(
+  x,
+  sect = c("titles", "footnotes", "footnote_page"),
+  align = NULL
+)
 }
 \arguments{
 \item{x}{a list of character vectors, no more than 3 elements to a vector.}
 
 \item{sect}{Either "titles" or "footnotes"}
+
+\item{align}{Where to place each line - \code{"left"}, \code{"center"}, \code{"right"},
+\code{"split"}, or \code{NA} for the default. One value per element of \code{x}, or a
+single value for all of them.}
 }
 \value{
 A flextable object

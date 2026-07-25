@@ -94,6 +94,11 @@ clintable_as_html <- function(
     }
   }
 
+  # Outside the block above, so the configured alignment is honored even when
+  # the default styling is skipped, and after it so that it holds whatever a
+  # styling function did to the table properties
+  x <- table_align_(x)
+
   # Keep with next paging
   if (!is.null(x$clinify_config$auto_page_var)) {
     x <- auto_page_(x)

@@ -101,6 +101,9 @@ as_clindoc <- function(x) {
 add_clintable_ <- function(doc, x) {
   pg_method <- x$clinify_config$pagination_method
   x <- getOption("clinify_table_default")(x)
+  # After the styling function, so that an explicitly configured alignment
+  # holds even if that function rebuilt the table properties
+  x <- table_align_(x)
 
   # Keep with next paging
   if (!is.null(x$clinify_config$auto_page_var)) {

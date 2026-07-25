@@ -1,3 +1,11 @@
+# clinify 0.4.0
+
+- Fixed the default styling functions discarding a table's other properties when they fixed its layout. `flextable::set_table_properties()` rebuilds the whole property list, so a table's alignment on the page, its width, its Word accessibility fields and its `opts_word`/`opts_html` settings were all quietly reset at render time ([#98](https://github.com/atorus-research/clinify/issues/98))
+- Added `clin_table_align()` to set how a table sits across the page. It is applied after the default styling function, so it holds even when an organisation's own `clinify_table_default()` rebuilds the table properties ([#98](https://github.com/atorus-research/clinify/issues/98))
+- `clin_add_titles()`, `clin_add_footnotes()`, `clin_add_footnote_page()` and `new_title_footnote()` gained an `align` argument to place each line, so a single left aligned title no longer needs its text passed twice ([#98](https://github.com/atorus-research/clinify/issues/98))
+- A title or footnote line with no elements now gives a clear error instead of failing inside `data.frame()`
+- The `clinify_table_default()` in `defaults_template.R` and in `vignette("defaults")` no longer rebuild the table properties either. Organisations that copied the template will want to pick up the change
+
 # clinify 0.3.1
 
 - Updated for compatibility with {officer} (>= 0.7.0); the minimum required {officer} version is now 0.7.2

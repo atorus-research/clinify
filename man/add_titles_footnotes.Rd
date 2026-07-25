@@ -6,11 +6,11 @@
 \alias{clin_add_footnote_page}
 \title{Add titles, footnotes, or a footnote page to a clintable or clindoc}
 \usage{
-clin_add_titles(x, ls = NULL, ft = NULL)
+clin_add_titles(x, ls = NULL, ft = NULL, align = NULL)
 
-clin_add_footnotes(x, ls = NULL, ft = NULL)
+clin_add_footnotes(x, ls = NULL, ft = NULL, align = NULL)
 
-clin_add_footnote_page(x, ls = NULL, ft = NULL)
+clin_add_footnote_page(x, ls = NULL, ft = NULL, align = NULL)
 }
 \arguments{
 \item{x}{a clintable object}
@@ -18,6 +18,11 @@ clin_add_footnote_page(x, ls = NULL, ft = NULL)
 \item{ls}{a list of character vectors, no more than 2 elements to a vector}
 
 \item{ft}{A flextable object to use as the header}
+
+\item{align}{Where to place each line, as a character vector holding one
+value per element of \code{ls} (or a single value for all of them). Values are
+\code{"left"}, \code{"center"}, \code{"right"}, \code{"split"}, or \code{NA} to keep the default for
+that line. Cannot be used together with \code{ft}.}
 }
 \value{
 A clintable object
@@ -32,8 +37,12 @@ When using the \code{ls} parameter, each element of the list can contain no more
 elements within each character vector. In a title, a single element will align center.
 In a footnote, a single element will align to the left. For both titles and footnotes,
 two elements will align split down the middle, with the left side element aligning left
-and the right side element aligning right. In a title, a single left aligned element,
-provide a 2 element character vector with duplicate values.
+and the right side element aligning right.
+
+Use \code{align} to place a line somewhere other than its default. A line holding
+a single element can go \code{"left"}, \code{"center"}, or \code{"right"}; a line holding two
+elements is split down the middle by construction, which \code{align} spells
+\code{"split"}. \code{NA} leaves a line where it would have landed anyway.
 }
 \examples{
 clintable(mtcars) |>
@@ -42,6 +51,15 @@ clintable(mtcars) |>
       c("Left", "Right"),
       c("Just the middle")
     )
+  ) |>
+  clin_add_titles(
+    list(
+      c("Protocol: ABC", "Page {PAGE} of {NUMPAGES}"),
+      "Table 14-2.01",
+      "Summary of Demographic and Baseline Characteristics"
+    ),
+    # the title line stays centered, the one below it goes left
+    align = c(NA, NA, "left")
   ) |>
   clin_add_footnotes(
     list(

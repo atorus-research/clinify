@@ -46,10 +46,7 @@ clinify_titles_default <- function(x, ...) {
   x <- flextable::line_spacing(x, space = 1, part = "all")
   # Setup the cell padding.
   x <- flextable::padding(x, part = "all", padding.bottom = 0, padding.top = 0)
-  x <- flextable::set_table_properties(
-    x,
-    layout = "fixed"
-  )
+  x <- fix_table_layout_(x)
   # Automatically find and update a pagenum string
   x <- clin_replace_pagenums(x)
   x
@@ -81,10 +78,7 @@ clinify_footnotes_default <- function(x, ...) {
   # Setup the cell padding.
   x <- flextable::padding(x, part = "all", padding.bottom = 0, padding.top = 0)
 
-  x <- flextable::set_table_properties(
-    x,
-    layout = "fixed"
-  )
+  x <- fix_table_layout_(x)
   # Automatically find and update a pagenum string
   x <- clin_replace_pagenums(x)
   x
@@ -140,10 +134,7 @@ clinify_table_default <- function(x, ...) {
   x <- flextable::fontsize(x, part = "all", size = 9)
 
   # Set table's layout.
-  x <- flextable::set_table_properties(
-    x,
-    layout = "fixed"
-  )
+  x <- fix_table_layout_(x)
 
   x
 }
@@ -223,4 +214,28 @@ clin_default_table_width <- function() {
 
   # Table width is page width - margins.
   sect$page_size$width - (sect$page_margins$left + sect$page_margins$right)
+}
+
+#' Fix the table layout without disturbing the other table properties
+#'
+#' `flextable::set_table_properties()` rebuilds the whole property list, so
+#' anything the caller had set and does not pass back in - the table's
+#' alignment on the page, its width, the Word accessibility fields - is
+#' quietly replaced with a default. A fixed layout is all clinify needs, so
+#' the layout is all it sets, leaving the rest of what the user asked for
+#' in place.
+#'
+#' @param x A flextable object
+#'
+#' @return A flextable object with a fixed layout
+#'
+#' @noRd
+fix_table_layout_ <- function(x) {
+  if (is.null(x$properties)) {
+    # Nothing to preserve, so let flextable build a complete property list
+    return(flextable::set_table_properties(x, layout = "fixed"))
+  }
+
+  x$properties$layout <- "fixed"
+  x
 }
