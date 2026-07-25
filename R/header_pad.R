@@ -4,31 +4,35 @@
 #' here for where they sit rather than for the padding that produces them,
 #' because the mapping between the two is not obvious:
 #'
-#' - `above` is the space over the column labels. A blank row above the header
-#'   is a common house convention, and padding is how it is produced.
-#' - `label_to_rule` is the space between the column labels and the rule drawn
-#'   under them. A cell's bottom border sits at the bottom edge of the cell,
-#'   *below* its bottom padding, so padding under the header pushes the rule
-#'   away from the labels and toward the body. It does not open space beneath
-#'   the rule.
+#' - `above` is the space over each header row. On a single row header that is
+#'   the buffer above the column labels; on a spanned header it also opens the
+#'   space between the levels, which is what a blank row above the header
+#'   normally looks like.
+#' - `below` is the space under each header row. The one that matters most is
+#'   the bottom row's, because a cell's bottom border sits at the bottom edge
+#'   of the cell, *below* its padding - so this is what decides how far the
+#'   rule is drawn from the column labels. It does not open space beneath the
+#'   rule.
 #' - `rule_to_body` is the space between that rule and the first row of the
 #'   table body, which is the one that has to come from the body side.
 #'
-#' clinify starts every table with 9 points above the top header row and 9
-#' below the bottom one. Whatever is given here replaces those.
+#' `above` and `below` apply to every row of the header, which is the usual
+#' convention and matches `flextable::padding(part = "header")`. To space a
+#' single header row differently, reach for `flextable::padding()` with an `i`
+#' directly.
 #'
 #' `rule_to_body` is applied to the first row of every page, so a table split
-#' over pages keeps the same gap under the rule throughout. If a group label
-#' is added above the header, `above` stays with the column labels, which
-#' leaves it as the space between the label and the labels beneath it.
+#' over pages keeps the same gap under the rule throughout. If a group label is
+#' added above the header it keeps its own spacing, since it is put there as
+#' the table renders.
 #'
 #' Spacing is given in points, which is what flextable measures cell padding
-#' in.
+#' in. Whatever is set here replaces the header padding clinify starts with.
 #'
 #' @param x A clintable object
-#' @param above Space above the column labels, in points
-#' @param label_to_rule Space between the column labels and the rule under
-#'   them, in points
+#' @param above Space above each header row, in points
+#' @param below Space below each header row, in points. The bottom row's is
+#'   what sets how far the rule sits from the column labels
 #' @param rule_to_body Space between that rule and the first body row, in
 #'   points
 #'
@@ -36,28 +40,26 @@
 #' @export
 #'
 #' @examples
-#' # A blank row's worth of space above the labels, the rule tight underneath
-#' # them, and a little air before the body starts
+#' # A blank row's worth of space around each header row, the rule close under
+#' # the labels, and a little air before the body starts
 #' clintable(mtcars) |>
-#'   clin_header_pad(above = 18, label_to_rule = 4, rule_to_body = 6)
+#'   clin_header_pad(above = 18, below = 4, rule_to_body = 6)
 clin_header_pad <- function(
   x,
   above = NULL,
-  label_to_rule = NULL,
+  below = NULL,
   rule_to_body = NULL
 ) {
   stopifnot(inherits(x, "clintable"))
 
   pad <- list(
     above = above,
-    label_to_rule = label_to_rule,
+    below = below,
     rule_to_body = rule_to_body
   )
 
   if (all(vapply(pad, is.null, TRUE))) {
-    stop(
-      "At least one of above, label_to_rule, or rule_to_body needs a value"
-    )
+    stop("At least one of above, below, or rule_to_body needs a value")
   }
 
   for (edge in names(pad)) {
@@ -100,8 +102,10 @@ check_header_pad_ <- function(value, edge) {
 
 #' Apply the header spacing that belongs to the header
 #'
-#' The header travels onto every page, so this only needs doing once, before
-#' the table is sliced.
+#' Every header row is spaced the same, so a spanned header keeps the space
+#' between its levels rather than only at the outside of the block. The header
+#' travels onto every page, so this only needs doing once, before the table is
+#' sliced.
 #'
 #' @param x A clintable object
 #'
@@ -115,28 +119,16 @@ apply_header_pad_ <- function(x) {
     return(x)
   }
 
-  rows <- flextable::nrow_part(x, part = "header")
-
-  if (rows < 1) {
+  if (flextable::nrow_part(x, part = "header") < 1) {
     return(x)
   }
 
   if (!is.null(pad$above)) {
-    x <- flextable::padding(
-      x,
-      i = 1,
-      part = "header",
-      padding.top = pad$above
-    )
+    x <- flextable::padding(x, part = "header", padding.top = pad$above)
   }
 
-  if (!is.null(pad$label_to_rule)) {
-    x <- flextable::padding(
-      x,
-      i = rows,
-      part = "header",
-      padding.bottom = pad$label_to_rule
-    )
+  if (!is.null(pad$below)) {
+    x <- flextable::padding(x, part = "header", padding.bottom = pad$below)
   }
 
   x

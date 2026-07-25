@@ -201,10 +201,10 @@ Three pieces of vertical space shape the header block, and `clin_header_pad()` n
 
 ```{r, eval=FALSE}
 clintable(dat2) |>
-  clin_header_pad(above = 18, label_to_rule = 4, rule_to_body = 6)
+  clin_header_pad(above = 18, below = 4, rule_to_body = 6)
 ```
 
-`above` is the room over the column labels, which is how a blank row above the header is produced. `label_to_rule` is the room between the labels and the rule drawn under them, and `rule_to_body` is the room between that rule and the first body row. The last two are not interchangeable: a cell's bottom border is drawn at the bottom edge of the cell, below its padding, so padding under the header pushes the rule away from the labels and toward the body rather than opening space beneath it. Space under the rule has to come from the body side, which is what `rule_to_body` does - on the first row of every page, so a table split over pages keeps the same gap throughout.
+`above` and `below` are the room over and under each header row - on a single row header that is the buffer above the column labels and the distance down to the rule, and on a spanned header it also opens the space between the levels. `rule_to_body` is the room between that rule and the first body row. `below` and `rule_to_body` are not interchangeable: a cell's bottom border is drawn at the bottom edge of the cell, below its padding, so padding under the header pushes the rule away from the labels and toward the body rather than opening space beneath it. Space under the rule has to come from the body side, which is what `rule_to_body` does - on the first row of every page, so a table split over pages keeps the same gap throughout.
 
 Where a table sits across the page is `clin_table_align()`. {flextable} centres tables, and regulatory outputs are usually flush left.
 

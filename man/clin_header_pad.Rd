@@ -4,15 +4,15 @@
 \alias{clin_header_pad}
 \title{Set the spacing around a table's column headers}
 \usage{
-clin_header_pad(x, above = NULL, label_to_rule = NULL, rule_to_body = NULL)
+clin_header_pad(x, above = NULL, below = NULL, rule_to_body = NULL)
 }
 \arguments{
 \item{x}{A clintable object}
 
-\item{above}{Space above the column labels, in points}
+\item{above}{Space above each header row, in points}
 
-\item{label_to_rule}{Space between the column labels and the rule under
-them, in points}
+\item{below}{Space below each header row, in points. The bottom row's is
+what sets how far the rule sits from the column labels}
 
 \item{rule_to_body}{Space between that rule and the first body row, in
 points}
@@ -27,31 +27,35 @@ because the mapping between the two is not obvious:
 }
 \details{
 \itemize{
-\item \code{above} is the space over the column labels. A blank row above the header
-is a common house convention, and padding is how it is produced.
-\item \code{label_to_rule} is the space between the column labels and the rule drawn
-under them. A cell's bottom border sits at the bottom edge of the cell,
-\emph{below} its bottom padding, so padding under the header pushes the rule
-away from the labels and toward the body. It does not open space beneath
-the rule.
+\item \code{above} is the space over each header row. On a single row header that is
+the buffer above the column labels; on a spanned header it also opens the
+space between the levels, which is what a blank row above the header
+normally looks like.
+\item \code{below} is the space under each header row. The one that matters most is
+the bottom row's, because a cell's bottom border sits at the bottom edge
+of the cell, \emph{below} its padding - so this is what decides how far the
+rule is drawn from the column labels. It does not open space beneath the
+rule.
 \item \code{rule_to_body} is the space between that rule and the first row of the
 table body, which is the one that has to come from the body side.
 }
 
-clinify starts every table with 9 points above the top header row and 9
-below the bottom one. Whatever is given here replaces those.
+\code{above} and \code{below} apply to every row of the header, which is the usual
+convention and matches \code{flextable::padding(part = "header")}. To space a
+single header row differently, reach for \code{flextable::padding()} with an \code{i}
+directly.
 
 \code{rule_to_body} is applied to the first row of every page, so a table split
-over pages keeps the same gap under the rule throughout. If a group label
-is added above the header, \code{above} stays with the column labels, which
-leaves it as the space between the label and the labels beneath it.
+over pages keeps the same gap under the rule throughout. If a group label is
+added above the header it keeps its own spacing, since it is put there as
+the table renders.
 
 Spacing is given in points, which is what flextable measures cell padding
-in.
+in. Whatever is set here replaces the header padding clinify starts with.
 }
 \examples{
-# A blank row's worth of space above the labels, the rule tight underneath
-# them, and a little air before the body starts
+# A blank row's worth of space around each header row, the rule close under
+# the labels, and a little air before the body starts
 clintable(mtcars) |>
-  clin_header_pad(above = 18, label_to_rule = 4, rule_to_body = 6)
+  clin_header_pad(above = 18, below = 4, rule_to_body = 6)
 }

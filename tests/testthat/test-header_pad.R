@@ -47,12 +47,12 @@ test_that("clin_header_pad records what it was given", {
   pad <- clin_header_pad(
     ct,
     above = 18,
-    label_to_rule = 4,
+    below = 4,
     rule_to_body = 6
   )$clinify_config$header_pad
 
   expect_equal(pad$above, 18)
-  expect_equal(pad$label_to_rule, 4)
+  expect_equal(pad$below, 4)
   expect_equal(pad$rule_to_body, 6)
 
   # Only what was asked for
@@ -65,12 +65,12 @@ test_that("clin_header_pad records what it was given", {
 test_that("clin_header_pad is validated", {
   ct <- clintable(head(mtcars[, 1:2], 3))
 
-  expect_error(clin_header_pad(ct), "At least one of above, label_to_rule")
+  expect_error(clin_header_pad(ct), "At least one of above, below")
   expect_error(clin_header_pad(ct, above = "x"), "single number of points")
   expect_error(clin_header_pad(ct, above = -1), "single number of points")
   expect_error(clin_header_pad(ct, above = c(1, 2)), "single number of points")
   expect_error(clin_header_pad(ct, above = NA), "single number of points")
-  expect_error(clin_header_pad(ct, label_to_rule = -1), "`label_to_rule` must")
+  expect_error(clin_header_pad(ct, below = -1), "`below` must")
   expect_error(clin_header_pad(ct, rule_to_body = -1), "`rule_to_body` must")
   expect_error(clin_header_pad(mtcars, above = 1), "inherits")
 
@@ -90,7 +90,7 @@ test_that("Header spacing lands where it is named", {
   expect_equal(stock[[1]]$bottom, 9)
 
   padded <- docx_spacing(
-    clin_header_pad(ct, above = 18, label_to_rule = 4, rule_to_body = 6)
+    clin_header_pad(ct, above = 18, below = 4, rule_to_body = 6)
   )
 
   # Above the labels, and between the labels and the rule
@@ -105,12 +105,12 @@ test_that("Header spacing lands where it is named", {
 })
 
 test_that("The rule sits below the header's bottom padding", {
-  # This is the whole reason the three pieces are named for where they sit:
-  # padding under the header moves the rule away from the labels rather than
-  # opening space beneath it, so the two are not interchangeable
+  # This is the whole reason the pieces are named for where they sit: padding
+  # under the header moves the rule away from the labels rather than opening
+  # space beneath it, so the two are not interchangeable
   ct <- clintable(head(mtcars[, 1:2], 3))
 
-  wide_label_gap <- docx_spacing(clin_header_pad(ct, label_to_rule = 20))
+  wide_label_gap <- docx_spacing(clin_header_pad(ct, below = 20))
   wide_body_gap <- docx_spacing(clin_header_pad(ct, rule_to_body = 20))
 
   # Asking for room under the labels puts it on the header, above the rule
@@ -125,6 +125,45 @@ test_that("The rule sits below the header's bottom padding", {
   # that decides how far from the labels it is drawn
   expect_equal(wide_label_gap[[1]]$rule, "single")
   expect_equal(wide_body_gap[[1]]$rule, "single")
+})
+
+test_that("Every header row is spaced, not just the outside of the block", {
+  # A spanned header has to keep the space between its levels. Padding only the
+  # top and bottom of the block renders it shorter than the reference, which is
+  # what the CDISC pilot hit on its multi row header tables (#97)
+  dat <- data.frame(pid = "01", sid = "701", a = "1", b = "2")
+
+  ct <- clintable(dat, use_labels = FALSE) |>
+    clin_column_headers(
+      pid = c("", "Pooled", "Id"),
+      sid = c("", "Site", "Id"),
+      a = c("Treatment", "ITT", "n"),
+      b = c("Treatment", "Eff", "n")
+    )
+
+  rows <- docx_spacing(clin_header_pad(ct, above = 18, below = 4))
+
+  # All three header rows, not only the first and last
+  for (i in 1:3) {
+    expect_equal(rows[[i]]$top, 18, label = paste("header row", i, "top"))
+    expect_equal(rows[[i]]$bottom, 4, label = paste("header row", i, "bottom"))
+  }
+
+  # Which is exactly what padding the header part by hand produces - this is
+  # the call the pilot had to keep using
+  by_hand <- function(x, ...) {
+    x <- clinify_table_default(x)
+    flextable::padding(x, padding.top = 18, padding.bottom = 4, part = "header")
+  }
+  reference <- withr::with_options(
+    list(clinify_table_default = by_hand),
+    docx_spacing(ct)
+  )
+
+  expect_equal(
+    lapply(rows[1:3], `[`, c("top", "bottom")),
+    lapply(reference[1:3], `[`, c("top", "bottom"))
+  )
 })
 
 test_that("The gap under the rule reaches the first row of every page", {
@@ -164,7 +203,7 @@ test_that("A group label leaves the buffer with the column labels", {
 
 test_that("The HTML preview survives configured header spacing", {
   ct <- clintable(head(mtcars[, 1:2], 3)) |>
-    clin_header_pad(above = 18, label_to_rule = 4, rule_to_body = 6)
+    clin_header_pad(above = 18, below = 4, rule_to_body = 6)
   expect_no_error(clintable_as_html(ct))
 
   dat <- data.frame(pg = rep(1:2, each = 2), v1 = as.character(1:4))
