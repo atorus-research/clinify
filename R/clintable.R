@@ -57,8 +57,9 @@ as_clintable <- function(x, page_by = NULL, group_by = NULL) {
 #' @param group_by A character vector of variable names which will be used for grouping and attached
 #'   as a label above the table headers
 #' @param use_labels Use variable labels as column headers. Nested levels can be
-#'   achieved using the string "||" as a delimitter. Horizontal and vertical levels
-#'   using identical words will be merged.
+#'   achieved using the string "||" as a delimitter. Horizontally adjacent cells
+#'   using identical words will be merged, which can be adjusted afterwards using
+#'   the `merge` argument of `clin_column_headers()`.
 #' @param ... Parameters to pass to `flextable::flextable()`
 #'
 #' @return A clintable object

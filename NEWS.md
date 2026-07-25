@@ -1,3 +1,12 @@
+# clinify 0.4.0
+
+- `clin_column_headers()` gained a `merge` argument to control the automatic merging of identical, adjacent header cells. Use `merge = "spanners"` to keep the bottom row of the header out of it, `merge = FALSE` to turn merging off entirely, or a vector of header row numbers for finer control. This lets a header row that legitimately repeats a label across adjacent columns keep those cells separate ([#95](https://github.com/atorus-research/clinify/issues/95))
+- `clin_column_headers()` can now be called with only the `merge` argument and no header text, which adjusts the merging of headers already in place - including headers built from column labels ([#95](https://github.com/atorus-research/clinify/issues/95))
+- The `clinify_table_default()` in `defaults_template.R` no longer merges header cells horizontally, which would have overridden the `merge` argument of `clin_column_headers()` at render time
+- Because `merge` is now a parameter of `clin_column_headers()`, a column named `merge` can no longer be given a header through `...`. Use column labels for that column instead. This is a breaking change.
+- Fixed merged cells being left in an invalid state when a table is paginated column wise with `clin_alt_pages()`. Merges are now recalculated for every row of the header, for the table body, and for merges running vertically, where previously only the top header row was corrected. Symptoms included header text disappearing from later pages, cells claiming to span more columns than the page has, and `write_clindoc()` failing with "missing value where TRUE/FALSE needed" when a page ended in a split spanner
+- Fixed a single column table losing all but the top level of a multi level column header
+
 # clinify 0.3.1
 
 - Updated for compatibility with {officer} (>= 0.7.0); the minimum required {officer} version is now 0.7.2

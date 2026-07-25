@@ -8,7 +8,6 @@
 #' @param x A clintable or flextable object
 #' @param rows Subset of rows to extract
 #' @param columns Subset of columns to extract
-#' @param skip_spans Don't readjust spanners in the header
 #' @param reapply_config Carry the clinify config to the sliced page
 #'
 #' @return A clinpage object
@@ -22,7 +21,6 @@ slice_clintable <- function(
   x,
   rows,
   columns,
-  skip_spans = FALSE,
   reapply_config = FALSE
 ) {
   out <- new_clinpage()
@@ -61,77 +59,77 @@ slice_clintable <- function(
   out$blanks <- x$blanks
   out$properties <- x$properties
 
-  # If the column headers have spanners, then it's possible
-  # the horizontal span is too wide for the vector
-  if (!skip_spans && nrow(x$header$dataset) > 0) {
-    for (i in seq_along(dim(out$header$spans$rows)[1])) {
-      out$header$spans$rows[i, ] <- adjust_span_row(
-        out$header$spans$rows[i, ],
-        out$header$dataset[i, ]
-      )
-    }
+  out
+}
+
+#' Subset the merges of a table part
+#'
+#' Merged cells are stored as a count on the first cell of the merge and a
+#' zero on each cell it covers, so taking a subset of rows or columns out of
+#' the middle of a merge leaves counts that no longer match what is there -
+#' too wide, or a covered cell whose count has been dropped along with the
+#' cell that carried it. Working out which merge each cell belongs to first
+#' and then counting the cells that survive gives the merges the subset
+#' should have.
+#'
+#' Horizontal merges are the ones a column subset disturbs, and vertical
+#' merges are the ones a row subset disturbs.
+#'
+#' @param spans The `spans` element of a table part
+#' @param rows Subset of rows
+#' @param columns Subset of cols
+#'
+#' @return A `spans` list holding the merges of the subset
+#'
+#' @noRd
+slice_spans <- function(spans, rows, columns) {
+  out <- list(
+    rows = matrix(1L, nrow = length(rows), ncol = length(columns)),
+    columns = matrix(1L, nrow = length(rows), ncol = length(columns))
+  )
+
+  # Carry the numeric type of the source table forward
+  storage.mode(out$rows) <- storage.mode(spans$rows)
+  storage.mode(out$columns) <- storage.mode(spans$columns)
+
+  for (i in seq_along(rows)) {
+    out$rows[i, ] <- slice_span_vec(spans$rows[rows[i], ], columns)
+  }
+
+  for (j in seq_along(columns)) {
+    out$columns[, j] <- slice_span_vec(spans$columns[, columns[j]], rows)
   }
 
   out
 }
 
-#' Adjust Row Spanning Over Page Breaks
+#' Subset one row or column of merges
 #'
-#' This function modifies a vector `v` representing row spans in a table. It ensures that
-#' spans are correctly adjusted over page breaks by identifying cases where data values exist (`d`),
-#' but spans are incorrectly set to 0. The function updates such cases to maintain consistency.
+#' @param v Merge counts along one row or column of a table part
+#' @param keep The positions being kept
 #'
-#' @param v A numeric vector representing row spans.
-#' @param d A character vector representing the data values in the table.
-#' @return A modified numeric vector with adjusted row spans.
+#' @return The merge counts of the kept positions
+#'
 #' @examples
-#' v <- c(0, 0, 2, 0, 0)
-#' d <- c("A", "A", "B", "B", "B")
-#' adjust_span_row(v, d) # Corrects the spans accordingly
+#' # A blank pair of cells followed by a spanner over four
+#' slice_span_vec(c(2, 0, 4, 0, 0, 0), c(1, 2, 3)) # 2 0 1
 #' @noRd
-adjust_span_row <- function(v, d) {
-  # Find and update spans over page breaks by finding
-  # data values populated but spans are set as 0
-  not_empty <- !(d %in% c(" ", ""))
-  if (any(not_empty)) {
-    ne_ind <- which(not_empty)
-
-    indices <- which(diff(ne_ind) == 1) # Find indices where the difference is 1
-    unique_starts <- indices[which(diff(indices) != 1)]
-
-    # Include the first element if it starts a sequence
-    if (length(indices) > 0 && indices[1] == 1) {
-      unique_starts <- c(ne_ind[1], unique_starts)
-    }
-
-    for (i in unique_starts) {
-      # Set it to 2 and this will correct in the next step
-      if (v[i] == 0) v[i] <- 2
-    }
+slice_span_vec <- function(v, keep) {
+  if (!length(keep)) {
+    return(v[0])
   }
 
-  for (i in seq_along(v)) {
-    if (
-      (
-        # Contains multi span and not the last element and not, or
-        (v[i] > 0 && i < length(v) && v[i] != 1) ||
-          # The last element is 1 but this one is 0, so this is spanned
-          (i == 1 || v[i - 1] == 1) && v[i] == 0
-      ) &&
-        # Followed by 0
-        v[i + 1] == 0
-    ) {
-      # Count consecutive zeros after v[i]
-      count_zeros <- sum(cumsum(v[-(1:i)]) == 0)
-      v[i] <- count_zeros + 1
-    } else {
-      # For the last element don't span extra
-      if (i == length(v) && v[i] > 1) {
-        v[i] <- 1
-      }
-    }
-  }
-  return(v)
+  # Each count opens a merge and each zero continues the one before it, so
+  # the position of the count identifies the merge every cell belongs to
+  blocks <- cummax(seq_along(v) * (v > 0))
+
+  # Count the cells of each merge that survived, and put the count back on
+  # the first of them
+  kept <- rle(blocks[keep])$lengths
+  unlist(
+    lapply(kept, \(n) c(n, rep(0L, n - 1L))),
+    use.names = FALSE
+  )
 }
 
 #' Slice a complex_tabpart object
@@ -161,9 +159,7 @@ slice_complex_tabpart <- function(x, rows, columns) {
   hrule <- x$hrule[rows]
 
   # Spans
-  spans <- x$spans
-  spans$rows <- spans$rows[rows, columns, drop = FALSE]
-  spans$columns <- spans$columns[rows, columns, drop = FALSE]
+  spans <- slice_spans(x$spans, rows, columns)
 
   # Styles
   styles <- list(cells = NULL, pars = NULL, text = NULL)
