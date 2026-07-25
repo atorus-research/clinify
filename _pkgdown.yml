@@ -47,6 +47,7 @@ reference:
     desc: Table aesthetic helpers
   - contents:
       - clin_col_widths
+      - clin_table_align
       - clin_column_headers
       - clin_replace_pagenums
       - clin_group_pad
