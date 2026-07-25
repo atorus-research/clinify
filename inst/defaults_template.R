@@ -101,7 +101,7 @@ options(
   },
   #' The function to apply default table styling
   #'
-  #' Headers with the same value are merged both horizontally and vertically
+  #' Headers stacked with the same value are merged vertically
   #' All borders are clear except for the header (bleck, solid, 0.2pt)
   #' As well as top horizontal line for the table header.
   #' font style - Courier New, 9pt, not bold, not italic
@@ -117,10 +117,11 @@ options(
   #' @export
   clinify_table_default = function(x, ...) {
 
-    # Merge cells with same name
-    # (merge occurs both horizontally and vertically)
+    # Merge cells stacked with the same name.
+    # Horizontal merging is left alone here - that is decided when the headers
+    # are built, and merging again would override the `merge` argument of
+    # clin_column_headers().
     x <- flextable::merge_v(x, part="header")
-    x <- flextable::merge_h(x, part="header")
 
 
     # You can center-align all table headers but first, for example like this:
