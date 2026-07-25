@@ -188,6 +188,17 @@ In this case, we're saying that:
 - `disp` will fill 15% of the page
 - `vs` will fill 15% of the page
 
+Widths deal with the horizontal; `clin_row_height()` deals with the vertical. Regulatory outputs are usually specified to an exact row pitch, and how tall a row renders is what decides how much fits on a page. {flextable} leaves rows at a nominal quarter inch with a rule of "auto", which lets the renderer size them however it likes, so a table can drift down the page and paginate differently than the specification says it should. Pitches are given in points, since that is how they are normally specified:
+
+```{r, eval=FALSE}
+clintable(dat2) |>
+  clin_row_height(body = 15.35, title = 11.4, footnote = 11.4)
+```
+
+The body, the titles and the footnotes are set separately because they are separate tables. Group label and caption rows take the body pitch. The default `rule = "atleast"` treats the pitch as a floor, so a cell whose text wraps grows past it rather than being clipped; `rule = "exact"` pins every row to the pitch, which is the only way to get a pitch tighter than the font's line height, at the cost of clipping anything that does not fit.
+
+Where a table sits across the page is `clin_table_align()`. {flextable} centres tables, and regulatory outputs are usually flush left.
+
 The rest of the columns will be spaced evenly based on the remaining space. The space that's filled is based on default configurations for page width, which are configurable within your session. Furthermore, `clin_col_width()` adapts to alternating pages. The ratios given to key columns apply for each alternating page, and the proportions applied to the additional `col_group` variables adapt any remaining space to ensure a page fits the total page width. 
 
 One last tedious part of structuring any table is getting the table headers formatted correctly. There are a couple specific features, such as spanning headers, which can also be tricky to get right, especially in a semi-automated way. For this reason, we've added the function `clin_column_headers()` to make this process a bit easier. Let's use `iris` as an example of a table to which we want to apply some spanning headers.

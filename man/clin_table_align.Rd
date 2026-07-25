@@ -15,7 +15,7 @@ clin_table_align(x, align)
 A clintable object
 }
 \description{
-{flextable} centres a table on the page. Regulatory outputs are usually
+flextable centres a table on the page. Regulatory outputs are usually
 flush left, and a narrow table sometimes wants to be centred deliberately.
 The choice is recorded on the clintable and applied when the table renders,
 after the default styling function has run, so it holds even when an
