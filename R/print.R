@@ -132,8 +132,12 @@ print_clinpage <- function(
   footnotes = NULL,
   group_label = NULL,
   captions = NULL,
-  pitch = NULL
+  pitch = NULL,
+  header_pad = NULL
 ) {
+  # The gap under the header rule comes from the body, so every page needs it
+  x <- apply_rule_to_body_(x, header_pad)
+
   if (!is.null(group_label)) {
     # TODO: Allow formatting on this
     x <- flextable::add_header_lines(
@@ -199,6 +203,7 @@ print_alternating <- function(
 ) {
   pag_idx <- x$clinify_config$pagination_idx
   pitch <- row_height_for_(x$clinify_config, "body")
+  header_pad <- x$clinify_config$header_pad
 
   # Don't try to print more pages than requested
   if (!is.null(pag_idx)) {
@@ -228,7 +233,8 @@ print_alternating <- function(
         footnotes = footnotes,
         group_label = p$label,
         captions = p$captions,
-        pitch = pitch
+        pitch = pitch,
+        header_pad = header_pad
       )
     })
   } else {

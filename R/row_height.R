@@ -186,6 +186,10 @@ apply_row_height_at_ <- function(ft, i, height, part) {
 #' @noRd
 finish_table_ <- function(x) {
   x <- table_align_(x)
+  x <- apply_header_pad_(x)
+  # Covers a table that is never sliced into pages. A paginated one gets the
+  # same gap put on the first row of each of its pages as they are built
+  x <- apply_rule_to_body_(x, x$clinify_config$header_pad)
   apply_row_height_(x, row_height_for_(x$clinify_config, "body"))
 }
 

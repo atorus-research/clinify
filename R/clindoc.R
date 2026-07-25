@@ -157,6 +157,9 @@ get_table_ <- function(x, p) {
   # Rows added while rendering take the body pitch
   pitch <- row_height_for_(x$clinify_config, "body")
 
+  # The gap under the header rule comes from the body, so every page needs it
+  tbl <- apply_rule_to_body_(tbl, x$clinify_config$header_pad)
+
   if (!is.null(p$label)) {
     tbl <- flextable::add_header_lines(
       tbl,
