@@ -424,7 +424,7 @@ prep_pagination_ <- function(x) {
       refdat
     )
     cols <- seq(1:ncol(refdat))[-key_idx]
-    x <- slice_clintable(x, 1:nrow(refdat), cols, skip_spans = TRUE)
+    x <- slice_clintable(x, 1:nrow(refdat), cols)
   }
 
   # Make Column vectors
