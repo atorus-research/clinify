@@ -43,7 +43,7 @@ write_clindoc <- function(x, file) {
 
   # If footnote page applied on doc and not clintable, append to beginning
   if (!is.null(footnote_page)) {
-    footnote_page <- getOption("clinify_footnotes_default")(footnote_page)
+    footnote_page <- style_footnotes_(footnote_page, clinify_config)
     doc <- officer::cursor_begin(doc)
     doc <- body_add_flextable(doc, footnote_page, pos = "before")
     # Page break after footnote page
@@ -51,11 +51,11 @@ write_clindoc <- function(x, file) {
   }
 
   if (!is.null(titles)) {
-    titles <- getOption("clinify_titles_default")(titles)
+    titles <- style_titles_(titles, clinify_config)
     settings$header_default <- block_list(titles)
   }
   if (!is.null(footnotes)) {
-    footnotes <- getOption("clinify_footnotes_default")(footnotes)
+    footnotes <- style_footnotes_(footnotes, clinify_config)
     settings$footer_default <- block_list(footnotes)
   }
 

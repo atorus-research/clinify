@@ -82,17 +82,22 @@ clintable_as_html <- function(
   # Apply the default styling
   if (apply_defaults) {
     if (!is.null(titles)) {
-      titles <- getOption("clinify_titles_default")(titles)
+      titles <- style_titles_(titles, x$clinify_config)
     }
     if (!is.null(footnotes)) {
-      footnotes <- getOption("clinify_footnotes_default")(footnotes)
+      footnotes <- style_footnotes_(footnotes, x$clinify_config)
     }
     x <- getOption("clinify_table_default")(x)
     if (!is.null(x$clinify_config$footnote_page)) {
-      footnote_page <- getOption("clinify_footnotes_default")(footnote_page) |>
+      footnote_page <- style_footnotes_(footnote_page, x$clinify_config) |>
         flextable::width(width = flextable::flextable_dim(x)$widths / 2)
     }
   }
+
+  # Outside the block above, so what the table was configured with is honored
+  # even when the default styling is skipped, and after it so that it holds
+  # whatever a styling function did
+  x <- finish_table_(x)
 
   # Keep with next paging
   if (!is.null(x$clinify_config$auto_page_var)) {
@@ -126,8 +131,13 @@ print_clinpage <- function(
   titles = NULL,
   footnotes = NULL,
   group_label = NULL,
-  captions = NULL
+  captions = NULL,
+  pitch = NULL,
+  header_pad = NULL
 ) {
+  # The gap under the header rule comes from the body, so every page needs it
+  x <- apply_rule_to_body_(x, header_pad)
+
   if (!is.null(group_label)) {
     # TODO: Allow formatting on this
     x <- flextable::add_header_lines(
@@ -136,6 +146,8 @@ print_clinpage <- function(
     )
     x <- getOption("clinify_grouplabel_default")(x)
     x <- flextable::align(x, 1, 1, "left", part = "header")
+    # Rows added while rendering take the body pitch
+    x <- apply_row_height_at_(x, 1, pitch, "header")
   }
   if (!is.null(captions)) {
     # TODO: Allow formatting on this
@@ -145,6 +157,7 @@ print_clinpage <- function(
     )
     # This has to be applied after the footer is added
     x <- getOption("clinify_caption_default")(x)
+    x <- apply_row_height_at_(x, 1, pitch, "footer")
   }
 
   body <- flextable::htmltools_value(x = x)
@@ -189,6 +202,8 @@ print_alternating <- function(
   footnote_page = NULL
 ) {
   pag_idx <- x$clinify_config$pagination_idx
+  pitch <- row_height_for_(x$clinify_config, "body")
+  header_pad <- x$clinify_config$header_pad
 
   # Don't try to print more pages than requested
   if (!is.null(pag_idx)) {
@@ -217,7 +232,9 @@ print_alternating <- function(
         titles = titles,
         footnotes = footnotes,
         group_label = p$label,
-        captions = p$captions
+        captions = p$captions,
+        pitch = pitch,
+        header_pad = header_pad
       )
     })
   } else {
