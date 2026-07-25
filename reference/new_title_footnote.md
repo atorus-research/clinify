@@ -25,6 +25,7 @@ A flextable object
 ## Examples
 
 ``` r
+
 title <- new_title_footnote(
   list(
     # We'll add tools to automate paging

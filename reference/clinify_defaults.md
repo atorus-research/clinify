@@ -38,6 +38,7 @@ A `clintable` object with the applied styling.
 ## Examples
 
 ``` r
+
 op <- options()
 
 sect <- clinify_docx_default()

@@ -23,6 +23,7 @@ programmers making these tables.
 Let’s start at the beginning
 
 ``` r
+
 library(clinify)
 library(flextable)
 library(officer)
@@ -71,6 +72,7 @@ your table being formatted.
 Let’s expand some features of the table.
 
 ``` r
+
 ct <- clintable(mtcars) |>
   clin_add_titles(
     list(
@@ -113,9 +115,9 @@ print(ct)
 | 15.2 | 8   | 275.8 | 180 | 3.07 | 3.780 | 18.00 | 0   | 0   | 3    | 3    |
 | 10.4 | 8   | 472.0 | 205 | 2.93 | 5.250 | 17.98 | 0   | 0   | 3    | 4    |
 
-|                    |                                  |
-|--------------------|----------------------------------|
-| Here's a footnote. | 19:55 Thursday, January 08, 2026 |
+|                    |                               |
+|--------------------|-------------------------------|
+| Here's a footnote. | 13:07 Saturday, July 25, 2026 |
 
 Here we’ve added some titles and footnotes to the document. The
 functions
@@ -153,6 +155,7 @@ apply extra formatting as desired.
 Let’s look at a couple more functions.
 
 ``` r
+
 dat <- mtcars
 dat["page"] <- c(
   rep(1, 10),
@@ -217,9 +220,9 @@ print(ct)
 
 [TABLE]
 
-|                    |                                  |
-|--------------------|----------------------------------|
-| Here's a footnote. | 19:55 Thursday, January 08, 2026 |
+|                    |                               |
+|--------------------|-------------------------------|
+| Here's a footnote. | 13:07 Saturday, July 25, 2026 |
 
 |                 |       |
 |-----------------|-------|
@@ -228,9 +231,9 @@ print(ct)
 
 [TABLE]
 
-|                    |                                  |
-|--------------------|----------------------------------|
-| Here's a footnote. | 19:55 Thursday, January 08, 2026 |
+|                    |                               |
+|--------------------|-------------------------------|
+| Here's a footnote. | 13:07 Saturday, July 25, 2026 |
 
 |                 |       |
 |-----------------|-------|
@@ -239,9 +242,9 @@ print(ct)
 
 [TABLE]
 
-|                    |                                  |
-|--------------------|----------------------------------|
-| Here's a footnote. | 19:55 Thursday, January 08, 2026 |
+|                    |                               |
+|--------------------|-------------------------------|
+| Here's a footnote. | 13:07 Saturday, July 25, 2026 |
 
 1
 
@@ -288,6 +291,7 @@ parameters:
 If we look at that function specifically:
 
 ``` r
+
 ct |>
   clin_alt_pages(
     key_cols = c("mpg", "cyl", "hp"),
@@ -329,6 +333,7 @@ centimeters. In `clin_col_width()` we allow you to use the proportion of
 the page that you’d like that column to fill. From the syntax above:
 
 ``` r
+
 ct |>
   clin_col_widths(mpg = .2, cyl = .2, disp = .15, vs = .15)
 ```
@@ -357,6 +362,7 @@ to make this process a bit easier. Let’s use `iris` as an example of a
 table to which we want to apply some spanning headers.
 
 ``` r
+
 clintable(iris) |>
   clin_column_headers(
     Sepal.Length = c("Flowers", "Sepal", "Length"),
@@ -409,6 +415,7 @@ the same spanning can be achieved as well. Let’s consider another
 example:
 
 ``` r
+
 iris2 <- iris
 attr(iris2$Sepal.Length, "label") <- "Flower||Sepal||Length"
 attr(iris2$Sepal.Width, "label") <- "Flower||Sepal||Width"
@@ -472,6 +479,7 @@ document out to docx, use the
 function. Let’s revisit our table from before.
 
 ``` r
+
 # Create a basic table
 ct <- clintable(dat2) |>
   clin_page_by("page") |>

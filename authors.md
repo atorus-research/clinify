@@ -23,13 +23,13 @@ Source:
 [`DESCRIPTION`](https://github.com/atorus-research/clinify/blob/main/DESCRIPTION)
 
 Stackhouse M, Didenko R, Boiko Y (2026). *clinify: Clinical Table
-Styling Tools and Utilities*. R package version 0.3.0.9000,
+Styling Tools and Utilities*. R package version 0.3.1,
 <https://atorus-research.github.io/clinify/>.
 
     @Manual{,
       title = {clinify: Clinical Table Styling Tools and Utilities},
       author = {Mike Stackhouse and Ross Didenko and Yevhenii Boiko},
       year = {2026},
-      note = {R package version 0.3.0.9000},
+      note = {R package version 0.3.1},
       url = {https://atorus-research.github.io/clinify/},
     }

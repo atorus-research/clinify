@@ -27,6 +27,7 @@ and only within a word document itself. `keep_with_next` is a feature of
 Word, so in an HTML view there’s nothing much to see.
 
 ``` r
+
 library(clinify)
 clintable(mtcars) |>
   clin_auto_page("gear")
@@ -74,6 +75,7 @@ has the `drop` argument to specify whether the paging variable should be
 dropped from the table.
 
 ``` r
+
 clintable(mtcars) |>
   clin_auto_page("gear", when = 'notempty', drop = TRUE)
 ```
@@ -91,6 +93,7 @@ to drive this.
 Let’s prep some data and provide an example.
 
 ``` r
+
 dat <- mtcars
 dat["page"] <- c(
   rep(1, 10),
@@ -169,6 +172,7 @@ An alternative to using a paging variable, another shortcut option is to
 specify the maximum rows you want to print to a specific page.
 
 ``` r
+
 clintable(dat2) |>
   clin_page_by(max_rows = 5)
 ```
@@ -218,6 +222,7 @@ Similarly, the `caption_by` data will be pulled into footnotes attached
 below the table body but above the footer.
 
 ``` r
+
 clintable(dat2) |>
   clin_page_by("page") |>
   clin_group_by(c("groups1", "groups2"), caption_by = "captions")
@@ -271,6 +276,7 @@ takes two parameters after the `clintable`:
 - `col_groups`: The sets of columns differing from page to page
 
 ``` r
+
 clintable(dat2) |>
   clin_page_by("page") |>
   clin_alt_pages(
@@ -353,6 +359,7 @@ that will appropriately change when the group changes. Consider this
 example:
 
 ``` r
+
 library(dplyr)
 #> 
 #> Attaching package: 'dplyr'

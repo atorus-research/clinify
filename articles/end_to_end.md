@@ -7,6 +7,7 @@ First we’ll start by preparing the data. We’ll use our other package
 {Tplyr} to take care of the summaries.
 
 ``` r
+
 library(clinify)
 library(Tplyr)
 library(dplyr)
@@ -119,6 +120,7 @@ get everything ready. Looking at some of these sections:
   `{NUMPAGES}`.
 
 ``` r
+
 ct <- clintable(dat) |>
   # Use group changes to let Word naturally split pages
   clin_auto_page("ord_layer_index", drop = TRUE) |>
@@ -188,15 +190,16 @@ print(ct)
 
 [TABLE]
 
-|                         |                                  |
-|-------------------------|----------------------------------|
-| Source: /my/file/path.R | 19:55 Thursday, January 08, 2026 |
+|                         |                               |
+|-------------------------|-------------------------------|
+| Source: /my/file/path.R | 13:07 Saturday, July 25, 2026 |
 
 With everything ready to go, we can write our table out to its
 destination using
 [`write_clindoc()`](https://atorus-research.github.io/clinify/reference/write_clindoc.md).
 
 ``` r
+
 write_clindoc(ct, "demo_table.docx")
 ```
 

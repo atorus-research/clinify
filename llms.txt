@@ -11,6 +11,7 @@ the creation of clinical tables, listings, and figures.
 You can install the development version of **{clinify}** like so:
 
 ``` r
+
 install.packages("clinify")
 
 # Install the development version:
@@ -69,6 +70,7 @@ Here are some key principles we’re using in building **{clinify}**:
 Here’s a basic example of some of clinify’s benefit in action
 
 ``` r
+
 library(clinify)
 # Mock some data
 dat <- mtcars
@@ -131,6 +133,7 @@ Built off {flextable} and {officer}, you can then write the table out to
 a docx file.
 
 ``` r
+
 # Write the table out to docx
 write_clindoc(ct, "demo_table.docx")
 ```

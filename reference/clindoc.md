@@ -45,6 +45,7 @@ will be ignored.
 ## Examples
 
 ``` r
+
 ct <- clintable(mtcars)
 
 clindoc(ct)

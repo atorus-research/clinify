@@ -5,6 +5,7 @@ it, you can just write it to disk. To do this, you can use the function
 [`write_clindoc()`](https://atorus-research.github.io/clinify/reference/write_clindoc.md).
 
 ``` r
+
 library(clinify)
 
 ct <- clintable(mtcars)
@@ -22,6 +23,7 @@ the conversion into a `clindoc` object happens for you. But you can also
 create a clindoc on your own.
 
 ``` r
+
 library(clinify)
 
 ct <- clintable(mtcars)
@@ -37,6 +39,7 @@ rare circumstances where you may have tables that require different
 column headers for different sections of data. Consider the following:
 
 ``` r
+
 ct1 <- clintable(head(mtcars, 10))
 ct2 <- clintable(head(iris, 10))
 
@@ -55,6 +58,7 @@ generating tables using [`lapply()`](https://rdrr.io/r/base/lapply.html)
 or {purrr}
 
 ``` r
+
 ct1 <- clintable(head(mtcars, 10))
 ct2 <- clintable(head(iris, 10))
 
@@ -84,6 +88,7 @@ As such, the `clin_add_title()`, `clin_add_footnote()`, and
 functions work on `clindoc` objects identically to a `clintable`.
 
 ``` r
+
 tables <- lapply(list(mtcars, iris), \(x) clintable(head(x, 10)))
 
 doc <- clindoc(tables) |>

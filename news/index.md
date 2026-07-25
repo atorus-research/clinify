@@ -1,5 +1,21 @@
 # Changelog
 
+## clinify 0.3.1
+
+CRAN release: 2026-06-02
+
+- Updated for compatibility with {officer} (\>= 0.7.0); the minimum
+  required {officer} version is now 0.7.2
+- Group label styling now retains the configured font size
+- Fixed style application when column vectors were simplified
+  incorrectly
+- Fixed slicing when a table is subset to a single column
+- Fixed handling of spanning header gaps when a spanner is split across
+  pages
+- Made internal table-slicing tests robust to platform-dependent
+  font-metric estimates (resolves an R CMD check error on
+  r-devel-linux-x86_64-fedora-gcc)
+
 ## clinify 0.3.0
 
 CRAN release: 2025-07-07

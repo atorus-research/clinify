@@ -43,6 +43,7 @@ used in
 [`clin_col_widths()`](https://atorus-research.github.io/clinify/reference/clin_col_widths.md).
 
 ``` r
+
 clinify_docx_default <- function() {
   # I want these as defaults but need to carry it forward because
   # the default section strips it off
@@ -71,6 +72,7 @@ respectively. This allows you to be flexible with how you specify the
 page numbers should look.
 
 ``` r
+
 clinify_titles_default <- function(x, ...) {
   # Remove all borders as heading does not need any.
   x <- flextable::border_remove(x)
@@ -132,6 +134,7 @@ clinify_footnotes_default <- function(x, ...) {
 ### `clinify_table_default`
 
 ``` r
+
 clinify_table_default <- function(x, ...) {
   # Clear all borders first and apply them just for the header
   # (as horizontal lines).
@@ -197,6 +200,7 @@ The caption doesn’t bind to the table object until the pagination is
 being processed.
 
 ``` r
+
 clinify_grouplabel_default <- function(x, ...) {
   # Remove topline above group label
   x <- flextable::hline_top(
@@ -224,6 +228,7 @@ being processed. As such, the “footer” of the flextable object itself
 can’t have styles applied until the footer is set.
 
 ``` r
+
 clinify_caption_default <- function(x, ...) {
   # Set font properties for the table header.
   x <- flextable::font(x, part = "footer", fontname = "Courier New")
@@ -238,6 +243,7 @@ Once you have the function created, the options can be applied as
 follows.
 
 ``` r
+
 options(
   clinify_docx_default = sect,
   clinify_titles_default = clinify_titles_default,

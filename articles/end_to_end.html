@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>End-to-End Example • clinify</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="End-to-End Example">
 <!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-165685385-2"></script><script>
@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinify</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,7 +84,7 @@ going to create a simple demographics table.</p>
 {Tplyr} to take care of the summaries.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://atorus-research.github.io/clinify/">clinify</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/atorus-research/Tplyr" class="external-link">Tplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://atorus-research.github.io/Tplyr/" class="external-link">Tplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
@@ -111,42 +111,42 @@ going to create a simple demographics table.</p>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/tplyr_table.html" class="external-link">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/layer_attachment.html" class="external-link">add_layer</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/layer_constructors.html" class="external-link">group_count</a></span><span class="op">(</span><span class="va">SEX</span>, by <span class="op">=</span> <span class="st">"Sex n (%)"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/set_missing_count.html" class="external-link">set_missing_count</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/f_str.html" class="external-link">f_str</a></span><span class="op">(</span><span class="st">"xx"</span>, <span class="va">n</span><span class="op">)</span>, Missing <span class="op">=</span> <span class="cn">NA</span>, denom_ignore <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/tplyr_table.html" class="external-link">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/layer_attachment.html" class="external-link">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/layer_constructors.html" class="external-link">group_count</a></span><span class="op">(</span><span class="va">SEX</span>, by <span class="op">=</span> <span class="st">"Sex n (%)"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/set_missing_count.html" class="external-link">set_missing_count</a></span><span class="op">(</span><span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/f_str.html" class="external-link">f_str</a></span><span class="op">(</span><span class="st">"xx"</span>, <span class="va">n</span><span class="op">)</span>, Missing <span class="op">=</span> <span class="cn">NA</span>, denom_ignore <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/layer_attachment.html" class="external-link">add_layer</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/layer_constructors.html" class="external-link">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (Years)"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/layer_attachment.html" class="external-link">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/layer_constructors.html" class="external-link">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (Years)"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/layer_attachment.html" class="external-link">add_layer</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/layer_constructors.html" class="external-link">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age Categories n (%)"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/set_missing_count.html" class="external-link">set_missing_count</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/f_str.html" class="external-link">f_str</a></span><span class="op">(</span><span class="st">"xx"</span>, <span class="va">n</span><span class="op">)</span>, Missing <span class="op">=</span> <span class="cn">NA</span>, denom_ignore <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/layer_attachment.html" class="external-link">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/layer_constructors.html" class="external-link">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age Categories n (%)"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/set_missing_count.html" class="external-link">set_missing_count</a></span><span class="op">(</span><span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/f_str.html" class="external-link">f_str</a></span><span class="op">(</span><span class="st">"xx"</span>, <span class="va">n</span><span class="op">)</span>, Missing <span class="op">=</span> <span class="cn">NA</span>, denom_ignore <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/layer_attachment.html" class="external-link">add_layer</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/layer_constructors.html" class="external-link">group_count</a></span><span class="op">(</span><span class="va">RACE</span>, by <span class="op">=</span> <span class="st">"Race n (%)"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/set_missing_count.html" class="external-link">set_missing_count</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/f_str.html" class="external-link">f_str</a></span><span class="op">(</span><span class="st">"xx"</span>, <span class="va">n</span><span class="op">)</span>, Missing <span class="op">=</span> <span class="cn">NA</span>, denom_ignore <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/ordering.html" class="external-link">set_order_count_method</a></span><span class="op">(</span><span class="st">"byfactor"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/layer_attachment.html" class="external-link">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/layer_constructors.html" class="external-link">group_count</a></span><span class="op">(</span><span class="va">RACE</span>, by <span class="op">=</span> <span class="st">"Race n (%)"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/set_missing_count.html" class="external-link">set_missing_count</a></span><span class="op">(</span><span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/f_str.html" class="external-link">f_str</a></span><span class="op">(</span><span class="st">"xx"</span>, <span class="va">n</span><span class="op">)</span>, Missing <span class="op">=</span> <span class="cn">NA</span>, denom_ignore <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/ordering.html" class="external-link">set_order_count_method</a></span><span class="op">(</span><span class="st">"byfactor"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/layer_attachment.html" class="external-link">add_layer</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/layer_constructors.html" class="external-link">group_count</a></span><span class="op">(</span><span class="va">ETHNIC</span>, by <span class="op">=</span> <span class="st">"Ethnicity n (%)"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/set_missing_count.html" class="external-link">set_missing_count</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/f_str.html" class="external-link">f_str</a></span><span class="op">(</span><span class="st">"xx"</span>, <span class="va">n</span><span class="op">)</span>, Missing <span class="op">=</span> <span class="cn">NA</span>, denom_ignore <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/layer_attachment.html" class="external-link">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/layer_constructors.html" class="external-link">group_count</a></span><span class="op">(</span><span class="va">ETHNIC</span>, by <span class="op">=</span> <span class="st">"Ethnicity n (%)"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/set_missing_count.html" class="external-link">set_missing_count</a></span><span class="op">(</span><span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/f_str.html" class="external-link">f_str</a></span><span class="op">(</span><span class="st">"xx"</span>, <span class="va">n</span><span class="op">)</span>, Missing <span class="op">=</span> <span class="cn">NA</span>, denom_ignore <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/layer_attachment.html" class="external-link">add_layer</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/layer_constructors.html" class="external-link">group_desc</a></span><span class="op">(</span><span class="va">HEIGHTBL</span>, by <span class="op">=</span> <span class="st">"Height at Baseline"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/layer_attachment.html" class="external-link">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/layer_constructors.html" class="external-link">group_desc</a></span><span class="op">(</span><span class="va">HEIGHTBL</span>, by <span class="op">=</span> <span class="st">"Height at Baseline"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/layer_attachment.html" class="external-link">add_layer</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/layer_constructors.html" class="external-link">group_desc</a></span><span class="op">(</span><span class="va">WEIGHTBL</span>, by <span class="op">=</span> <span class="st">"Weight at Baseline"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/layer_attachment.html" class="external-link">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/layer_constructors.html" class="external-link">group_desc</a></span><span class="op">(</span><span class="va">WEIGHTBL</span>, by <span class="op">=</span> <span class="st">"Weight at Baseline"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Apply some conditional formatting for blanking out 0's.</span></span>
-<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/build.html" class="external-link">build</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/build.html" class="external-link">build</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"var"</span><span class="op">)</span>,</span>
 <span>      <span class="op">~</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span></span>
 <span>        <span class="va">ord_layer_index</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>,</span>
-<span>        <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/apply_conditional_format.html" class="external-link">apply_conditional_format</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/apply_conditional_format.html" class="external-link">apply_conditional_format</a></span><span class="op">(</span></span>
 <span>          string <span class="op">=</span> <span class="va">.</span>,</span>
 <span>          format_group <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>          condition <span class="op">=</span> <span class="va">x</span> <span class="op">==</span> <span class="fl">0</span>,</span>
@@ -160,7 +160,7 @@ going to create a simple demographics table.</p>
 <span><span class="co"># Sort all the row values out, add row masks and breaks</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">ord_layer_index</span>, <span class="va">ord_layer_1</span>, <span class="va">ord_layer_2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/Tplyr/man/apply_row_masks.html" class="external-link">apply_row_masks</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://atorus-research.github.io/Tplyr/reference/apply_row_masks.html" class="external-link">apply_row_masks</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"row_label"</span><span class="op">)</span>,</span>
 <span>    <span class="va">var1_Placebo</span>,</span>
@@ -253,146 +253,146 @@ yourself, page numbers are auto detected by using the strings
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ct</span><span class="op">)</span></span></code></pre></div>
 <style></style>
 <div class="tabwid">
-<style>.cl-fd5d9d66{}.cl-fd572990{font-family:'Courier New';font-size:9pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-fd59fa76{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0;padding-top:0;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-fd59fa80{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0;padding-top:0;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-fd59fa81{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0;padding-top:0;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-fd5a1ec0{width:4.853in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fd5a1eca{width:4.853in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fd5a1ed4{width:4.853in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
-<table data-quarto-disable-processing="true" class="table cl-fd5d9d66"><tbody>
+<style>.cl-c816cb2e{}.cl-c80ea5fc{font-family:'Courier New';font-size:9pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-c812166a{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0;padding-top:0;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-c8121674{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0;padding-top:0;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-c812167e{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0;padding-top:0;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-c8124cac{width:4.853in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c8124cc0{width:4.853in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c8124cc1{width:4.853in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="table cl-c816cb2e"><tbody>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-fd5a1ec0"><p class="cl-fd59fa76"><span class="cl-fd572990">Protocol: CDISCPILOT01</span></p></td>
-<td class="cl-fd5a1eca"><p class="cl-fd59fa80"><span class="cl-fd572990">Page </span><span class="cl-fd572990"> of </span></p></td>
+<td class="cl-c8124cac"><p class="cl-c812166a"><span class="cl-c80ea5fc">Protocol: CDISCPILOT01</span></p></td>
+<td class="cl-c8124cc0"><p class="cl-c8121674"><span class="cl-c80ea5fc">Page </span><span class="cl-c80ea5fc"> of </span></p></td>
 </tr>
-<tr style="overflow-wrap:break-word;"><td colspan="2" class="cl-fd5a1ed4"><p class="cl-fd59fa81"><span class="cl-fd572990">Table 14-2.01</span></p></td></tr>
-<tr style="overflow-wrap:break-word;"><td colspan="2" class="cl-fd5a1ed4"><p class="cl-fd59fa81"><span class="cl-fd572990">Summary of Demographic and Baseline Characteristics</span></p></td></tr>
+<tr style="overflow-wrap:break-word;"><td colspan="2" class="cl-c8124cc1"><p class="cl-c812167e"><span class="cl-c80ea5fc">Table 14-2.01</span></p></td></tr>
+<tr style="overflow-wrap:break-word;"><td colspan="2" class="cl-c8124cc1"><p class="cl-c812167e"><span class="cl-c80ea5fc">Summary of Demographic and Baseline Characteristics</span></p></td></tr>
 </tbody></table>
 </div>
 <div class="tabwid">
-<style>.cl-fd54b386{}.cl-fd4c2d92{font-family:'Courier New';font-size:9pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-fd4f9496{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-fd4f94a0{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0.1pt;padding-top:0.1pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-fd4f94aa{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0.1pt;padding-top:0.1pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-fd4f94ab{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0.1pt;padding-top:0.1pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-fd4f94b4{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0.1pt;padding-top:0.1pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-fd4f94b5{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0.1pt;padding-top:14pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-fd4f94b6{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0.1pt;padding-top:14pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-fd4fcab0{width:1.653in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fd4fcaba{width:2.918in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fd4fcac4{width:1.712in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fd4fcac5{width:1.712in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fd4fcace{width:1.653in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fd4fcacf{width:2.918in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fd4fcad8{width:1.712in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fd4fcad9{width:1.712in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fd4fcada{width:1.653in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fd4fcae2{width:2.918in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fd4fcae3{width:1.712in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
-<table data-quarto-disable-processing="true" class="table cl-fd54b386">
+<style>.cl-c80c9654{}.cl-c803ab34{font-family:'Courier New';font-size:9pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-c8074488{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-c807449c{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0.1pt;padding-top:0.1pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-c80744a6{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0.1pt;padding-top:0.1pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-c80744a7{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0.1pt;padding-top:0.1pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-c80744b0{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0.1pt;padding-top:0.1pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-c80744b1{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0.1pt;padding-top:14pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-c80744ba{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0.1pt;padding-top:14pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-c8077d4a{width:1.653in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c8077d54{width:2.918in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c8077d5e{width:1.712in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c8077d5f{width:1.712in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c8077d68{width:1.653in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c8077d69{width:2.918in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c8077d6a{width:1.712in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c8077d72{width:1.712in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c8077d73{width:1.653in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c8077d7c{width:2.918in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c8077d7d{width:1.712in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="table cl-c80c9654">
 <thead>
 <tr style="overflow-wrap:break-word;">
-<th colspan="2" class="cl-fd4fcab0"><p class="cl-fd4f9496"><span class="cl-fd4c2d92"></span></p></th>
-<th class="cl-fd4fcac4"><p class="cl-fd4f9496"><span class="cl-fd4c2d92"> </span></p></th>
-<th colspan="2" class="cl-fd4fcac5"><p class="cl-fd4f9496"><span class="cl-fd4c2d92">Xanomeline</span></p></th>
+<th colspan="2" class="cl-c8077d4a"><p class="cl-c8074488"><span class="cl-c803ab34"></span></p></th>
+<th class="cl-c8077d5e"><p class="cl-c8074488"><span class="cl-c803ab34"> </span></p></th>
+<th colspan="2" class="cl-c8077d5f"><p class="cl-c8074488"><span class="cl-c803ab34">Xanomeline</span></p></th>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<th colspan="2" class="cl-fd4fcace"><p class="cl-fd4f9496"><span class="cl-fd4c2d92"></span></p></th>
-<th class="cl-fd4fcad8"><p class="cl-fd4f9496"><span class="cl-fd4c2d92">Placebo</span><br><span class="cl-fd4c2d92">(N=86)</span></p></th>
-<th class="cl-fd4fcad9"><p class="cl-fd4f9496"><span class="cl-fd4c2d92">Low Dose</span><br><span class="cl-fd4c2d92">(N=84)</span></p></th>
-<th class="cl-fd4fcad9"><p class="cl-fd4f9496"><span class="cl-fd4c2d92">High Dose</span><br><span class="cl-fd4c2d92">(N=84)</span></p></th>
+<th colspan="2" class="cl-c8077d68"><p class="cl-c8074488"><span class="cl-c803ab34"></span></p></th>
+<th class="cl-c8077d6a"><p class="cl-c8074488"><span class="cl-c803ab34">Placebo</span><br><span class="cl-c803ab34">(N=86)</span></p></th>
+<th class="cl-c8077d72"><p class="cl-c8074488"><span class="cl-c803ab34">Low Dose</span><br><span class="cl-c803ab34">(N=84)</span></p></th>
+<th class="cl-c8077d72"><p class="cl-c8074488"><span class="cl-c803ab34">High Dose</span><br><span class="cl-c803ab34">(N=84)</span></p></th>
 </tr>
 </thead>
 <tbody>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-fd4fcada"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92">Sex n (%)</span></p></td>
-<td class="cl-fd4fcae2"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92">Female</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">53 ( 61.6%)</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">50 ( 59.5%)</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">40 ( 47.6%)</span></p></td>
+<td class="cl-c8077d73"><p class="cl-c807449c"><span class="cl-c803ab34">Sex n (%)</span></p></td>
+<td class="cl-c8077d7c"><p class="cl-c807449c"><span class="cl-c803ab34">Female</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">53 ( 61.6%)</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">50 ( 59.5%)</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">40 ( 47.6%)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-fd4fcada"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92"></span></p></td>
-<td class="cl-fd4fcae2"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92">Male</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">33 ( 38.4%)</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">34 ( 40.5%)</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">44 ( 52.4%)</span></p></td>
+<td class="cl-c8077d73"><p class="cl-c807449c"><span class="cl-c803ab34"></span></p></td>
+<td class="cl-c8077d7c"><p class="cl-c807449c"><span class="cl-c803ab34">Male</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">33 ( 38.4%)</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">34 ( 40.5%)</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">44 ( 52.4%)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-fd4fcada"><p class="cl-fd4f94ab"><span class="cl-fd4c2d92"></span></p></td>
-<td class="cl-fd4fcae2"><p class="cl-fd4f94ab"><span class="cl-fd4c2d92">Missing</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b4"><span class="cl-fd4c2d92"> 0</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b4"><span class="cl-fd4c2d92"> 0</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b4"><span class="cl-fd4c2d92"> 0</span></p></td>
+<td class="cl-c8077d73"><p class="cl-c80744a7"><span class="cl-c803ab34"></span></p></td>
+<td class="cl-c8077d7c"><p class="cl-c80744a7"><span class="cl-c803ab34">Missing</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744b0"><span class="cl-c803ab34"> 0</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744b0"><span class="cl-c803ab34"> 0</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744b0"><span class="cl-c803ab34"> 0</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-fd4fcada"><p class="cl-fd4f94b5"><span class="cl-fd4c2d92">Age (Years)</span></p></td>
-<td class="cl-fd4fcae2"><p class="cl-fd4f94b5"><span class="cl-fd4c2d92">n</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b6"><span class="cl-fd4c2d92"> 86</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b6"><span class="cl-fd4c2d92"> 84</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b6"><span class="cl-fd4c2d92"> 84</span></p></td>
+<td class="cl-c8077d73"><p class="cl-c80744b1"><span class="cl-c803ab34">Age (Years)</span></p></td>
+<td class="cl-c8077d7c"><p class="cl-c80744b1"><span class="cl-c803ab34">n</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744ba"><span class="cl-c803ab34"> 86</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744ba"><span class="cl-c803ab34"> 84</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744ba"><span class="cl-c803ab34"> 84</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-fd4fcada"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92"></span></p></td>
-<td class="cl-fd4fcae2"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92">Mean (SD)</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">75.2 ( 8.59)</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">75.7 ( 8.29)</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">74.4 ( 7.89)</span></p></td>
+<td class="cl-c8077d73"><p class="cl-c807449c"><span class="cl-c803ab34"></span></p></td>
+<td class="cl-c8077d7c"><p class="cl-c807449c"><span class="cl-c803ab34">Mean (SD)</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">75.2 ( 8.59)</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">75.7 ( 8.29)</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">74.4 ( 7.89)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-fd4fcada"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92"></span></p></td>
-<td class="cl-fd4fcae2"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92">Median</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">76.0</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">77.5</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">76.0</span></p></td>
+<td class="cl-c8077d73"><p class="cl-c807449c"><span class="cl-c803ab34"></span></p></td>
+<td class="cl-c8077d7c"><p class="cl-c807449c"><span class="cl-c803ab34">Median</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">76.0</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">77.5</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">76.0</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-fd4fcada"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92"></span></p></td>
-<td class="cl-fd4fcae2"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92">Q1, Q3</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">69.2, 81.8</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">71.0, 82.0</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">70.8, 80.0</span></p></td>
+<td class="cl-c8077d73"><p class="cl-c807449c"><span class="cl-c803ab34"></span></p></td>
+<td class="cl-c8077d7c"><p class="cl-c807449c"><span class="cl-c803ab34">Q1, Q3</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">69.2, 81.8</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">71.0, 82.0</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">70.8, 80.0</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-fd4fcada"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92"></span></p></td>
-<td class="cl-fd4fcae2"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92">Min, Max</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">52, 89</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">51, 88</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">56, 88</span></p></td>
+<td class="cl-c8077d73"><p class="cl-c807449c"><span class="cl-c803ab34"></span></p></td>
+<td class="cl-c8077d7c"><p class="cl-c807449c"><span class="cl-c803ab34">Min, Max</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">52, 89</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">51, 88</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">56, 88</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-fd4fcada"><p class="cl-fd4f94ab"><span class="cl-fd4c2d92"></span></p></td>
-<td class="cl-fd4fcae2"><p class="cl-fd4f94ab"><span class="cl-fd4c2d92">Missing</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b4"><span class="cl-fd4c2d92">  0</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b4"><span class="cl-fd4c2d92">  0</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b4"><span class="cl-fd4c2d92">  0</span></p></td>
+<td class="cl-c8077d73"><p class="cl-c80744a7"><span class="cl-c803ab34"></span></p></td>
+<td class="cl-c8077d7c"><p class="cl-c80744a7"><span class="cl-c803ab34">Missing</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744b0"><span class="cl-c803ab34">  0</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744b0"><span class="cl-c803ab34">  0</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744b0"><span class="cl-c803ab34">  0</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-fd4fcada"><p class="cl-fd4f94b5"><span class="cl-fd4c2d92">Age Categories n (%)</span></p></td>
-<td class="cl-fd4fcae2"><p class="cl-fd4f94b5"><span class="cl-fd4c2d92">&lt;65</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b6"><span class="cl-fd4c2d92">14 ( 16.3%)</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b6"><span class="cl-fd4c2d92"> 8 (  9.5%)</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b6"><span class="cl-fd4c2d92">11 ( 13.1%)</span></p></td>
+<td class="cl-c8077d73"><p class="cl-c80744b1"><span class="cl-c803ab34">Age Categories n (%)</span></p></td>
+<td class="cl-c8077d7c"><p class="cl-c80744b1"><span class="cl-c803ab34">&lt;65</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744ba"><span class="cl-c803ab34">14 ( 16.3%)</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744ba"><span class="cl-c803ab34"> 8 (  9.5%)</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744ba"><span class="cl-c803ab34">11 ( 13.1%)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-fd4fcada"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92"></span></p></td>
-<td class="cl-fd4fcae2"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92">&gt;80</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">30 ( 34.9%)</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">29 ( 34.5%)</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">18 ( 21.4%)</span></p></td>
+<td class="cl-c8077d73"><p class="cl-c807449c"><span class="cl-c803ab34"></span></p></td>
+<td class="cl-c8077d7c"><p class="cl-c807449c"><span class="cl-c803ab34">&gt;80</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">30 ( 34.9%)</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">29 ( 34.5%)</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">18 ( 21.4%)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-fd4fcada"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92"></span></p></td>
-<td class="cl-fd4fcae2"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92">65-80</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">42 ( 48.8%)</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">47 ( 56.0%)</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92">55 ( 65.5%)</span></p></td>
+<td class="cl-c8077d73"><p class="cl-c807449c"><span class="cl-c803ab34"></span></p></td>
+<td class="cl-c8077d7c"><p class="cl-c807449c"><span class="cl-c803ab34">65-80</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">42 ( 48.8%)</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">47 ( 56.0%)</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34">55 ( 65.5%)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-fd4fcada"><p class="cl-fd4f94ab"><span class="cl-fd4c2d92"></span></p></td>
-<td class="cl-fd4fcae2"><p class="cl-fd4f94ab"><span class="cl-fd4c2d92">Missing</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b4"><span class="cl-fd4c2d92"> 0</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b4"><span class="cl-fd4c2d92"> 0</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b4"><span class="cl-fd4c2d92"> 0</span></p></td>
+<td class="cl-c8077d73"><p class="cl-c80744a7"><span class="cl-c803ab34"></span></p></td>
+<td class="cl-c8077d7c"><p class="cl-c80744a7"><span class="cl-c803ab34">Missing</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744b0"><span class="cl-c803ab34"> 0</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744b0"><span class="cl-c803ab34"> 0</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744b0"><span class="cl-c803ab34"> 0</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-fd4fcada"><p class="cl-fd4f94b5"><span class="cl-fd4c2d92">Race n (%)</span></p></td>
-<td class="cl-fd4fcae2"><p class="cl-fd4f94b5"><span class="cl-fd4c2d92">AMERICAN INDIAN OR ALASKA NATIVE</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b6"><span class="cl-fd4c2d92"> 0         </span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b6"><span class="cl-fd4c2d92"> 0         </span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94b6"><span class="cl-fd4c2d92"> 1 (  1.2%)</span></p></td>
+<td class="cl-c8077d73"><p class="cl-c80744b1"><span class="cl-c803ab34">Race n (%)</span></p></td>
+<td class="cl-c8077d7c"><p class="cl-c80744b1"><span class="cl-c803ab34">AMERICAN INDIAN OR ALASKA NATIVE</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744ba"><span class="cl-c803ab34"> 0         </span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744ba"><span class="cl-c803ab34"> 0         </span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744ba"><span class="cl-c803ab34"> 1 (  1.2%)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-fd4fcada"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92"></span></p></td>
-<td class="cl-fd4fcae2"><p class="cl-fd4f94a0"><span class="cl-fd4c2d92">ASIAN</span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92"> 0         </span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92"> 0         </span></p></td>
-<td class="cl-fd4fcae3"><p class="cl-fd4f94aa"><span class="cl-fd4c2d92"> 0         </span></p></td>
+<td class="cl-c8077d73"><p class="cl-c807449c"><span class="cl-c803ab34"></span></p></td>
+<td class="cl-c8077d7c"><p class="cl-c807449c"><span class="cl-c803ab34">ASIAN</span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34"> 0         </span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34"> 0         </span></p></td>
+<td class="cl-c8077d7d"><p class="cl-c80744a6"><span class="cl-c803ab34"> 0         </span></p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="tabwid">
-<style>.cl-fd65d756{}.cl-fd5f212c{font-family:'Courier New';font-size:9pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-fd61ccb0{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0;padding-top:0;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-fd61ccba{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0;padding-top:0;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-fd61fbb8{width:4.853in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fd61fbc2{width:4.853in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
-<table data-quarto-disable-processing="true" class="table cl-fd65d756"><tbody><tr style="overflow-wrap:break-word;">
-<td class="cl-fd61fbb8"><p class="cl-fd61ccb0"><span class="cl-fd5f212c">Source: /my/file/path.R</span></p></td>
-<td class="cl-fd61fbc2"><p class="cl-fd61ccba"><span class="cl-fd5f212c">19:55 Thursday, January 08, 2026</span></p></td>
+<style>.cl-c8229774{}.cl-c8189e68{font-family:'Courier New';font-size:9pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-c81bef00{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0;padding-top:0;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-c81bef14{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0;padding-top:0;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-c81c281c{width:4.853in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-c81c2830{width:4.853in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="table cl-c8229774"><tbody><tr style="overflow-wrap:break-word;">
+<td class="cl-c81c281c"><p class="cl-c81bef00"><span class="cl-c8189e68">Source: /my/file/path.R</span></p></td>
+<td class="cl-c81c2830"><p class="cl-c81bef14"><span class="cl-c8189e68">13:07 Saturday, July 25, 2026</span></p></td>
 </tr></tbody></table>
 </div>
 <p>With everything ready to go, we can write our table out to its
@@ -411,7 +411,7 @@ destination using <code><a href="../reference/write_clindoc.html">write_clindoc(
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

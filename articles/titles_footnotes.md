@@ -11,6 +11,7 @@ apply titles and footnotes. There are several functions available within
 Let’s look at an example:
 
 ``` r
+
 library(clinify)
 
 clintable(mtcars) |>
@@ -53,9 +54,9 @@ clintable(mtcars) |>
 | 15.2 | 8   | 275.8 | 180 | 3.07 | 3.780 | 18.00 | 0   | 0   | 3    | 3    |
 | 10.4 | 8   | 472.0 | 205 | 2.93 | 5.250 | 17.98 | 0   | 0   | 3    | 4    |
 
-|                    |                                  |
-|--------------------|----------------------------------|
-| Here's a footnote. | 19:55 Thursday, January 08, 2026 |
+|                    |                               |
+|--------------------|-------------------------------|
+| Here's a footnote. | 13:07 Saturday, July 25, 2026 |
 
 Both
 [`clin_add_titles()`](https://atorus-research.github.io/clinify/reference/add_titles_footnotes.md)
@@ -84,6 +85,7 @@ Another option for setting titles and footnotes is to create your own
 flextable object.
 
 ``` r
+
 clintable(mtcars) |>
   clin_add_titles(ft = flextable::flextable(head(iris, 2)))
 ```
@@ -125,6 +127,7 @@ a single left aligned title, you can provide duplicate text, which keeps
 the left alignment and merges the duplicate values.
 
 ``` r
+
 clintable(mtcars) |>
   clin_add_titles(
     list(
@@ -164,9 +167,9 @@ clintable(mtcars) |>
 | Four very long footnote full of text  |     |
 | Five very long footnote full of text  |     |
 
-|                    |                                  |
-|--------------------|----------------------------------|
-| Here's a footnote. | 19:55 Thursday, January 08, 2026 |
+|                    |                               |
+|--------------------|-------------------------------|
+| Here's a footnote. | 13:07 Saturday, July 25, 2026 |
 
 |                 |     |
 |-----------------|-----|
@@ -191,9 +194,9 @@ clintable(mtcars) |>
 | 15.2 | 8   | 275.8 | 180 | 3.07 | 3.780 | 18.00 | 0   | 0   | 3    | 3    |
 | 10.4 | 8   | 472.0 | 205 | 2.93 | 5.250 | 17.98 | 0   | 0   | 3    | 4    |
 
-|                    |                                  |
-|--------------------|----------------------------------|
-| Here's a footnote. | 19:55 Thursday, January 08, 2026 |
+|                    |                               |
+|--------------------|-------------------------------|
+| Here's a footnote. | 13:07 Saturday, July 25, 2026 |
 
 1
 

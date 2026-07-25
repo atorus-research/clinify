@@ -50,6 +50,7 @@ A `clintable` object with modified padding.
 ## Examples
 
 ``` r
+
 ct <- clintable(mtcars) |>
   clin_group_pad('gear')
 
