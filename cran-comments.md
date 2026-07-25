@@ -1,37 +1,32 @@
-# clinify 0.3.0
+## Submission notes
 
-- Incorporate performance improvements from {officer} package updates 
-- Fix issue with `clin_col_widths()` where numeric precision issues could cause unexpected errors
-- Group labels can be formatted and by default moved above header line ([#79](https://github.com/atorus-research/clinify/issues/79))
-- Added `make_grouped_pagenums()` helper function
-- Added function to create `clindoc()` objects specifically, and multiple tables can be passed to `clindoc()` ([#63](https://github.com/atorus-research/clinify/issues/63), [#80](https://github.com/atorus-research/clinify/issues/80))
-- Titles and footnotes now only split into two parts to avoid line wrapping ([#69](https://github.com/atorus-research/clinify/issues/69)). This is a breaking change.
-- Added `clin_group_pad()` function ([#72](https://github.com/atorus-research/clinify/issues/72))
-- Updated group tracking in `clin_group_by()`, `clin_auto_page()` and `clin_group_pad()` to find groups by changed values or by populated values.
-- `clin_auto_page()` now has an option to drop the `page_by` variable. Does not drop variable by default. This is a breaking change.
-- Renamed `write_clintable()` to `write_clindoc()`. This is a breaking change.
-- New vignette on Document Objects and Saving
+This is a patch release (0.3.1) that fixes the R CMD check ERROR reported for
+clinify 0.3.0 on r-devel-linux-x86_64-fedora-gcc.
 
-# clinify 0.2.0
-- Added in body captions ([#26](https://github.com/atorus-research/clinify/issues/26) and [#28](https://github.com/atorus-research/clinify/issues/28))
-- Dedicated footnote pages [#29](https://github.com/atorus-research/clinify/issues/29)
-- Fixed column header bugs [#61](https://github.com/atorus-research/clinify/issues/61)
-- Allow return as `rdocx` object [#63](https://github.com/atorus-research/clinify/issues/63)
-- Automatic page numbers [#4](https://github.com/atorus-research/clinify/issues/4)
-- Added `clin_auto_page()` function for auto pagination using word's `keep_with_next` ([#16](https://github.com/atorus-research/clinify/issues/16))
-- Several new vignettes
+The failure was in a unit test that compared {flextable} `autofit()` row
+heights for exact equality. Those heights are estimated from font metrics and
+vary across platforms, which produced a single-row mismatch (0.433 vs 0.422)
+on r-devel-linux-x86_64-fedora-gcc only. The test no longer asserts on those
+platform-dependent dimensions; it still verifies table data, content, spans,
+styles, and headers. This release also brings compatibility with
+{officer} (>= 0.7.0) and several styling/slicing fixes; see NEWS.md.
 
-# clinify 0.1.2 
+## Test environments
 
-CRAN review comments, including:
-- Updated description file for reference links
-- Updated help documentation `dontrun{}` examples avoid unnecessary use of `dontrun{}`
-- Updated help example to not write file to local directory, and ensured all tests and vignettes write to files in `tempdir()`
+* local: macOS, R 4.5.1
+* GitHub Actions: Ubuntu 22.04 and ubuntu-latest (R-release and R-devel),
+  macOS-latest (R-release), windows-latest (R-release)
 
-# clinify 0.1.1
+## R CMD check results
 
-CRAN review comment updates in DESCRIPTION file
+0 errors | 0 warnings | 1 note
 
-# clinify 0.1.0 
+The package checks cleanly (0 errors, 0 warnings) on all of the GitHub Actions
+environments listed above, including R-devel on Linux. The only NOTE appears
+locally: "checking for future file timestamps ... unable to verify current
+time", which is caused by the local check machine having no network access to
+verify the current time; it does not occur on CRAN.
 
-Initial CRAN submission
+## Reverse dependencies
+
+There are no reverse dependencies for this package.

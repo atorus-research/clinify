@@ -17,3 +17,5 @@
 ^CRAN-SUBMISSION$
 ^\.lintr$
 ^data-raw$
+^CLAUDE\.md$
+^\.claude$
