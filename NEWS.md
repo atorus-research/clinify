@@ -17,6 +17,7 @@
 - `clin_add_titles()`, `clin_add_footnotes()`, `clin_add_footnote_page()` and `new_title_footnote()` gained an `align` argument to place each line, so a single left aligned title no longer needs its text passed twice ([#98](https://github.com/atorus-research/clinify/issues/98))
 - A title or footnote line with no elements now gives a clear error instead of failing inside `data.frame()`
 - The `clinify_table_default()` in `defaults_template.R` and in `vignette("defaults")` no longer rebuild the table properties either. Organisations that copied the template will want to pick up the change
+- Added `clin_spanner_rule()` to draw the rule that conventionally sits under a spanner label, across only the columns that spanner covers. The columns come from the header on the table, so the space over a stub or a trailing p-value column is left un-ruled and the rule follows the spanners as the layout changes instead of being given as column numbers that have to be kept in step with it. The rule is drawn after the default styling function, so it holds when an organisation's `clinify_table_default()` clears the borders it started from, and `border` takes an `officer::fp_border()` for a dashed or hairline pen, or `FALSE` to keep a house style from underlining the spanners at all ([#105](https://github.com/atorus-research/clinify/issues/105))
 
 # clinify 0.3.1
 
