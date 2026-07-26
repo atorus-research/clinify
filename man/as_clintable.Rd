@@ -20,6 +20,21 @@ A clintable object
 \description{
 Convert a flextable into a clintable object
 }
+\details{
+There is no \code{coerce_character} argument here, unlike \code{\link[=clintable]{clintable()}}.
+A flextable arrives with its cell text already rendered, so the numeric
+formatting this argument exists to avoid has already happened and coercing
+the source data is no longer an option. The nearest equivalent is
+\code{flextable::set_formatter(x, values = as.character)} before calling
+\code{as_clintable()}, which rewrites every body cell from the stored data.
+That is not the same operation: it replaces cell \emph{content}, so any
+chunk level work already done on the body - \code{flextable::compose()},
+\verb{flextable::colformat_*()}, images, hyperlinks, equations - is discarded,
+and columns keep the right alignment flextable gave them for being numeric.
+Because that trade cannot be made safely on the user's behalf, it is left
+to the caller. To get the coercion without the trade, build with
+\code{clintable(x, coerce_character = TRUE)} instead.
+}
 \examples{
 
 ft <- flextable::flextable(mtcars)
