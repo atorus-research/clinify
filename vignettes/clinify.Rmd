@@ -188,6 +188,26 @@ In this case, we're saying that:
 - `disp` will fill 15% of the page
 - `vs` will fill 15% of the page
 
+Widths deal with the horizontal; `clin_row_height()` deals with the vertical. Regulatory outputs are usually specified to an exact row pitch, and how tall a row renders is what decides how much fits on a page. {flextable} leaves rows at a nominal quarter inch with a rule of "auto", which lets the renderer size them however it likes, so a table can drift down the page and paginate differently than the specification says it should. Pitches are given in points, since that is how they are normally specified:
+
+```{r, eval=FALSE}
+clintable(dat2) |>
+  clin_row_height(body = 15.35, title = 11.4, footnote = 11.4)
+```
+
+The body, the titles and the footnotes are set separately because they are separate tables. Group label and caption rows take the body pitch. The default `rule = "atleast"` treats the pitch as a floor, so a cell whose text wraps grows past it rather than being clipped; `rule = "exact"` pins every row to the pitch, which is the only way to get a pitch tighter than the font's line height, at the cost of clipping anything that does not fit.
+
+Three pieces of vertical space shape the header block, and `clin_header_pad()` names them for where they sit rather than for the padding that produces them:
+
+```{r, eval=FALSE}
+clintable(dat2) |>
+  clin_header_pad(above = 18, below = 4, rule_to_body = 6)
+```
+
+`above` and `below` are the room over and under each header row - on a single row header that is the buffer above the column labels and the distance down to the rule, and on a spanned header it also opens the space between the levels. `rule_to_body` is the room between that rule and the first body row. `below` and `rule_to_body` are not interchangeable: a cell's bottom border is drawn at the bottom edge of the cell, below its padding, so padding under the header pushes the rule away from the labels and toward the body rather than opening space beneath it. Space under the rule has to come from the body side, which is what `rule_to_body` does - on the first row of every page, so a table split over pages keeps the same gap throughout.
+
+Where a table sits across the page is `clin_table_align()`. {flextable} centres tables, and regulatory outputs are usually flush left.
+
 The rest of the columns will be spaced evenly based on the remaining space. The space that's filled is based on default configurations for page width, which are configurable within your session. Furthermore, `clin_col_width()` adapts to alternating pages. The ratios given to key columns apply for each alternating page, and the proportions applied to the additional `col_group` variables adapt any remaining space to ensure a page fits the total page width. 
 
 One last tedious part of structuring any table is getting the table headers formatted correctly. There are a couple specific features, such as spanning headers, which can also be tricky to get right, especially in a semi-automated way. For this reason, we've added the function `clin_column_headers()` to make this process a bit easier. Let's use `iris` as an example of a table to which we want to apply some spanning headers.
@@ -206,6 +226,21 @@ The first parameter of `clin_column_headers()` will be the `clintable` object fo
 
 When using spanning headers, you're also typically using cell merging so that a single string of text spans over multiple columns. To accomplish this, repeat the text that you want to merge and ensure that those elements are placed in the same row. Consider the example above. For the Sepal variable, we have two spanning headers. One for "flowers", and one for "Sepal". These cells will be merged, and the bottom row contains "Length" and "Width" separately.
 
+Sometimes a header row repeats a label across adjacent columns without those columns being one spanner - a shift table where several columns each sit under their own treatment arm but share a "Baseline" sub-label, for example. Merging those cells would be wrong, so the `merge` argument lets you say which header rows should have their identical cells merged. `merge = "spanners"` covers the common case by leaving the bottom row of the header - the one holding the individual column labels - alone.
+
+```{r}
+clintable(iris) |>
+  clin_column_headers(
+    Sepal.Length = c("Flowers", "Sepal", "Value"),
+    Sepal.Width = c("Flowers", "Sepal", "Value"),
+    Petal.Length = c("Petal", "Value"),
+    Petal.Width = c("Petal", "Value"),
+    merge = "spanners"
+  )
+```
+
+Merging can also be turned off entirely with `merge = FALSE`, or aimed at specific header rows using ordinary R subscripts, numbered from the top down - `merge = 1:2` for the top two rows, or `merge = -3` for everything except the third. Since `merge` works a row at a time, a row that needs some of its repeated cells merged but not others should be left out of `merge` and spanned with `flextable::merge_at()` instead.
+
 Another common way you may want to apply headers is by using your variable labels. By default, clintable will respect this. Furthermore, the same spanning can be achieved as well. Let's consider another example:
 
 ```{r}
@@ -220,7 +255,20 @@ clintable(iris2) |>
   align(align = "center", part = "body")
 ```
 
-The underlying logic of this example is exactly the same as using `clin_column_headers()`, and in fact `clin_column_headers()` is actually called by default. The difference is that here, to separate levels we use the delimiter `||`. Note in this example how the spanning variable have also changed so that `Flower` stretches over all four Petal and Sepal columns. 
+The underlying logic of this example is exactly the same as using `clin_column_headers()`, and in fact the same header building machinery is applied by default. The difference is that here, to separate levels we use the delimiter `||`. Note in this example how the spanning variable have also changed so that `Flower` stretches over all four Petal and Sepal columns. 
+
+Headers built this way can have their merging adjusted too. Call `clin_column_headers()` with nothing but the `merge` argument and the header text coming from the labels is left as it is:
+
+```{r}
+iris3 <- iris
+attr(iris3$Sepal.Length, "label") <- "Flower||Sepal||Value"
+attr(iris3$Sepal.Width, "label") <- "Flower||Sepal||Value"
+attr(iris3$Petal.Length, "label") <- "Flower||Petal||Value"
+attr(iris3$Petal.Width, "label") <- "Flower||Petal||Value"
+
+clintable(iris3) |>
+  clin_column_headers(merge = "spanners")
+```
 
 Note that after headers are applied, additional styling can be done. In this case, we use the `flextable::align()` function to change the alignment on both the table body and column headers to center. Note that default styles are applied when the table is written out or printed, so these might potentially override some settings depending on how those functions are applied.
 

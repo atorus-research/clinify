@@ -44,10 +44,10 @@ options(
     x <- flextable::line_spacing(x, space = 1, part = "all")
     # Setup the cell padding.
     x <- flextable::padding(x, part = "all", padding.bottom = 0, padding.top = 0)
-    x <- flextable::set_table_properties(
-      x,
-      layout = "fixed"
-    )
+    # Fix the layout without discarding the rest of the table's properties.
+    # set_table_properties() rebuilds them all, which would reset the table's
+    # alignment on the page and the Word accessibility fields.
+    x$properties$layout <- "fixed"
   },
   #' The function to apply default footer styling
   #'
@@ -94,14 +94,14 @@ options(
     # Setup the cell padding.
     x <- flextable::padding(x, part = "all", padding.bottom = 0, padding.top = 0)
 
-    x <- flextable::set_table_properties(
-      x,
-      layout = "fixed"
-    )
+    # Fix the layout without discarding the rest of the table's properties.
+    # set_table_properties() rebuilds them all, which would reset the table's
+    # alignment on the page and the Word accessibility fields.
+    x$properties$layout <- "fixed"
   },
   #' The function to apply default table styling
   #'
-  #' Headers with the same value are merged both horizontally and vertically
+  #' Headers stacked with the same value are merged vertically
   #' All borders are clear except for the header (bleck, solid, 0.2pt)
   #' As well as top horizontal line for the table header.
   #' font style - Courier New, 9pt, not bold, not italic
@@ -117,10 +117,11 @@ options(
   #' @export
   clinify_table_default = function(x, ...) {
 
-    # Merge cells with same name
-    # (merge occurs both horizontally and vertically)
+    # Merge cells stacked with the same name.
+    # Horizontal merging is left alone here - that is decided when the headers
+    # are built, and merging again would override the `merge` argument of
+    # clin_column_headers().
     x <- flextable::merge_v(x, part="header")
-    x <- flextable::merge_h(x, part="header")
 
 
     # You can center-align all table headers but first, for example like this:
@@ -158,10 +159,10 @@ options(
 
 
     # Set table's layout.
-    x <- flextable::set_table_properties(
-      x,
-      layout = "fixed"
-    )
+    # Fix the layout without discarding the rest of the table's properties.
+    # set_table_properties() rebuilds them all, which would reset the table's
+    # alignment on the page and the Word accessibility fields.
+    x$properties$layout <- "fixed"
 
     # Setup the cell padding for table body.
     x <- flextable::padding(x, part = "body", padding.bottom = 0.1, padding.top = 0.1)

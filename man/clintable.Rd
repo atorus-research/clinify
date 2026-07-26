@@ -4,7 +4,14 @@
 \alias{clintable}
 \title{Create a new clintable object}
 \usage{
-clintable(x, page_by = NULL, group_by = NULL, use_labels = TRUE, ...)
+clintable(
+  x,
+  page_by = NULL,
+  group_by = NULL,
+  use_labels = TRUE,
+  coerce_character = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{A data frame}
@@ -15,8 +22,13 @@ clintable(x, page_by = NULL, group_by = NULL, use_labels = TRUE, ...)
 as a label above the table headers}
 
 \item{use_labels}{Use variable labels as column headers. Nested levels can be
-achieved using the string "||" as a delimitter. Horizontal and vertical levels
-using identical words will be merged.}
+achieved using the string "||" as a delimitter. Horizontally adjacent cells
+using identical words will be merged, which can be adjusted afterwards using
+the \code{merge} argument of \code{clin_column_headers()}.}
+
+\item{coerce_character}{Coerce every column of \code{x} to character before the
+flextable is built, so pre-formatted values render exactly as supplied.
+Defaults to \code{FALSE}, which leaves flextable's numeric formatting in place.}
 
 \item{...}{Parameters to pass to \code{flextable::flextable()}}
 }
@@ -28,6 +40,62 @@ A clintable object directly inherits from a flextable object. This function
 will pass all necessary parameters \code{flextable::flextable()} and conver the
 object to a \code{clintable}
 }
+\section{Rendering values verbatim}{
+flextable bakes cell text in when the table is built, and it formats a
+\code{double} column as a whole with \code{format(x, trim = TRUE, scientific = FALSE, big.mark = ",")}. Because that decision is column wide, a clinical summary
+column holding a count in one row and a statistic in another - necessarily a
+\code{double} - is reformatted against its neighbours: \code{c(86, 75.2)} renders the
+count as \code{"86.0"}, \code{c(1234, 12.5)} renders it as \code{"1,234.0"}, and
+\code{c(1234567.891, 2)} is rounded to seven significant digits as
+\code{"1,234,568"}. Values that were already formatted upstream are therefore
+silently changed, and nothing errors to say so.
+
+\code{coerce_character = TRUE} runs \code{as.character()} over every column first, so
+each value carries into the table as its own string and no column wide
+decision is made. It replaces the \code{lapply(x, as.character)} line that
+otherwise has to be written ahead of every table. Column \code{label} attributes
+survive the coercion, so \code{use_labels} still finds them. Factors coerce to
+their levels rather than their integer codes.
+
+Two side effects are worth knowing about. Numeric columns lose the right
+alignment flextable's default theme gives them, since alignment follows
+column type; use \code{clin_table_align()} or \code{flextable::align()} to put it
+back. And flextable's formula selectors compare against the coerced values,
+so \code{bold(i = ~ n > 5)} becomes a string comparison and quietly selects
+different rows.
+}
+
+\section{NA is left as NA}{
+\code{as.character(NA)} is \code{NA_character_}, and flextable's default \code{na_str} is
+\code{""}, so an \code{NA} still renders as a blank cell. \code{NA} is deliberately not
+replaced with \code{""}, which is safe in a body column but changes the meaning
+of a pagination variable.
+
+\code{clin_page_by()} splits where the page variable changes, as does
+\code{clin_group_by()} by default, and that comparison is \code{x != lag(x)}. It is
+\code{NA} wherever either side is \code{NA}, and those rows are dropped rather than
+treated as splits. So a \code{page_by}, \code{group_by}, or \code{caption_by} column that
+is padded - carrying its value only on the first row of each block, \code{NA}
+below - collapses to a single page with no group label. A variable used that
+way needs \code{clin_group_by(when = "notempty")}, which tests against \code{""} and
+handles \code{NA} just as well, and \code{clin_page_by()} offers no such option so its
+page variable has to carry a value on every row.
+
+Padding and a change comparison do not go together whichever the pad is, but
+they fail differently, and the \code{NA} failure is the quieter one: \code{""} padding
+makes each padded row look like a change and splits on every one of them,
+which is hard to miss, where \code{NA} padding drops the splits and leaves a
+plausible looking single page.
+}
+
 \examples{
 clintable(mtcars)
+
+# A summary column holding a count and a mean is a double, so flextable
+# would render the count 86 as "86.0". Coercion keeps it as written.
+summary_dat <- data.frame(
+  row_label = c("n", "Mean"),
+  trt_a = c(86, 75.2)
+)
+clintable(summary_dat, coerce_character = TRUE)
 }

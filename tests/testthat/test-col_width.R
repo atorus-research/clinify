@@ -66,3 +66,42 @@ test_that("Widths set properly - standard table", {
   expect_equal(sum(ct3$body$colwidths[v2]), unname(clin_default_table_width()))
   expect_equal(sum(ct3$body$colwidths[v3]), unname(clin_default_table_width()))
 })
+
+test_that("clin_table_align records and applies page alignment", {
+  ct <- clintable(head(mtcars[, 1:3], 3))
+
+  expect_null(ct$clinify_config$table_align)
+  expect_equal(clin_table_align(ct, "left")$clinify_config$table_align, "left")
+
+  expect_error(clin_table_align(ct, "middle"), "should be one of")
+  expect_error(clin_table_align(mtcars, "left"), "inherits")
+
+  # It has to win over a styling function that rebuilds the table properties,
+  # which is what an organisation's own clinify_table_default() may well do
+  clobbering <- function(x, ...) {
+    flextable::set_table_properties(x, layout = "fixed")
+  }
+  withr::local_options(clinify_table_default = clobbering)
+
+  aligned <- clin_table_align(ct, "left")
+
+  file <- withr::local_tempfile(fileext = ".docx")
+  write_clindoc(aligned, file = file)
+
+  unzipped <- withr::local_tempdir()
+  utils::unzip(file, files = "word/document.xml", exdir = unzipped)
+  xml <- paste(
+    readLines(file.path(unzipped, "word", "document.xml"), warn = FALSE),
+    collapse = ""
+  )
+  tbl_pr <- regmatches(xml, regexpr("<w:tblPr>.*?</w:tblPr>", xml))
+
+  # Word spells a left aligned table "start"
+  expect_match(tbl_pr, 'w:val="start"')
+
+  # And the HTML preview agrees
+  expect_match(
+    paste(clintable_as_html(aligned), collapse = ""),
+    "tabwid_left"
+  )
+})

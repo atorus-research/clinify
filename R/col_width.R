@@ -108,3 +108,48 @@ clin_col_widths <- function(x, ...) {
   }
   x
 }
+
+#' Set how a table sits across the page
+#'
+#' flextable centres a table on the page. Regulatory outputs are usually
+#' flush left, and a narrow table sometimes wants to be centred deliberately.
+#' The choice is recorded on the clintable and applied when the table renders,
+#' after the default styling function has run, so it holds even when an
+#' organisation's own `clinify_table_default()` rebuilds the table properties.
+#'
+#' This is only about where the table sits across the page. How wide it is, and
+#' how that width is divided between the columns, is [clin_col_widths()].
+#'
+#' @param x A clintable object
+#' @param align One of "left", "center", or "right"
+#'
+#' @return A clintable object
+#' @export
+#'
+#' @examples
+#' clintable(mtcars) |>
+#'   clin_table_align("left")
+clin_table_align <- function(x, align) {
+  stopifnot(inherits(x, "clintable"))
+  align <- match.arg(align, c("left", "center", "right"))
+
+  x$clinify_config$table_align <- align
+  x
+}
+
+#' Apply the configured page alignment
+#'
+#' Run after the default styling function, so that the alignment holds
+#' whatever that function did to the table properties.
+#'
+#' @param x A clintable object
+#'
+#' @return A clintable object
+#'
+#' @noRd
+table_align_ <- function(x) {
+  if (!is.null(x$clinify_config$table_align)) {
+    x$properties$align <- x$clinify_config$table_align
+  }
+  x
+}

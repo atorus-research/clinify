@@ -82,9 +82,10 @@ as_clindoc <- function(x) {
   doc <- new_clindoc()
   doc$clinify_config$titles <- x$clinify_config$titles
   doc$clinify_config$footnotes <- x$clinify_config$footnotes
+  doc$clinify_config$row_height <- x$clinify_config$row_height
 
   if (!is.null(footnote_page)) {
-    footnote_page <- getOption("clinify_footnotes_default")(footnote_page)
+    footnote_page <- style_footnotes_(footnote_page, x$clinify_config)
     doc <- flextable::body_add_flextable(doc, footnote_page)
     doc <- officer::body_add_break(doc)
   }
@@ -101,6 +102,9 @@ as_clindoc <- function(x) {
 add_clintable_ <- function(doc, x) {
   pg_method <- x$clinify_config$pagination_method
   x <- getOption("clinify_table_default")(x)
+  # After the styling function, so that what the table itself was configured
+  # with holds even if that function set a house style of its own
+  x <- finish_table_(x)
 
   # Keep with next paging
   if (!is.null(x$clinify_config$auto_page_var)) {
@@ -149,6 +153,13 @@ doc_alternating_ <- function(doc, x) {
 #' @noRd
 get_table_ <- function(x, p) {
   tbl <- slice_clintable(x, p$rows, p$cols)
+
+  # Rows added while rendering take the body pitch
+  pitch <- row_height_for_(x$clinify_config, "body")
+
+  # The gap under the header rule comes from the body, so every page needs it
+  tbl <- apply_rule_to_body_(tbl, x$clinify_config$header_pad)
+
   if (!is.null(p$label)) {
     tbl <- flextable::add_header_lines(
       tbl,
@@ -156,6 +167,7 @@ get_table_ <- function(x, p) {
     )
     tbl <- getOption("clinify_grouplabel_default")(tbl)
     tbl <- flextable::align(tbl, 1, 1, "left", part = "header")
+    tbl <- apply_row_height_at_(tbl, 1, pitch, "header")
   }
 
   if (!is.null(p$captions)) {
@@ -165,6 +177,7 @@ get_table_ <- function(x, p) {
     )
     # This has to be applied after the footer is added
     tbl <- getOption("clinify_caption_default")(tbl)
+    tbl <- apply_row_height_at_(tbl, 1, pitch, "footer")
   }
 
   tbl

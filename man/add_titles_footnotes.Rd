@@ -6,18 +6,29 @@
 \alias{clin_add_footnote_page}
 \title{Add titles, footnotes, or a footnote page to a clintable or clindoc}
 \usage{
-clin_add_titles(x, ls = NULL, ft = NULL)
+clin_add_titles(x, ls = NULL, ft = NULL, align = NULL, tokens = NULL)
 
-clin_add_footnotes(x, ls = NULL, ft = NULL)
+clin_add_footnotes(x, ls = NULL, ft = NULL, align = NULL, tokens = NULL)
 
-clin_add_footnote_page(x, ls = NULL, ft = NULL)
+clin_add_footnote_page(x, ls = NULL, ft = NULL, align = NULL, tokens = NULL)
 }
 \arguments{
 \item{x}{a clintable object}
 
-\item{ls}{a list of character vectors, no more than 2 elements to a vector}
+\item{ls}{a list of character vectors, no more than 2 elements to a vector,
+or a data frame spec as described above}
 
 \item{ft}{A flextable object to use as the header}
+
+\item{align}{Where to place each line, as a character vector holding one
+value per element of \code{ls} (or a single value for all of them). Values are
+\code{"left"}, \code{"center"}, \code{"right"}, \code{"split"}, or \code{NA} to keep the default for
+that line. Cannot be used together with \code{ft}, or with a spec that already
+has an \code{align} column.}
+
+\item{tokens}{Replacements for \code{{NAME}} placeholders in the text, as a named
+list or character vector - \code{tokens = list(FILE = "programs/t14-1-01.R")}
+turns \code{{FILE}} into that path. Cannot be used together with \code{ft}.}
 }
 \value{
 A clintable object
@@ -32,8 +43,34 @@ When using the \code{ls} parameter, each element of the list can contain no more
 elements within each character vector. In a title, a single element will align center.
 In a footnote, a single element will align to the left. For both titles and footnotes,
 two elements will align split down the middle, with the left side element aligning left
-and the right side element aligning right. In a title, a single left aligned element,
-provide a 2 element character vector with duplicate values.
+and the right side element aligning right.
+
+Use \code{align} to place a line somewhere other than its default. A line holding
+a single element can go \code{"left"}, \code{"center"}, or \code{"right"}; a line holding two
+elements is split down the middle by construction, which \code{align} spells
+\code{"split"}. \code{NA} leaves a line where it would have landed anyway.
+
+Instead of a list, \code{ls} can be a data frame holding every line for a table
+at once, so one object feeds the titles, the footnotes and a footnote page
+together. Each of the three functions takes the rows that belong to it and
+ignores the rest, and a surface with no rows is left alone. Rows are used in
+the order they are given.\tabular{ll}{
+   column \tab holds \cr
+   \code{type} \tab \code{"title"}, \code{"footnote"}, or \code{"footnote_page"} (plurals accepted) \cr
+   \code{text1} \tab the line, or its left hand side \cr
+   \code{text2} \tab the right hand side of a split line, blank or \code{NA} if there is none \cr
+   \code{align} \tab as the \code{align} argument below, blank or \code{NA} for the default \cr
+}
+
+
+Only \code{type} and \code{text1} are required. Reading the spec in is left to you -
+it is an ordinary data frame, so it can come from a spreadsheet, a CSV, a
+database, or be written out by hand.
+
+\code{tokens} fills in \code{{NAME}} placeholders, which is how a program path or a run
+date gets into text that was written somewhere else. \code{{PAGE}} and
+\code{{NUMPAGES}} are left alone - those become real Word page number fields when
+the table renders, so do not pass them as tokens.
 }
 \examples{
 clintable(mtcars) |>
@@ -42,6 +79,15 @@ clintable(mtcars) |>
       c("Left", "Right"),
       c("Just the middle")
     )
+  ) |>
+  clin_add_titles(
+    list(
+      c("Protocol: ABC", "Page {PAGE} of {NUMPAGES}"),
+      "Table 14-2.01",
+      "Summary of Demographic and Baseline Characteristics"
+    ),
+    # the title line stays centered, the one below it goes left
+    align = c(NA, NA, "left")
   ) |>
   clin_add_footnotes(
     list(
@@ -59,6 +105,19 @@ clintable(mtcars) |>
       )
     )
   )
+
+# Or keep every line for the table in one place and let each function take
+# the rows that belong to it
+spec <- data.frame(
+  type = c("title", "title", "footnote"),
+  text1 = c("Protocol: ABC", "Table 14-2.01", "Source: {FILE}"),
+  text2 = c("Page {PAGE} of {NUMPAGES}", NA, NA),
+  align = c("split", "center", "left")
+)
+
+clintable(mtcars) |>
+  clin_add_titles(spec, tokens = list(FILE = "programs/t14-2-01.R")) |>
+  clin_add_footnotes(spec, tokens = list(FILE = "programs/t14-2-01.R"))
 
 }
 \concept{add_titles_footnotes}

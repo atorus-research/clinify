@@ -1,15 +1,14 @@
 ## Submission notes
 
-This is a patch release (0.3.1) that fixes the R CMD check ERROR reported for
-clinify 0.3.0 on r-devel-linux-x86_64-fedora-gcc.
+This is a minor release (0.4.0). It adds a `merge` argument to
+`clin_column_headers()` so that automatic merging of identical, adjacent
+column header cells can be limited to chosen header rows, and it fixes cell
+merges being left in an invalid state when a table is paginated column wise.
+See NEWS.md.
 
-The failure was in a unit test that compared {flextable} `autofit()` row
-heights for exact equality. Those heights are estimated from font metrics and
-vary across platforms, which produced a single-row mismatch (0.433 vs 0.422)
-on r-devel-linux-x86_64-fedora-gcc only. The test no longer asserts on those
-platform-dependent dimensions; it still verifies table data, content, spans,
-styles, and headers. This release also brings compatibility with
-{officer} (>= 0.7.0) and several styling/slicing fixes; see NEWS.md.
+One narrow breaking change is documented in NEWS.md: because `merge` is now a
+parameter of `clin_column_headers()`, a column named `merge` can no longer be
+given a header through `...`.
 
 ## Test environments
 
@@ -19,13 +18,10 @@ styles, and headers. This release also brings compatibility with
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 0 notes
 
-The package checks cleanly (0 errors, 0 warnings) on all of the GitHub Actions
-environments listed above, including R-devel on Linux. The only NOTE appears
-locally: "checking for future file timestamps ... unable to verify current
-time", which is caused by the local check machine having no network access to
-verify the current time; it does not occur on CRAN.
+Checked locally on macOS with R 4.5.1. The GitHub Actions environments listed
+above are checked on every push; confirm they are green before submitting.
 
 ## Reverse dependencies
 
