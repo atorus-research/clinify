@@ -56,6 +56,35 @@ clintable(mtcars) |>
 
 While this particular example is obscure, this opens up the possibility to specifically craft your own title or footnote.
 
+## Titles and footnotes from a spec
+
+Projects usually keep the titles and footnotes for every table in one place - a spreadsheet, a CSV, a database table - rather than writing them into each program. Instead of a list, `ls` accepts a data frame holding every line for a table, and each function takes the rows that belong to it:
+
+```{r}
+spec <- data.frame(
+  type = c("title", "title", "footnote", "footnote_page"),
+  text1 = c(
+    "Protocol: CDISCPILOT01",
+    "Table 14-2.01",
+    "Source: {FILE}",
+    "Kept off the table pages"
+  ),
+  text2 = c("Page {PAGE} of {NUMPAGES}", NA, NA, NA),
+  align = c("split", "center", "left", "left")
+)
+
+clintable(head(iris, 3)) |>
+  clin_add_titles(spec, tokens = list(FILE = "programs/t14-2-01.R")) |>
+  clin_add_footnotes(spec, tokens = list(FILE = "programs/t14-2-01.R")) |>
+  clin_add_footnote_page(spec)
+```
+
+Only `type` and `text1` are required; `text2` holds the right hand side of a split line and `align` places each line. A surface with no rows in the spec is left alone, which is what lets the same object be handed to all three functions - above, `clin_add_footnotes()` ignores the title and footnote page rows.
+
+Reading the spec in is deliberately left to you. It is an ordinary data frame, so where it comes from is your choice, and clinify does not need to know about spreadsheets to accept one.
+
+`tokens` fills in `{NAME}` placeholders, which is how a program path or a run date reaches text that was written elsewhere. Note that `{PAGE}` and `{NUMPAGES}` are left alone - those become real Word page number fields when the table renders, so they should not be passed as tokens.
+
 ## Footnote Pages
 
 Another circumstance that **{clinify}** allows for is the creation of a specific footnote pages. This can be used in circumstances where there are too many required footnotes for the table, and rather than putting in the footer you can place them into their own specific preceding page of the table itself. Also, note in this example that if you want to add a single left aligned title, you can provide duplicate text, which keeps the left alignment and merges the duplicate values.
