@@ -54,9 +54,9 @@ clintable(mtcars) |>
 | 15.2 | 8   | 275.8 | 180 | 3.07 | 3.780 | 18.00 | 0   | 0   | 3    | 3    |
 | 10.4 | 8   | 472.0 | 205 | 2.93 | 5.250 | 17.98 | 0   | 0   | 3    | 4    |
 
-|                    |                               |
-|--------------------|-------------------------------|
-| Here's a footnote. | 13:07 Saturday, July 25, 2026 |
+|                    |                             |
+|--------------------|-----------------------------|
+| Here's a footnote. | 13:15 Sunday, July 26, 2026 |
 
 Both
 [`clin_add_titles()`](https://atorus-research.github.io/clinify/reference/add_titles_footnotes.md)
@@ -116,6 +116,82 @@ clintable(mtcars) |>
 While this particular example is obscure, this opens up the possibility
 to specifically craft your own title or footnote.
 
+## Titles and footnotes from a spec
+
+Projects usually keep the titles and footnotes for every table in one
+place - a spreadsheet, a CSV, a database table - rather than writing
+them into each program. Instead of a list, `ls` accepts a data frame
+holding every line for a table, and each function takes the rows that
+belong to it:
+
+``` r
+
+spec <- data.frame(
+  type = c("title", "title", "footnote", "footnote_page"),
+  text1 = c(
+    "Protocol: CDISCPILOT01",
+    "Table 14-2.01",
+    "Source: {FILE}",
+    "Kept off the table pages"
+  ),
+  text2 = c("Page {PAGE} of {NUMPAGES}", NA, NA, NA),
+  align = c("split", "center", "left", "left")
+)
+
+clintable(head(iris, 3)) |>
+  clin_add_titles(spec, tokens = list(FILE = "programs/t14-2-01.R")) |>
+  clin_add_footnotes(spec, tokens = list(FILE = "programs/t14-2-01.R")) |>
+  clin_add_footnote_page(spec)
+```
+
+|                        |           |
+|------------------------|-----------|
+| Protocol: CDISCPILOT01 | Page of   |
+| Table 14-2.01          |           |
+
+|                          |     |
+|--------------------------|-----|
+| Kept off the table pages |     |
+
+|                             |     |
+|-----------------------------|-----|
+| Source: programs/t14-2-01.R |     |
+
+|                        |           |
+|------------------------|-----------|
+| Protocol: CDISCPILOT01 | Page of   |
+| Table 14-2.01          |           |
+
+| Sepal.Length | Sepal.Width | Petal.Length | Petal.Width | Species |
+|--------------|-------------|--------------|-------------|---------|
+| 5.1          | 3.5         | 1.4          | 0.2         | setosa  |
+| 4.9          | 3.0         | 1.4          | 0.2         | setosa  |
+| 4.7          | 3.2         | 1.3          | 0.2         | setosa  |
+
+|                             |     |
+|-----------------------------|-----|
+| Source: programs/t14-2-01.R |     |
+
+1
+
+2
+
+Only `type` and `text1` are required; `text2` holds the right hand side
+of a split line and `align` places each line. A surface with no rows in
+the spec is left alone, which is what lets the same object be handed to
+all three functions - above,
+[`clin_add_footnotes()`](https://atorus-research.github.io/clinify/reference/add_titles_footnotes.md)
+ignores the title and footnote page rows.
+
+Reading the spec in is deliberately left to you. It is an ordinary data
+frame, so where it comes from is your choice, and clinify does not need
+to know about spreadsheets to accept one.
+
+`tokens` fills in `{NAME}` placeholders, which is how a program path or
+a run date reaches text that was written elsewhere. Note that `{PAGE}`
+and `{NUMPAGES}` are left alone - those become real Word page number
+fields when the table renders, so they should not be passed as tokens.
+
 ## Footnote Pages
 
 Another circumstance that **{clinify}** allows for is the creation of a
@@ -167,9 +243,9 @@ clintable(mtcars) |>
 | Four very long footnote full of text  |     |
 | Five very long footnote full of text  |     |
 
-|                    |                               |
-|--------------------|-------------------------------|
-| Here's a footnote. | 13:07 Saturday, July 25, 2026 |
+|                    |                             |
+|--------------------|-----------------------------|
+| Here's a footnote. | 13:15 Sunday, July 26, 2026 |
 
 |                 |     |
 |-----------------|-----|
@@ -194,9 +270,9 @@ clintable(mtcars) |>
 | 15.2 | 8   | 275.8 | 180 | 3.07 | 3.780 | 18.00 | 0   | 0   | 3    | 3    |
 | 10.4 | 8   | 472.0 | 205 | 2.93 | 5.250 | 17.98 | 0   | 0   | 3    | 4    |
 
-|                    |                               |
-|--------------------|-------------------------------|
-| Here's a footnote. | 13:07 Saturday, July 25, 2026 |
+|                    |                             |
+|--------------------|-----------------------------|
+| Here's a footnote. | 13:15 Sunday, July 26, 2026 |
 
 1
 

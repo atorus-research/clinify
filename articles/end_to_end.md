@@ -190,9 +190,9 @@ print(ct)
 
 [TABLE]
 
-|                         |                               |
-|-------------------------|-------------------------------|
-| Source: /my/file/path.R | 13:07 Saturday, July 25, 2026 |
+|                         |                             |
+|-------------------------|-----------------------------|
+| Source: /my/file/path.R | 13:14 Sunday, July 26, 2026 |
 
 With everything ready to go, we can write our table out to its
 destination using

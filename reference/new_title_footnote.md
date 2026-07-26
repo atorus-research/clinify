@@ -5,7 +5,11 @@ Create a new title or footnote flextable
 ## Usage
 
 ``` r
-new_title_footnote(x, sect = c("titles", "footnotes", "footnote_page"))
+new_title_footnote(
+  x,
+  sect = c("titles", "footnotes", "footnote_page"),
+  align = NULL
+)
 ```
 
 ## Arguments
@@ -17,6 +21,12 @@ new_title_footnote(x, sect = c("titles", "footnotes", "footnote_page"))
 - sect:
 
   Either "titles" or "footnotes"
+
+- align:
+
+  Where to place each line - `"left"`, `"center"`, `"right"`, `"split"`,
+  or `NA` for the default. One value per element of `x`, or a single
+  value for all of them.
 
 ## Value
 

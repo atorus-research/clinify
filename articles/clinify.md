@@ -115,9 +115,9 @@ print(ct)
 | 15.2 | 8   | 275.8 | 180 | 3.07 | 3.780 | 18.00 | 0   | 0   | 3    | 3    |
 | 10.4 | 8   | 472.0 | 205 | 2.93 | 5.250 | 17.98 | 0   | 0   | 3    | 4    |
 
-|                    |                               |
-|--------------------|-------------------------------|
-| Here's a footnote. | 13:07 Saturday, July 25, 2026 |
+|                    |                             |
+|--------------------|-----------------------------|
+| Here's a footnote. | 13:14 Sunday, July 26, 2026 |
 
 Here we’ve added some titles and footnotes to the document. The
 functions
@@ -220,9 +220,9 @@ print(ct)
 
 [TABLE]
 
-|                    |                               |
-|--------------------|-------------------------------|
-| Here's a footnote. | 13:07 Saturday, July 25, 2026 |
+|                    |                             |
+|--------------------|-----------------------------|
+| Here's a footnote. | 13:14 Sunday, July 26, 2026 |
 
 |                 |       |
 |-----------------|-------|
@@ -231,9 +231,9 @@ print(ct)
 
 [TABLE]
 
-|                    |                               |
-|--------------------|-------------------------------|
-| Here's a footnote. | 13:07 Saturday, July 25, 2026 |
+|                    |                             |
+|--------------------|-----------------------------|
+| Here's a footnote. | 13:14 Sunday, July 26, 2026 |
 
 |                 |       |
 |-----------------|-------|
@@ -242,9 +242,9 @@ print(ct)
 
 [TABLE]
 
-|                    |                               |
-|--------------------|-------------------------------|
-| Here's a footnote. | 13:07 Saturday, July 25, 2026 |
+|                    |                             |
+|--------------------|-----------------------------|
+| Here's a footnote. | 13:14 Sunday, July 26, 2026 |
 
 1
 
@@ -345,6 +345,58 @@ In this case, we’re saying that:
 - `disp` will fill 15% of the page
 - `vs` will fill 15% of the page
 
+Widths deal with the horizontal;
+[`clin_row_height()`](https://atorus-research.github.io/clinify/reference/clin_row_height.md)
+deals with the vertical. Regulatory outputs are usually specified to an
+exact row pitch, and how tall a row renders is what decides how much
+fits on a page. {flextable} leaves rows at a nominal quarter inch with a
+rule of “auto”, which lets the renderer size them however it likes, so a
+table can drift down the page and paginate differently than the
+specification says it should. Pitches are given in points, since that is
+how they are normally specified:
+
+``` r
+
+clintable(dat2) |>
+  clin_row_height(body = 15.35, title = 11.4, footnote = 11.4)
+```
+
+The body, the titles and the footnotes are set separately because they
+are separate tables. Group label and caption rows take the body pitch.
+The default `rule = "atleast"` treats the pitch as a floor, so a cell
+whose text wraps grows past it rather than being clipped;
+`rule = "exact"` pins every row to the pitch, which is the only way to
+get a pitch tighter than the font’s line height, at the cost of clipping
+anything that does not fit.
+
+Three pieces of vertical space shape the header block, and
+[`clin_header_pad()`](https://atorus-research.github.io/clinify/reference/clin_header_pad.md)
+names them for where they sit rather than for the padding that produces
+them:
+
+``` r
+
+clintable(dat2) |>
+  clin_header_pad(above = 18, below = 4, rule_to_body = 6)
+```
+
+`above` and `below` are the room over and under each header row - on a
+single row header that is the buffer above the column labels and the
+distance down to the rule, and on a spanned header it also opens the
+space between the levels. `rule_to_body` is the room between that rule
+and the first body row. `below` and `rule_to_body` are not
+interchangeable: a cell’s bottom border is drawn at the bottom edge of
+the cell, below its padding, so padding under the header pushes the rule
+away from the labels and toward the body rather than opening space
+beneath it. Space under the rule has to come from the body side, which
+is what `rule_to_body` does - on the first row of every page, so a table
+split over pages keeps the same gap throughout.
+
+Where a table sits across the page is
+[`clin_table_align()`](https://atorus-research.github.io/clinify/reference/clin_table_align.md).
+{flextable} centres tables, and regulatory outputs are usually flush
+left.
+
 The rest of the columns will be spaced evenly based on the remaining
 space. The space that’s filled is based on default configurations for
 page width, which are configurable within your session. Furthermore,
@@ -409,6 +461,55 @@ Sepal variable, we have two spanning headers. One for “flowers”, and one
 for “Sepal”. These cells will be merged, and the bottom row contains
 “Length” and “Width” separately.
 
+Sometimes a header row repeats a label across adjacent columns without
+those columns being one spanner - a shift table where several columns
+each sit under their own treatment arm but share a “Baseline” sub-label,
+for example. Merging those cells would be wrong, so the `merge` argument
+lets you say which header rows should have their identical cells merged.
+`merge = "spanners"` covers the common case by leaving the bottom row of
+the header - the one holding the individual column labels - alone.
+
+``` r
+
+clintable(iris) |>
+  clin_column_headers(
+    Sepal.Length = c("Flowers", "Sepal", "Value"),
+    Sepal.Width = c("Flowers", "Sepal", "Value"),
+    Petal.Length = c("Petal", "Value"),
+    Petal.Width = c("Petal", "Value"),
+    merge = "spanners"
+  )
+```
+
+| Flowers |       |       |       |        |
+|---------|-------|-------|-------|--------|
+| Sepal   |       | Petal |       |        |
+| Value   | Value | Value | Value |        |
+| 5.1     | 3.5   | 1.4   | 0.2   | setosa |
+| 4.9     | 3.0   | 1.4   | 0.2   | setosa |
+| 4.7     | 3.2   | 1.3   | 0.2   | setosa |
+| 4.6     | 3.1   | 1.5   | 0.2   | setosa |
+| 5.0     | 3.6   | 1.4   | 0.2   | setosa |
+| 5.4     | 3.9   | 1.7   | 0.4   | setosa |
+| 4.6     | 3.4   | 1.4   | 0.3   | setosa |
+| 5.0     | 3.4   | 1.5   | 0.2   | setosa |
+| 4.4     | 2.9   | 1.4   | 0.2   | setosa |
+| 4.9     | 3.1   | 1.5   | 0.1   | setosa |
+| 5.4     | 3.7   | 1.5   | 0.2   | setosa |
+| 4.8     | 3.4   | 1.6   | 0.2   | setosa |
+| 4.8     | 3.0   | 1.4   | 0.1   | setosa |
+| 4.3     | 3.0   | 1.1   | 0.1   | setosa |
+| 5.8     | 4.0   | 1.2   | 0.2   | setosa |
+
+Merging can also be turned off entirely with `merge = FALSE`, or aimed
+at specific header rows using ordinary R subscripts, numbered from the
+top down - `merge = 1:2` for the top two rows, or `merge = -3` for
+everything except the third. Since `merge` works a row at a time, a row
+that needs some of its repeated cells merged but not others should be
+left out of `merge` and spanned with
+[`flextable::merge_at()`](https://davidgohel.github.io/flextable/reference/merge_at.html)
+instead.
+
 Another common way you may want to apply headers is by using your
 variable labels. By default, clintable will respect this. Furthermore,
 the same spanning can be achieved as well. Let’s consider another
@@ -449,12 +550,47 @@ clintable(iris2) |>
 
 The underlying logic of this example is exactly the same as using
 [`clin_column_headers()`](https://atorus-research.github.io/clinify/reference/clin_column_headers.md),
-and in fact
+and in fact the same header building machinery is applied by default.
+The difference is that here, to separate levels we use the delimiter
+`||`. Note in this example how the spanning variable have also changed
+so that `Flower` stretches over all four Petal and Sepal columns.
+
+Headers built this way can have their merging adjusted too. Call
 [`clin_column_headers()`](https://atorus-research.github.io/clinify/reference/clin_column_headers.md)
-is actually called by default. The difference is that here, to separate
-levels we use the delimiter `||`. Note in this example how the spanning
-variable have also changed so that `Flower` stretches over all four
-Petal and Sepal columns.
+with nothing but the `merge` argument and the header text coming from
+the labels is left as it is:
+
+``` r
+
+iris3 <- iris
+attr(iris3$Sepal.Length, "label") <- "Flower||Sepal||Value"
+attr(iris3$Sepal.Width, "label") <- "Flower||Sepal||Value"
+attr(iris3$Petal.Length, "label") <- "Flower||Petal||Value"
+attr(iris3$Petal.Width, "label") <- "Flower||Petal||Value"
+
+clintable(iris3) |>
+  clin_column_headers(merge = "spanners")
+```
+
+| Flower |       |       |       |        |
+|--------|-------|-------|-------|--------|
+| Sepal  |       | Petal |       |        |
+| Value  | Value | Value | Value |        |
+| 5.1    | 3.5   | 1.4   | 0.2   | setosa |
+| 4.9    | 3.0   | 1.4   | 0.2   | setosa |
+| 4.7    | 3.2   | 1.3   | 0.2   | setosa |
+| 4.6    | 3.1   | 1.5   | 0.2   | setosa |
+| 5.0    | 3.6   | 1.4   | 0.2   | setosa |
+| 5.4    | 3.9   | 1.7   | 0.4   | setosa |
+| 4.6    | 3.4   | 1.4   | 0.3   | setosa |
+| 5.0    | 3.4   | 1.5   | 0.2   | setosa |
+| 4.4    | 2.9   | 1.4   | 0.2   | setosa |
+| 4.9    | 3.1   | 1.5   | 0.1   | setosa |
+| 5.4    | 3.7   | 1.5   | 0.2   | setosa |
+| 4.8    | 3.4   | 1.6   | 0.2   | setosa |
+| 4.8    | 3.0   | 1.4   | 0.1   | setosa |
+| 4.3    | 3.0   | 1.1   | 0.1   | setosa |
+| 5.8    | 4.0   | 1.2   | 0.2   | setosa |
 
 Note that after headers are applied, additional styling can be done. In
 this case, we use the

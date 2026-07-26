@@ -47,6 +47,14 @@ Table aesthetic helpers
 
 - [`clin_col_widths()`](https://atorus-research.github.io/clinify/reference/clin_col_widths.md)
   : Set column widths using percent
+- [`clin_table_align()`](https://atorus-research.github.io/clinify/reference/clin_table_align.md)
+  : Set how a table sits across the page
+- [`clin_spanner_rule()`](https://atorus-research.github.io/clinify/reference/clin_spanner_rule.md)
+  : Draw a rule beneath the spanners in a clintable's column headers
+- [`clin_row_height()`](https://atorus-research.github.io/clinify/reference/clin_row_height.md)
+  : Set the row height of a clintable
+- [`clin_header_pad()`](https://atorus-research.github.io/clinify/reference/clin_header_pad.md)
+  : Set the spacing around a table's column headers
 - [`clin_column_headers()`](https://atorus-research.github.io/clinify/reference/clin_column_headers.md)
   : Set the column headers of the output clintable
 - [`clin_replace_pagenums()`](https://atorus-research.github.io/clinify/reference/clin_replace_pagenums.md)
