@@ -48,6 +48,7 @@ reference:
   - contents:
       - clin_col_widths
       - clin_table_align
+      - clin_spanner_rule
       - clin_row_height
       - clin_header_pad
       - clin_column_headers
