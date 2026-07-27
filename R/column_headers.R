@@ -14,9 +14,15 @@
 #' text value, where horizontally adjacent cells holding the same
 #' text are merged. Use the `merge` argument when a header row
 #' legitimately repeats a label across adjacent columns and those
-#' cells should be left alone. `merge` works a row at a time, so if a
-#' single row needs some of its repeated cells merged but not others,
-#' leave that row out of `merge` and span the intended cells with
+#' cells should be left alone - merged, they render as one label
+#' centred over the whole run, so the repeats are not there to read
+#' any more. That is most often wanted for the bottom row, which
+#' holds each column's own label: six columns each labelled
+#' `"Baseline"` come out as a single `Baseline` spanning all six
+#' unless `merge = "spanners"` keeps that row out of it. `merge`
+#' works a row at a time, so if a single row needs some of its
+#' repeated cells merged but not others, leave that row out of
+#' `merge` and span the intended cells with
 #' `flextable::merge_at()`.
 #'
 #' The same result can be achieved using column labels on the
