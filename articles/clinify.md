@@ -117,7 +117,7 @@ print(ct)
 
 |                    |                             |
 |--------------------|-----------------------------|
-| Here's a footnote. | 13:14 Sunday, July 26, 2026 |
+| Here's a footnote. | 20:36 Monday, July 27, 2026 |
 
 Here we’ve added some titles and footnotes to the document. The
 functions
@@ -222,7 +222,7 @@ print(ct)
 
 |                    |                             |
 |--------------------|-----------------------------|
-| Here's a footnote. | 13:14 Sunday, July 26, 2026 |
+| Here's a footnote. | 20:36 Monday, July 27, 2026 |
 
 |                 |       |
 |-----------------|-------|
@@ -233,7 +233,7 @@ print(ct)
 
 |                    |                             |
 |--------------------|-----------------------------|
-| Here's a footnote. | 13:14 Sunday, July 26, 2026 |
+| Here's a footnote. | 20:36 Monday, July 27, 2026 |
 
 |                 |       |
 |-----------------|-------|
@@ -244,7 +244,7 @@ print(ct)
 
 |                    |                             |
 |--------------------|-----------------------------|
-| Here's a footnote. | 13:14 Sunday, July 26, 2026 |
+| Here's a footnote. | 20:36 Monday, July 27, 2026 |
 
 1
 

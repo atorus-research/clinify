@@ -14,6 +14,8 @@ clin_row_height(
   body = NULL,
   title = NULL,
   footnote = NULL,
+  header = NULL,
+  header_leading = NULL,
   rule = c("atleast", "exact", "auto"),
   unit = c("pt", "in", "cm", "mm")
 )
@@ -37,6 +39,18 @@ clin_row_height(
 
   Row pitch for the footnote lines, and for a footnote page
 
+- header:
+
+  Row pitch for the column header rows. A floor under
+  `rule = "atleast"`, so a header cell of several lines still grows
+
+- header_leading:
+
+  Leading of the lines within the header, as a multiple of single
+  spacing - `0.75` draws them three quarters as far apart. This is the
+  only measurement here that is not a length, because flextable and Word
+  both express leading as a multiple, so `unit` does not apply to it
+
 - rule:
 
   How the renderer should treat the pitch. `"atleast"` (the default)
@@ -57,10 +71,23 @@ A clintable object
 
 ## Details
 
-The three surfaces are set separately because they are separate tables:
-the table body, and the title and footnote blocks that go into the Word
-header and footer. Group label and caption rows, which clinify inserts
-while it renders, take the body pitch.
+The surfaces are set separately because they are separate tables: the
+table body, the column header, and the title and footnote blocks that go
+into the Word header and footer. Group label and caption rows, which
+clinify inserts while it renders, take the body pitch.
+
+The column header has two levers rather than one, and they do different
+things. `header` bounds the header rows the same way `body` bounds the
+body rows, so with the default `rule = "atleast"` it is a floor: a
+header cell holding three lines still grows past it. `header_leading` is
+what closes the gap *between* those lines, so it is the one to reach for
+when a wrapped arm label sits looser than a reference output. They can
+be used together.
+
+Called a second time, this refines what the first call set rather than
+replacing it: arguments this call does not name keep their earlier
+value. So a house wide pitch can be set once and a single table can add
+an exception without restating the rest.
 
 The height is applied to whole parts, so it is a pitch for every row of
 the surface rather than a per-row height. Anything already set with
@@ -79,7 +106,7 @@ clintable(mtcars) |>
   clin_row_height(body = 15.35, title = 11.4, footnote = 11.4)
 
 
-.cl-f2be340a{}.cl-f2b343ba{font-family:'Courier New';font-size:9pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-f2b6a4d8{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:9pt;padding-top:9pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-f2b6a4ec{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0.1pt;padding-top:0.1pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-f2b6cd8c{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 1pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-f2b6cda0{width:0.75in;height:0.213in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}
+.cl-dfc65078{}.cl-dfbd9a1e{font-family:'Courier New';font-size:9pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-dfc11e96{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:9pt;padding-top:9pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-dfc11ea0{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0.1pt;padding-top:0.1pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-dfc146be{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 1pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-dfc146c8{width:0.75in;height:0.213in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}
 
 
 mpg

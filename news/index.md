@@ -1,5 +1,74 @@
 # Changelog
 
+## clinify (development version)
+
+- Fixed a second call to
+  [`clin_row_height()`](https://atorus-research.github.io/clinify/reference/clin_row_height.md),
+  [`clin_header_pad()`](https://atorus-research.github.io/clinify/reference/clin_header_pad.md)
+  or
+  [`clin_spanner_rule()`](https://atorus-research.github.io/clinify/reference/clin_spanner_rule.md)
+  replacing the first instead of refining it. Arguments the later call
+  does not name now keep whatever the earlier one set, so a house wide
+  setting and a per table exception can both be stated without restating
+  the rest. Previously the earlier values reverted to their defaults
+  with no error or warning
+  ([\#119](https://github.com/atorus-research/clinify/issues/119))
+- [`clin_row_height()`](https://atorus-research.github.io/clinify/reference/clin_row_height.md)
+  gained `header` and `header_leading`, completing the vertical pitch
+  controls asked for in
+  [\#97](https://github.com/atorus-research/clinify/issues/97). `header`
+  bounds the column header rows the way `body` bounds the body rows, and
+  `header_leading` closes the gap between the lines *within* a header
+  cell, which is what a wrapped arm label sitting looser than a
+  reference output actually needs. Leading is a multiple of single
+  spacing rather than a length, since that is how flextable and Word
+  express it
+  ([\#117](https://github.com/atorus-research/clinify/issues/117))
+- Fixed
+  [`clintable()`](https://atorus-research.github.io/clinify/reference/clintable.md)
+  erroring on data carrying haven value labels.
+  [`attr()`](https://rdrr.io/r/base/attr.html) partial matches, so a
+  `labels` attribute of value labels - which `haven::read_xpt()`
+  attaches to coded variables - was answering a request for `label` and
+  being read as header text
+  ([\#107](https://github.com/atorus-research/clinify/issues/107))
+- Fixed `use_labels = FALSE` not actually leaving column labels alone.
+  flextable reads labels of its own accord and was never told not to, so
+  the raw label string went into the header, `||` delimiter and all.
+  This also gives a way past the flextable side of
+  [\#107](https://github.com/atorus-research/clinify/issues/107), since
+  labels can now be turned off
+  ([\#107](https://github.com/atorus-research/clinify/issues/107))
+- Fixed the spacing clinify starts a column header with being lost as
+  soon as the headers were set. Setting them rebuilds the header part,
+  which dropped the padding applied at construction, so a table with
+  custom headers or `||` column labels sat on flextable’s own default
+  while a plain one kept clinify’s. It is applied as a starting point,
+  so a later
+  [`flextable::padding()`](https://davidgohel.github.io/flextable/reference/padding.html)
+  or
+  [`clin_header_pad()`](https://atorus-research.github.io/clinify/reference/clin_header_pad.md)
+  still wins
+  ([\#101](https://github.com/atorus-research/clinify/issues/101))
+- The `merge` argument of
+  [`clin_column_headers()`](https://atorus-research.github.io/clinify/reference/clin_column_headers.md)
+  now documents what merging a header row of repeated labels actually
+  looks like: the run renders as one label centred over all of it, so
+  the repeats are no longer there to read. The docs described the
+  mechanism but not the symptom, which made it easy to lose a bottom row
+  of per column labels without noticing that anything had gone
+  ([\#120](https://github.com/atorus-research/clinify/issues/120))
+- [`clin_header_pad()`](https://atorus-research.github.io/clinify/reference/clin_header_pad.md)
+  can now space header rows differently, either by taking a value per
+  row (`above = c(18, 34)`) or by aiming a call at particular rows
+  (`rows = 1`). Because the spacing is applied as the table renders,
+  after anything the caller did, a call covering every row overwrote a
+  per-row
+  [`flextable::padding()`](https://davidgohel.github.io/flextable/reference/padding.html)
+  set beforehand - so a house wide header buffer could not sit alongside
+  the handful of tables needing a different gap on one row
+  ([\#113](https://github.com/atorus-research/clinify/issues/113))
+
 ## clinify 0.4.0
 
 - [`clin_column_headers()`](https://atorus-research.github.io/clinify/reference/clin_column_headers.md)
@@ -15,29 +84,21 @@
   which adjusts the merging of headers already in place - including
   headers built from column labels
   ([\#95](https://github.com/atorus-research/clinify/issues/95))
-- The
+- Added
+  [`clin_spanner_rule()`](https://atorus-research.github.io/clinify/reference/clin_spanner_rule.md)
+  to draw the rule that conventionally sits under a spanner label,
+  across only the columns that spanner covers. The columns come from the
+  header on the table, so the space over a stub or a trailing p-value
+  column is left un-ruled and the rule follows the spanners as the
+  layout changes instead of being given as column numbers that have to
+  be kept in step with it. The rule is drawn after the default styling
+  function, so it holds when an organisation’s
   [`clinify_table_default()`](https://atorus-research.github.io/clinify/reference/clinify_defaults.md)
-  in `defaults_template.R` no longer merges header cells horizontally,
-  which would have overridden the `merge` argument of
-  [`clin_column_headers()`](https://atorus-research.github.io/clinify/reference/clin_column_headers.md)
-  at render time
-- Because `merge` is now a parameter of
-  [`clin_column_headers()`](https://atorus-research.github.io/clinify/reference/clin_column_headers.md),
-  a column named `merge` can no longer be given a header through `...`.
-  Use column labels for that column instead. This is a breaking change.
-- Fixed merged cells being left in an invalid state when a table is
-  paginated column wise with
-  [`clin_alt_pages()`](https://atorus-research.github.io/clinify/reference/clin_alt_pages.md).
-  Merges are now recalculated for every row of the header, for the table
-  body, and for merges running vertically, where previously only the top
-  header row was corrected. Symptoms included header text disappearing
-  from later pages, cells claiming to span more columns than the page
-  has, and
-  [`write_clindoc()`](https://atorus-research.github.io/clinify/reference/write_clindoc.md)
-  failing with “missing value where TRUE/FALSE needed” when a page ended
-  in a split spanner
-- Fixed a single column table losing all but the top level of a multi
-  level column header
+  clears the borders it started from, and `border` takes an
+  [`officer::fp_border()`](https://davidgohel.github.io/officer/reference/fp_border.html)
+  for a dashed or hairline pen, or `FALSE` to keep a house style from
+  underlining the spanners at all
+  ([\#105](https://github.com/atorus-research/clinify/issues/105))
 - Added
   [`clin_header_pad()`](https://atorus-research.github.io/clinify/reference/clin_header_pad.md)
   to set the vertical space around the column headers: `above` and
@@ -70,16 +131,13 @@
 - Group label and caption rows, which clinify inserts as it renders,
   take the body pitch
   ([\#97](https://github.com/atorus-research/clinify/issues/97))
-- Whatever a table itself is configured with is now applied after the
-  default styling function rather than before it, so a per table setting
-  beats an organisation’s house style, which beats the {flextable}
-  default. Previously a house
+- Added
+  [`clin_table_align()`](https://atorus-research.github.io/clinify/reference/clin_table_align.md)
+  to set how a table sits across the page. It is applied after the
+  default styling function, so it holds even when an organisation’s own
   [`clinify_table_default()`](https://atorus-research.github.io/clinify/reference/clinify_defaults.md)
-  that set a row height silently overrode an explicit one
-  ([\#97](https://github.com/atorus-research/clinify/issues/97),
-  [\#98](https://github.com/atorus-research/clinify/issues/98))
-- Fixed pagination discarding a table’s configuration when it dropped
-  the `page_by`, `group_by` or `caption_by` columns
+  rebuilds the table properties
+  ([\#98](https://github.com/atorus-research/clinify/issues/98))
 - [`clintable()`](https://atorus-research.github.io/clinify/reference/clintable.md)
   gained a `coerce_character` argument which coerces every column to
   character before the flextable is built, so pre-formatted values
@@ -95,20 +153,6 @@
   `group_by` or `caption_by` column - see
   [`?clintable`](https://atorus-research.github.io/clinify/reference/clintable.md)
   ([\#104](https://github.com/atorus-research/clinify/issues/104))
-- Fixed the default styling functions discarding a table’s other
-  properties when they fixed its layout.
-  [`flextable::set_table_properties()`](https://davidgohel.github.io/flextable/reference/set_table_properties.html)
-  rebuilds the whole property list, so a table’s alignment on the page,
-  its width, its Word accessibility fields and its
-  `opts_word`/`opts_html` settings were all quietly reset at render time
-  ([\#98](https://github.com/atorus-research/clinify/issues/98))
-- Added
-  [`clin_table_align()`](https://atorus-research.github.io/clinify/reference/clin_table_align.md)
-  to set how a table sits across the page. It is applied after the
-  default styling function, so it holds even when an organisation’s own
-  [`clinify_table_default()`](https://atorus-research.github.io/clinify/reference/clinify_defaults.md)
-  rebuilds the table properties
-  ([\#98](https://github.com/atorus-research/clinify/issues/98))
 - [`clin_add_titles()`](https://atorus-research.github.io/clinify/reference/add_titles_footnotes.md),
   [`clin_add_footnotes()`](https://atorus-research.github.io/clinify/reference/add_titles_footnotes.md)
   and
@@ -133,30 +177,58 @@
   gained an `align` argument to place each line, so a single left
   aligned title no longer needs its text passed twice
   ([\#98](https://github.com/atorus-research/clinify/issues/98))
+- Whatever a table itself is configured with is now applied after the
+  default styling function rather than before it, so a per table setting
+  beats an organisation’s house style, which beats the {flextable}
+  default. Previously a house
+  [`clinify_table_default()`](https://atorus-research.github.io/clinify/reference/clinify_defaults.md)
+  that set a row height silently overrode an explicit one
+  ([\#97](https://github.com/atorus-research/clinify/issues/97),
+  [\#98](https://github.com/atorus-research/clinify/issues/98))
+- Fixed the default styling functions discarding a table’s other
+  properties when they fixed its layout.
+  [`flextable::set_table_properties()`](https://davidgohel.github.io/flextable/reference/set_table_properties.html)
+  rebuilds the whole property list, so a table’s alignment on the page,
+  its width, its Word accessibility fields and its
+  `opts_word`/`opts_html` settings were all quietly reset at render time
+  ([\#98](https://github.com/atorus-research/clinify/issues/98))
+- Fixed merged cells being left in an invalid state when a table is
+  paginated column wise with
+  [`clin_alt_pages()`](https://atorus-research.github.io/clinify/reference/clin_alt_pages.md).
+  Merges are now recalculated for every row of the header, for the table
+  body, and for merges running vertically, where previously only the top
+  header row was corrected. Symptoms included header text disappearing
+  from later pages, cells claiming to span more columns than the page
+  has, and
+  [`write_clindoc()`](https://atorus-research.github.io/clinify/reference/write_clindoc.md)
+  failing with “missing value where TRUE/FALSE needed” when a page ended
+  in a split spanner
+- Fixed a single column table losing all but the top level of a multi
+  level column header
+- Fixed pagination discarding a table’s configuration when it dropped
+  the `page_by`, `group_by` or `caption_by` columns
 - A title or footnote line with no elements now gives a clear error
   instead of failing inside
   [`data.frame()`](https://rdrr.io/r/base/data.frame.html)
+- The
+  [`clinify_table_default()`](https://atorus-research.github.io/clinify/reference/clinify_defaults.md)
+  in `defaults_template.R` no longer merges header cells horizontally,
+  which would have overridden the `merge` argument of
+  [`clin_column_headers()`](https://atorus-research.github.io/clinify/reference/clin_column_headers.md)
+  at render time
+  ([\#95](https://github.com/atorus-research/clinify/issues/95))
 - The
   [`clinify_table_default()`](https://atorus-research.github.io/clinify/reference/clinify_defaults.md)
   in `defaults_template.R` and in
   [`vignette("defaults")`](https://atorus-research.github.io/clinify/articles/defaults.md)
   no longer rebuild the table properties either. Organisations that
   copied the template will want to pick up the change
-- Added
-  [`clin_spanner_rule()`](https://atorus-research.github.io/clinify/reference/clin_spanner_rule.md)
-  to draw the rule that conventionally sits under a spanner label,
-  across only the columns that spanner covers. The columns come from the
-  header on the table, so the space over a stub or a trailing p-value
-  column is left un-ruled and the rule follows the spanners as the
-  layout changes instead of being given as column numbers that have to
-  be kept in step with it. The rule is drawn after the default styling
-  function, so it holds when an organisation’s
-  [`clinify_table_default()`](https://atorus-research.github.io/clinify/reference/clinify_defaults.md)
-  clears the borders it started from, and `border` takes an
-  [`officer::fp_border()`](https://davidgohel.github.io/officer/reference/fp_border.html)
-  for a dashed or hairline pen, or `FALSE` to keep a house style from
-  underlining the spanners at all
-  ([\#105](https://github.com/atorus-research/clinify/issues/105))
+  ([\#98](https://github.com/atorus-research/clinify/issues/98))
+- Because `merge` is now a parameter of
+  [`clin_column_headers()`](https://atorus-research.github.io/clinify/reference/clin_column_headers.md),
+  a column named `merge` can no longer be given a header through `...`.
+  Use column labels for that column instead. This is a breaking change.
+  ([\#95](https://github.com/atorus-research/clinify/issues/95))
 
 ## clinify 0.3.1
 
