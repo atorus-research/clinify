@@ -6,10 +6,17 @@
 #' renderer size them however it likes. This records the pitch you want and
 #' applies it when the table renders.
 #'
-#' The three surfaces are set separately because they are separate tables: the
-#' table body, and the title and footnote blocks that go into the Word header
-#' and footer. Group label and caption rows, which clinify inserts while it
-#' renders, take the body pitch.
+#' The surfaces are set separately because they are separate tables: the table
+#' body, the column header, and the title and footnote blocks that go into the
+#' Word header and footer. Group label and caption rows, which clinify inserts
+#' while it renders, take the body pitch.
+#'
+#' The column header has two levers rather than one, and they do different
+#' things. `header` bounds the header rows the same way `body` bounds the body
+#' rows, so with the default `rule = "atleast"` it is a floor: a header cell
+#' holding three lines still grows past it. `header_leading` is what closes the
+#' gap *between* those lines, so it is the one to reach for when a wrapped arm
+#' label sits looser than a reference output. They can be used together.
 #'
 #' The height is applied to whole parts, so it is a pitch for every row of the
 #' surface rather than a per-row height. Anything already set with
@@ -22,6 +29,12 @@
 #' @param body Row pitch for the table body
 #' @param title Row pitch for the title lines
 #' @param footnote Row pitch for the footnote lines, and for a footnote page
+#' @param header Row pitch for the column header rows. A floor under
+#'   `rule = "atleast"`, so a header cell of several lines still grows
+#' @param header_leading Leading of the lines within the header, as a multiple
+#'   of single spacing - `0.75` draws them three quarters as far apart. This is
+#'   the only measurement here that is not a length, because flextable and Word
+#'   both express leading as a multiple, so `unit` does not apply to it
 #' @param rule How the renderer should treat the pitch. `"atleast"` (the
 #'   default) makes it a floor, so a cell whose text wraps grows past it instead
 #'   of being clipped. `"exact"` pins the row to the pitch and clips anything
@@ -40,11 +53,19 @@
 #' # Or in inches
 #' clintable(mtcars) |>
 #'   clin_row_height(body = 0.213, unit = "in")
+#'
+#' # A wrapped header label sitting too loose: bound the header rows and close
+#' # up the lines inside them
+#' clintable(mtcars) |>
+#'   clin_column_headers(mpg = "Miles\nper\ngallon") |>
+#'   clin_row_height(header = 13, header_leading = 0.75)
 clin_row_height <- function(
   x,
   body = NULL,
   title = NULL,
   footnote = NULL,
+  header = NULL,
+  header_leading = NULL,
   rule = c("atleast", "exact", "auto"),
   unit = c("pt", "in", "cm", "mm")
 ) {
@@ -52,10 +73,18 @@ clin_row_height <- function(
   rule <- match.arg(rule)
   unit <- match.arg(unit)
 
-  heights <- list(body = body, title = title, footnote = footnote)
+  heights <- list(
+    body = body,
+    title = title,
+    footnote = footnote,
+    header = header
+  )
 
-  if (all(vapply(heights, is.null, TRUE))) {
-    stop("At least one of body, title, or footnote needs a height")
+  if (all(vapply(heights, is.null, TRUE)) && is.null(header_leading)) {
+    stop(
+      "At least one of body, title, footnote, header, or header_leading needs ",
+      "a value"
+    )
   }
 
   for (surface in names(heights)) {
@@ -66,8 +95,43 @@ clin_row_height <- function(
     )
   }
 
-  x$clinify_config$row_height <- c(heights, list(rule = rule))
+  x$clinify_config$row_height <- c(
+    heights,
+    list(rule = rule, header_leading = check_header_leading_(header_leading))
+  )
   x
+}
+
+#' Check the header's line leading
+#'
+#' Leading is the one measurement here that is not a length. flextable takes it
+#' as a multiple of single spacing, and Word writes it that way, so there is no
+#' points form to convert to.
+#'
+#' @param leading The `header_leading` value as given
+#'
+#' @return The leading, or NULL
+#'
+#' @noRd
+check_header_leading_ <- function(leading) {
+  if (is.null(leading)) {
+    return(NULL)
+  }
+
+  if (
+    !is.numeric(leading) ||
+      length(leading) != 1 ||
+      is.na(leading) ||
+      leading <= 0
+  ) {
+    stop(
+      "`header_leading` must be a single positive multiple of single spacing, ",
+      "not ",
+      paste(deparse(leading), collapse = "")
+    )
+  }
+
+  leading
 }
 
 #' Check one row height and convert it to inches
@@ -187,6 +251,12 @@ apply_row_height_at_ <- function(ft, i, height, part) {
 finish_table_ <- function(x) {
   x <- table_align_(x)
   x <- apply_header_pad_(x)
+  x <- apply_row_height_(
+    x,
+    row_height_for_(x$clinify_config, "header"),
+    part = "header"
+  )
+  x <- apply_header_leading_(x)
   x <- apply_spanner_rule_(x)
   # Covers a table that is never sliced into pages. A paginated one gets the
   # same gap put on the first row of each of its pages as they are built
@@ -218,4 +288,28 @@ style_titles_ <- function(ft, config) {
 style_footnotes_ <- function(ft, config) {
   ft <- getOption("clinify_footnotes_default")(ft)
   apply_row_height_(ft, row_height_for_(config, "footnote"))
+}
+
+#' Tighten or loosen the leading of the header's lines
+#'
+#' Applied as the table renders, since a styling function that sets
+#' `flextable::line_spacing(part = "all")` would otherwise undo it.
+#'
+#' @param x A clintable object
+#'
+#' @return A clintable object
+#'
+#' @noRd
+apply_header_leading_ <- function(x) {
+  leading <- x$clinify_config$row_height$header_leading
+
+  if (is.null(leading)) {
+    return(x)
+  }
+
+  if (flextable::nrow_part(x, part = "header") < 1) {
+    return(x)
+  }
+
+  flextable::line_spacing(x, space = leading, part = "header")
 }

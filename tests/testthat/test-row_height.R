@@ -77,7 +77,7 @@ test_that("Row height can be given in any of the supported units", {
 test_that("clin_row_height is validated", {
   ct <- basic_table()
 
-  expect_error(clin_row_height(ct), "At least one of body, title, or footnote")
+  expect_error(clin_row_height(ct), "At least one of body, title, footnote")
   expect_error(clin_row_height(ct, body = "x"), "single positive number")
   expect_error(clin_row_height(ct, body = 0), "single positive number")
   expect_error(clin_row_height(ct, body = -1), "single positive number")
@@ -237,4 +237,102 @@ test_that("The HTML preview survives a configured pitch", {
     clin_group_by("grp") |>
     clin_row_height(body = 15.35)
   expect_no_error(clintable_as_html(grouped))
+})
+
+test_that("The column header has its own pitch and leading", {
+  multi_line <- function(...) {
+    ct <- clintable(head(mtcars[, 1:2], 2)) |>
+      clin_column_headers(
+        mpg = c("Xanomeline\nLow Dose\n(N=84)", "n (%)"),
+        cyl = c("Placebo", "n (%)")
+      )
+    if (...length()) clin_row_height(ct, ...) else ct
+  }
+
+  cfg <- multi_line(header = 13, header_leading = 0.75)$clinify_config$row_height
+  expect_equal(cfg$header, 13 / 72)
+  expect_equal(cfg$header_leading, 0.75)
+
+  # Word gets the header row height as a floor, and the leading as a multiple
+  # of single spacing
+  header_pitch <- function(ct) {
+    file <- withr::local_tempfile(fileext = ".docx")
+    write_clindoc(ct, file = file)
+
+    unzipped <- withr::local_tempdir()
+    utils::unzip(file, files = "word/document.xml", exdir = unzipped)
+    xml <- xml2::read_xml(file.path(unzipped, "word", "document.xml"))
+    row <- xml2::xml_find_all(
+      xml2::xml_find_all(xml, "//w:tbl")[[1]],
+      "./w:tr"
+    )[[1]]
+
+    attr_of <- function(path, which) {
+      node <- xml2::xml_find_first(row, path)
+      if (inherits(node, "xml_missing")) NA_character_ else
+        xml2::xml_attr(node, which)
+    }
+
+    list(
+      leading = attr_of("./w:tc/w:p/w:pPr/w:spacing", "line"),
+      height = attr_of("./w:trPr/w:trHeight", "val"),
+      rule = attr_of("./w:trPr/w:trHeight", "hRule")
+    )
+  }
+
+  stock <- header_pitch(multi_line())
+  expect_equal(stock$leading, "240")
+  expect_equal(stock$rule, "auto")
+
+  pitched <- header_pitch(multi_line(header = 13, header_leading = 0.75))
+  expect_equal(pitched$leading, "180")
+  expect_equal(pitched$height, "260")
+  expect_equal(pitched$rule, "atLeast")
+
+  # The body is untouched by either, and setting the body leaves the header be
+  body_only <- header_pitch(multi_line(body = 15.35))
+  expect_equal(body_only$leading, "240")
+  expect_equal(body_only$rule, "auto")
+})
+
+test_that("Header leading survives a styling function that resets it", {
+  # A house style that calls line_spacing(part = "all") would otherwise undo
+  # the leading, which is why it is applied as the table renders (#117)
+  house <- function(x, ...) {
+    x <- clinify_table_default(x)
+    flextable::line_spacing(x, space = 1, part = "all")
+  }
+  withr::local_options(clinify_table_default = house)
+
+  ct <- clintable(head(mtcars[, 1:2], 2)) |>
+    clin_column_headers(mpg = "Miles\nper\ngallon", cyl = "Cylinders") |>
+    clin_row_height(header_leading = 0.75)
+
+  styled <- finish_table_(getOption("clinify_table_default")(ct))
+  expect_equal(
+    unique(as.vector(styled$header$styles$pars$line_spacing$data)),
+    0.75
+  )
+})
+
+test_that("Header pitch is validated", {
+  ct <- clintable(head(mtcars[, 1:2], 2))
+
+  expect_error(clin_row_height(ct, header = "x"), "`header` must be")
+  expect_error(clin_row_height(ct, header = 0), "`header` must be")
+  expect_error(
+    clin_row_height(ct, header_leading = 0),
+    "positive multiple of single spacing"
+  )
+  expect_error(
+    clin_row_height(ct, header_leading = c(1, 2)),
+    "positive multiple of single spacing"
+  )
+  expect_error(
+    clin_row_height(ct, header_leading = "x"),
+    "positive multiple of single spacing"
+  )
+
+  # The "nothing asked for" message now names all five
+  expect_error(clin_row_height(ct), "header_leading needs")
 })
