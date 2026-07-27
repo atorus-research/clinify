@@ -44,6 +44,9 @@ rather than a spanner, and the rule under the bottom row is the one the
 styling function draws across the whole table.
 }
 
+Called a second time, this refines what the first call set rather than
+replacing it: arguments this call does not name keep their earlier value.
+
 The rule is drawn as the table renders, after the default styling function
 has run. That is what makes it survive a house style: the stock
 \code{clinify_table_default()} opens with \code{flextable::border_remove()}, which

@@ -19,6 +19,9 @@
 #'   rather than a spanner, and the rule under the bottom row is the one the
 #'   styling function draws across the whole table.
 #'
+#' Called a second time, this refines what the first call set rather than
+#' replacing it: arguments this call does not name keep their earlier value.
+#'
 #' The rule is drawn as the table renders, after the default styling function
 #' has run. That is what makes it survive a house style: the stock
 #' `clinify_table_default()` opens with `flextable::border_remove()`, which
@@ -65,10 +68,28 @@
 clin_spanner_rule <- function(x, border = TRUE, rows = NULL) {
   stopifnot(inherits(x, "clintable"))
 
-  x$clinify_config$spanner_rule <- list(
-    border = check_spanner_border_(border),
-    rows = check_spanner_rows_(rows)
+  # Only what this call actually named, so a second call refines the first.
+  # `border` has a default, so being NULL cannot say if it was asked for
+  supplied <- list()
+
+  if (!missing(border)) {
+    supplied$border <- check_spanner_border_(border)
+  }
+
+  if (!missing(rows)) {
+    supplied$rows <- check_spanner_rows_(rows)
+  }
+
+  x$clinify_config$spanner_rule <- merge_config_(
+    x$clinify_config$spanner_rule,
+    supplied
   )
+
+  # A first call that named nothing still means "rule the spanners"
+  if (is.null(x$clinify_config$spanner_rule$border)) {
+    x$clinify_config$spanner_rule$border <- check_spanner_border_(border)
+  }
+
   x
 }
 

@@ -4,7 +4,13 @@
 \alias{clin_header_pad}
 \title{Set the spacing around a table's column headers}
 \usage{
-clin_header_pad(x, above = NULL, below = NULL, rule_to_body = NULL)
+clin_header_pad(
+  x,
+  above = NULL,
+  below = NULL,
+  rule_to_body = NULL,
+  rows = NULL
+)
 }
 \arguments{
 \item{x}{A clintable object}
@@ -15,7 +21,11 @@ clin_header_pad(x, above = NULL, below = NULL, rule_to_body = NULL)
 what sets how far the rule sits from the column labels}
 
 \item{rule_to_body}{Space between that rule and the first body row, in
-points}
+points. A single value - there is only one first body row per page}
+
+\item{rows}{Which header rows to space, as row numbers counting from the
+top. The default spaces every row; rows left out keep whatever spacing
+they already have}
 }
 \value{
 A clintable object
@@ -40,15 +50,22 @@ rule.
 table body, which is the one that has to come from the body side.
 }
 
-\code{above} and \code{below} apply to every row of the header, which is the usual
-convention and matches \code{flextable::padding(part = "header")}. To space a
-single header row differently, reach for \code{flextable::padding()} with an \code{i}
-directly.
+\code{above} and \code{below} apply to every row of the header by default, which is
+the usual convention and matches \code{flextable::padding(part = "header")}. A
+header row that needs a different gap can be given one either by passing a
+value per row - \code{above = c(18, 34)} - or by aiming the call at particular
+rows with \code{rows}, which leaves the others alone. That matters because the
+spacing is applied as the table renders, after anything the caller did, so a
+call covering every row would otherwise overwrite a per-row
+\code{flextable::padding()} set beforehand.
 
 \code{rule_to_body} is applied to the first row of every page, so a table split
 over pages keeps the same gap under the rule throughout. If a group label is
 added above the header it keeps its own spacing, since it is put there as
 the table renders.
+
+Called a second time, this refines what the first call set rather than
+replacing it: arguments this call does not name keep their earlier value.
 
 Spacing is given in points, which is what flextable measures cell padding
 in. Whatever is set here replaces the header padding clinify starts with.

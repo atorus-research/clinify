@@ -14,9 +14,15 @@
 #' text value, where horizontally adjacent cells holding the same
 #' text are merged. Use the `merge` argument when a header row
 #' legitimately repeats a label across adjacent columns and those
-#' cells should be left alone. `merge` works a row at a time, so if a
-#' single row needs some of its repeated cells merged but not others,
-#' leave that row out of `merge` and span the intended cells with
+#' cells should be left alone - merged, they render as one label
+#' centred over the whole run, so the repeats are not there to read
+#' any more. That is most often wanted for the bottom row, which
+#' holds each column's own label: six columns each labelled
+#' `"Baseline"` come out as a single `Baseline` spanning all six
+#' unless `merge = "spanners"` keeps that row out of it. `merge`
+#' works a row at a time, so if a single row needs some of its
+#' repeated cells merged but not others, leave that row out of
+#' `merge` and span the intended cells with
 #' `flextable::merge_at()`.
 #'
 #' The same result can be achieved using column labels on the
@@ -233,6 +239,10 @@ apply_column_headers_ <- function(x, args, merge = TRUE) {
   # Apply to the clintable
   x <- flextable::set_header_df(x, typology)
 
+  # set_header_df() rebuilds the header part, so the spacing clinify starts a
+  # header with has just been dropped and needs putting back
+  x <- default_header_pad_(x)
+
   # Merging is resolved against the header rows that actually landed on the
   # table, which is not always the number of levels asked for
   remerge_header_(x, merge, clear = FALSE)
@@ -382,8 +392,12 @@ headers_from_labels_ <- function(x, merge = TRUE) {
   refdat <- x$body$dataset
   if (has_labels_(refdat)) {
     args <- lapply(refdat, \(x) {
-      if (!is.null(attr(x, "label"))) {
-        unlist(strsplit(attr(x, "label"), "||", fixed = TRUE))
+      # exact = TRUE, or a `labels` attribute of value labels answers a request
+      # for `label` and gets read as header text
+      label <- attr(x, "label", exact = TRUE)
+
+      if (!is.null(label)) {
+        unlist(strsplit(label, "||", fixed = TRUE))
       } else {
         ""
       }
@@ -400,5 +414,8 @@ headers_from_labels_ <- function(x, merge = TRUE) {
 #' Do any of the dataframe variables have labels?
 #' @noRd
 has_labels_ <- function(x) {
-  any(vapply(x, \(y) !is.null(attr(y, "label")), FALSE))
+  # exact = TRUE, because attr() otherwise partial matches - haven attaches a
+  # `labels` attribute of value labels to coded variables, and that would
+  # answer a request for `label` and be mistaken for a variable label
+  any(vapply(x, \(y) !is.null(attr(y, "label", exact = TRUE)), FALSE))
 }

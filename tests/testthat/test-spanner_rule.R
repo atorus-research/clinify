@@ -428,3 +428,31 @@ test_that("The HTML preview survives a configured spanner rule", {
     clin_spanner_rule(border = officer::fp_border(style = "dashed"))
   expect_no_error(clintable_as_html(paged))
 })
+
+test_that("A second call refines the first rather than replacing it", {
+  # `border` has a default, so a later call naming only `rows` used to reset the
+  # pen back to it (#119)
+  base <- clintable(head(mtcars[, 1:3], 2)) |>
+    clin_column_headers(
+      mpg = c("Spanner", "x"),
+      cyl = c("Spanner", "y"),
+      disp = c("", "z")
+    )
+
+  dashed <- officer::fp_border(style = "dashed", width = 2)
+  refined <- clin_spanner_rule(clin_spanner_rule(base, dashed), rows = 1)
+
+  cfg <- refined$clinify_config$spanner_rule
+  expect_equal(cfg$border$style, "dashed")
+  expect_equal(cfg$border$width, 2)
+  expect_equal(cfg$rows, 1L)
+
+  # A bare first call still means "rule the spanners", and border = FALSE still
+  # means do not - "no rule" is carried as a zero width pen rather than a FALSE
+  bare <- clin_spanner_rule(base)$clinify_config$spanner_rule$border
+  expect_gt(bare$width, 0)
+
+  none <- clin_spanner_rule(base, border = FALSE)$clinify_config$spanner_rule$border
+  expect_equal(none$width, 0)
+  expect_equal(none$style, "none")
+})

@@ -9,3 +9,6 @@ scratch*.R
 
 /.quarto/
 docs
+
+# Claude Code local state and agent worktrees
+.claude/

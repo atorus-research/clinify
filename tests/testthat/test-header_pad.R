@@ -66,10 +66,10 @@ test_that("clin_header_pad is validated", {
   ct <- clintable(head(mtcars[, 1:2], 3))
 
   expect_error(clin_header_pad(ct), "At least one of above, below")
-  expect_error(clin_header_pad(ct, above = "x"), "single number of points")
-  expect_error(clin_header_pad(ct, above = -1), "single number of points")
-  expect_error(clin_header_pad(ct, above = c(1, 2)), "single number of points")
-  expect_error(clin_header_pad(ct, above = NA), "single number of points")
+  expect_error(clin_header_pad(ct, above = "x"), "numbers of points")
+  expect_error(clin_header_pad(ct, above = -1), "numbers of points")
+  expect_error(clin_header_pad(ct, above = NA), "numbers of points")
+  expect_error(clin_header_pad(ct, above = numeric(0)), "numbers of points")
   expect_error(clin_header_pad(ct, below = -1), "`below` must")
   expect_error(clin_header_pad(ct, rule_to_body = -1), "`rule_to_body` must")
   expect_error(clin_header_pad(mtcars, above = 1), "inherits")
@@ -211,4 +211,97 @@ test_that("The HTML preview survives configured header spacing", {
     clin_page_by("pg") |>
     clin_header_pad(rule_to_body = 12)
   expect_no_error(clintable_as_html(paged))
+})
+
+test_that("Header spacing can differ per row", {
+  # A house wide buffer has to be able to sit alongside the handful of tables
+  # that need a different gap on one row (#113)
+  ct <- clintable(head(mtcars[, 1:2], 2)) |>
+    clin_column_headers(mpg = c("Drug A", "n"), cyl = c("Drug B", "n"))
+
+  top <- function(ct) {
+    unname(finish_table_(ct)$header$styles$pars$padding.top$data[, 1])
+  }
+
+  # One value per row
+  expect_equal(top(clin_header_pad(ct, above = c(18, 34))), c(18, 34))
+
+  # Or aim the call at one row and leave the other alone
+  expect_equal(top(clin_header_pad(ct, above = 18, rows = 1))[1], 18)
+  expect_equal(top(clin_header_pad(ct, above = 18, rows = 2))[2], 18)
+
+  # A single value still covers every row
+  expect_equal(top(clin_header_pad(ct, above = 18)), c(18, 18))
+})
+
+test_that("Spacing aimed at some rows leaves a per row exception alone", {
+  # The verb is applied as the table renders, after anything the caller did, so
+  # a call covering every row overwrites a padding() set beforehand - `rows` is
+  # how the exception is kept (#113)
+  ct <- clintable(head(mtcars[, 1:2], 2)) |>
+    clin_column_headers(mpg = c("Drug A", "n"), cyl = c("Drug B", "n")) |>
+    flextable::padding(i = 2, padding.top = 34, part = "header")
+
+  top <- function(ct) {
+    unname(finish_table_(ct)$header$styles$pars$padding.top$data[, 1])
+  }
+
+  # Untouched, the exception is there
+  expect_equal(top(ct)[2], 34)
+
+  # Covering every row replaces it, which is what the call asked for
+  expect_equal(top(clin_header_pad(ct, above = 18)), c(18, 18))
+
+  # Aiming at row 1 keeps it
+  expect_equal(top(clin_header_pad(ct, above = 18, rows = 1)), c(18, 34))
+})
+
+test_that("Per row header spacing is validated", {
+  ct <- clintable(head(mtcars[, 1:2], 2)) |>
+    clin_column_headers(mpg = c("Drug A", "n"), cyl = c("Drug B", "n"))
+
+  # A value per row has to match the rows it is aimed at
+  expect_error(
+    finish_table_(clin_header_pad(ct, above = c(18, 34, 99))),
+    "one for each of the 2 rows"
+  )
+  expect_error(
+    finish_table_(clin_header_pad(ct, above = c(18, 34), rows = 1)),
+    "one for each of the 1 rows"
+  )
+
+  # Rows have to be usable row numbers that the header actually has
+  expect_error(clin_header_pad(ct, above = 18, rows = 0), "1 or more")
+  expect_error(clin_header_pad(ct, above = 18, rows = 1.5), "whole header row")
+  expect_error(
+    finish_table_(clin_header_pad(ct, above = 18, rows = c(1, 9))),
+    "between 1 and 2"
+  )
+
+  # There is only one first body row to space away from the rule
+  expect_error(
+    clin_header_pad(ct, rule_to_body = c(1, 2)),
+    "single number of points"
+  )
+})
+
+test_that("A second call refines the first rather than replacing it", {
+  # Same silent loss as #119, in the other verb that carries several settings
+  base <- clintable(head(mtcars[, 1:2], 2)) |>
+    clin_column_headers(mpg = c("Sp", "x"), cyl = c("Sp", "y"))
+
+  refined <- base |>
+    clin_header_pad(above = 18, below = 4) |>
+    clin_header_pad(rule_to_body = 6)
+
+  pad <- refined$clinify_config$header_pad
+  expect_equal(pad$above, 18)
+  expect_equal(pad$below, 4)
+  expect_equal(pad$rule_to_body, 6)
+
+  # A value named again is replaced
+  expect_equal(
+    clin_header_pad(clin_header_pad(base, above = 18, below = 4), below = 9)$clinify_config$header_pad$below,
+    9
+  )
 })
