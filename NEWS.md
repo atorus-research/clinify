@@ -1,3 +1,7 @@
+# clinify (development version)
+
+- `clin_header_pad()` can now space header rows differently, either by taking a value per row (`above = c(18, 34)`) or by aiming a call at particular rows (`rows = 1`). Because the spacing is applied as the table renders, after anything the caller did, a call covering every row overwrote a per-row `flextable::padding()` set beforehand - so a house wide header buffer could not sit alongside the handful of tables needing a different gap on one row ([#113](https://github.com/atorus-research/clinify/issues/113))
+
 # clinify 0.4.0
 
 - `clin_column_headers()` gained a `merge` argument to control the automatic merging of identical, adjacent header cells. Use `merge = "spanners"` to keep the bottom row of the header out of it, `merge = FALSE` to turn merging off entirely, or a vector of header row numbers for finer control. This lets a header row that legitimately repeats a label across adjacent columns keep those cells separate ([#95](https://github.com/atorus-research/clinify/issues/95))
