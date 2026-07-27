@@ -1,3 +1,7 @@
+# clinify (development version)
+
+- Fixed the spacing clinify starts a column header with being lost as soon as the headers were set. Setting them rebuilds the header part, which dropped the padding applied at construction, so a table with custom headers or `||` column labels sat on flextable's own default while a plain one kept clinify's. It is applied as a starting point, so a later `flextable::padding()` or `clin_header_pad()` still wins ([#101](https://github.com/atorus-research/clinify/issues/101))
+
 # clinify 0.4.0
 
 - `clin_column_headers()` gained a `merge` argument to control the automatic merging of identical, adjacent header cells. Use `merge = "spanners"` to keep the bottom row of the header out of it, `merge = FALSE` to turn merging off entirely, or a vector of header row numbers for finer control. This lets a header row that legitimately repeats a label across adjacent columns keep those cells separate ([#95](https://github.com/atorus-research/clinify/issues/95))

@@ -233,6 +233,10 @@ apply_column_headers_ <- function(x, args, merge = TRUE) {
   # Apply to the clintable
   x <- flextable::set_header_df(x, typology)
 
+  # set_header_df() rebuilds the header part, so the spacing clinify starts a
+  # header with has just been dropped and needs putting back
+  x <- default_header_pad_(x)
+
   # Merging is resolved against the header rows that actually landed on the
   # table, which is not always the number of levels asked for
   remerge_header_(x, merge, clear = FALSE)
