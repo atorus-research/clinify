@@ -9,6 +9,8 @@ clin_row_height(
   body = NULL,
   title = NULL,
   footnote = NULL,
+  header = NULL,
+  header_leading = NULL,
   rule = c("atleast", "exact", "auto"),
   unit = c("pt", "in", "cm", "mm")
 )
@@ -21,6 +23,14 @@ clin_row_height(
 \item{title}{Row pitch for the title lines}
 
 \item{footnote}{Row pitch for the footnote lines, and for a footnote page}
+
+\item{header}{Row pitch for the column header rows. A floor under
+\code{rule = "atleast"}, so a header cell of several lines still grows}
+
+\item{header_leading}{Leading of the lines within the header, as a multiple
+of single spacing - \code{0.75} draws them three quarters as far apart. This is
+the only measurement here that is not a length, because flextable and Word
+both express leading as a multiple, so \code{unit} does not apply to it}
 
 \item{rule}{How the renderer should treat the pitch. \code{"atleast"} (the
 default) makes it a floor, so a cell whose text wraps grows past it instead
@@ -42,10 +52,17 @@ renderer size them however it likes. This records the pitch you want and
 applies it when the table renders.
 }
 \details{
-The three surfaces are set separately because they are separate tables: the
-table body, and the title and footnote blocks that go into the Word header
-and footer. Group label and caption rows, which clinify inserts while it
-renders, take the body pitch.
+The surfaces are set separately because they are separate tables: the table
+body, the column header, and the title and footnote blocks that go into the
+Word header and footer. Group label and caption rows, which clinify inserts
+while it renders, take the body pitch.
+
+The column header has two levers rather than one, and they do different
+things. \code{header} bounds the header rows the same way \code{body} bounds the body
+rows, so with the default \code{rule = "atleast"} it is a floor: a header cell
+holding three lines still grows past it. \code{header_leading} is what closes the
+gap \emph{between} those lines, so it is the one to reach for when a wrapped arm
+label sits looser than a reference output. They can be used together.
 
 The height is applied to whole parts, so it is a pitch for every row of the
 surface rather than a per-row height. Anything already set with
@@ -61,4 +78,10 @@ clintable(mtcars) |>
 # Or in inches
 clintable(mtcars) |>
   clin_row_height(body = 0.213, unit = "in")
+
+# A wrapped header label sitting too loose: bound the header rows and close
+# up the lines inside them
+clintable(mtcars) |>
+  clin_column_headers(mpg = "Miles\nper\ngallon") |>
+  clin_row_height(header = 13, header_leading = 0.75)
 }
