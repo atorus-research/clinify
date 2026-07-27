@@ -18,6 +18,11 @@
 #' gap *between* those lines, so it is the one to reach for when a wrapped arm
 #' label sits looser than a reference output. They can be used together.
 #'
+#' Called a second time, this refines what the first call set rather than
+#' replacing it: arguments this call does not name keep their earlier value. So
+#' a house wide pitch can be set once and a single table can add an exception
+#' without restating the rest.
+#'
 #' The height is applied to whole parts, so it is a pitch for every row of the
 #' surface rather than a per-row height. Anything already set with
 #' `flextable::height()` or `flextable::height_all()` is replaced. Because the
@@ -70,6 +75,11 @@ clin_row_height <- function(
   unit = c("pt", "in", "cm", "mm")
 ) {
   stopifnot(inherits(x, "clintable") || inherits(x, "clindoc"))
+
+  # Captured before match.arg() assigns to them, which would clear their
+  # missing status and make a second call look like it had asked for the default
+  rule_given <- !missing(rule)
+
   rule <- match.arg(rule)
   unit <- match.arg(unit)
 
@@ -95,10 +105,38 @@ clin_row_height <- function(
     )
   }
 
-  x$clinify_config$row_height <- c(
-    heights,
-    list(rule = rule, header_leading = check_header_leading_(header_leading))
+  # Only what this call actually named, so a second call refines the first
+  # rather than replacing it. `rule` has a default, so being NULL cannot tell
+  # us whether the caller asked for it
+  named <- c(
+    if (!missing(body)) "body",
+    if (!missing(title)) "title",
+    if (!missing(footnote)) "footnote",
+    if (!missing(header)) "header"
   )
+
+  supplied <- heights[named]
+
+  if (!missing(header_leading)) {
+    supplied$header_leading <- check_header_leading_(header_leading)
+  }
+
+  if (rule_given) {
+    supplied$rule <- rule
+  }
+
+  # A second call refines the first rather than replacing it, so a house wide
+  # pitch and a per table exception can both be stated
+  x$clinify_config$row_height <- merge_config_(
+    x$clinify_config$row_height,
+    supplied
+  )
+
+  # Whatever ends up configured still needs a rule to be applied with
+  if (is.null(x$clinify_config$row_height$rule)) {
+    x$clinify_config$row_height$rule <- rule
+  }
+
   x
 }
 
@@ -312,4 +350,32 @@ apply_header_leading_ <- function(x) {
   }
 
   flextable::line_spacing(x, space = leading, part = "header")
+}
+
+#' Fold a verb's arguments into whatever it was given before
+#'
+#' The verbs that carry several settings are meant to be usable twice - a house
+#' wide call, then a per table exception - so a second call refines the first
+#' rather than replacing it. Only the arguments actually supplied are taken
+#' from the new call; the rest keep what the earlier one set.
+#'
+#' Arguments whose default is not NULL, like `rule`, cannot be recognised by
+#' being NULL, so the caller passes the names it actually saw with
+#' `missing()`.
+#'
+#' @param previous The configuration already on the clintable, or NULL
+#' @param supplied A named list of the values this call is setting
+#'
+#' @return The merged configuration
+#'
+#' @noRd
+merge_config_ <- function(previous, supplied) {
+  if (is.null(previous)) {
+    return(supplied)
+  }
+
+  # A name present in `supplied` wins, even where its value is NULL, so that
+  # nothing the caller asked for is quietly dropped
+  previous[names(supplied)] <- supplied
+  previous
 }

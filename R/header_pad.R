@@ -30,6 +30,9 @@
 #' added above the header it keeps its own spacing, since it is put there as
 #' the table renders.
 #'
+#' Called a second time, this refines what the first call set rather than
+#' replacing it: arguments this call does not name keep their earlier value.
+#'
 #' Spacing is given in points, which is what flextable measures cell padding
 #' in. Whatever is set here replaces the header padding clinify starts with.
 #'
@@ -80,9 +83,23 @@ clin_header_pad <- function(
     stop("`rule_to_body` must be a single number of points")
   }
 
-  pad$rows <- check_header_pad_rows_(rows)
+  # Only what this call actually named, so a second call refines the first
+  named <- c(
+    if (!missing(above)) "above",
+    if (!missing(below)) "below",
+    if (!missing(rule_to_body)) "rule_to_body"
+  )
 
-  x$clinify_config$header_pad <- pad
+  supplied <- pad[named]
+
+  if (!missing(rows)) {
+    supplied$rows <- check_header_pad_rows_(rows)
+  }
+
+  x$clinify_config$header_pad <- merge_config_(
+    x$clinify_config$header_pad,
+    supplied
+  )
   x
 }
 
@@ -175,7 +192,10 @@ apply_header_pad_ <- function(x) {
     rows <- seq_len(depth)
   } else if (!all(rows <= depth)) {
     stop(sprintf(
-      "`rows` must be header row numbers between 1 and %s, the number of rows this header has",
+      paste(
+        "`rows` must be header row numbers between 1 and %s, the number of",
+        "rows this header has"
+      ),
       depth
     ))
   }
@@ -204,7 +224,10 @@ pad_header_rows_ <- function(x, rows, value, side) {
 
   if (!length(value) %in% c(1, length(rows))) {
     stop(sprintf(
-      "Header spacing must be one value, or one for each of the %s rows it is aimed at, not %s",
+      paste(
+        "Header spacing must be one value, or one for each of the %s rows it",
+        "is aimed at, not %s"
+      ),
       length(rows),
       length(value)
     ))

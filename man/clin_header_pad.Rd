@@ -64,6 +64,9 @@ over pages keeps the same gap under the rule throughout. If a group label is
 added above the header it keeps its own spacing, since it is put there as
 the table renders.
 
+Called a second time, this refines what the first call set rather than
+replacing it: arguments this call does not name keep their earlier value.
+
 Spacing is given in points, which is what flextable measures cell padding
 in. Whatever is set here replaces the header padding clinify starts with.
 }

@@ -336,3 +336,66 @@ test_that("Header pitch is validated", {
   # The "nothing asked for" message now names all five
   expect_error(clin_row_height(ct), "header_leading needs")
 })
+
+test_that("A second call refines the first rather than replacing it", {
+  # A house wide pitch plus a per table exception is the natural pattern, and a
+  # second call used to silently revert everything the first had set (#119)
+  base <- clintable(head(mtcars[, 1:2], 2)) |>
+    clin_column_headers(mpg = "A", cyl = "B")
+
+  house <- clin_row_height(
+    base,
+    body = 15.35,
+    title = 11.4,
+    footnote = 11.4,
+    rule = "atleast",
+    unit = "pt"
+  )
+
+  refined <- clin_row_height(house, header_leading = 0.75)
+  cfg <- refined$clinify_config$row_height
+
+  expect_equal(cfg$body, 15.35 / 72)
+  expect_equal(cfg$title, 11.4 / 72)
+  expect_equal(cfg$footnote, 11.4 / 72)
+  expect_equal(cfg$header_leading, 0.75)
+
+  # And it reaches the rendered table, which is where it bit
+  expect_equal(
+    unique(finish_table_(refined)$body$rowheights),
+    15.35 / 72
+  )
+
+  # A value named again is replaced, as it should be
+  expect_equal(
+    clin_row_height(house, body = 20)$clinify_config$row_height$body,
+    20 / 72
+  )
+})
+
+test_that("A rule set by an earlier call is not reset by a later one", {
+  # `rule` has a default, so being NULL cannot say whether the caller asked for
+  # it - and match.arg() assigns to the formal, which clears missing()
+  base <- clintable(head(mtcars[, 1:2], 2))
+
+  exact <- clin_row_height(base, body = 15.35, rule = "exact")
+  expect_equal(exact$clinify_config$row_height$rule, "exact")
+
+  # A later call that says nothing about the rule keeps it
+  expect_equal(
+    clin_row_height(exact, title = 11.4)$clinify_config$row_height$rule,
+    "exact"
+  )
+
+  # A later call that does name it wins
+  expect_equal(
+    clin_row_height(exact, title = 11.4, rule = "atleast")$clinify_config$row_height$rule,
+    "atleast"
+  )
+
+  # And a first call with no rule still gets the default
+  expect_equal(
+    clin_row_height(base, body = 15.35)$clinify_config$row_height$rule,
+    "atleast"
+  )
+})
