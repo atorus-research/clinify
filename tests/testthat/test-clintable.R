@@ -245,3 +245,59 @@ test_that("as_clintable has no coerce_character, but has a substitute", {
     c("86", "75.2")
   )
 })
+
+test_that("Value labels are not mistaken for a variable label", {
+  # haven attaches a `labels` attribute of value labels to coded variables, and
+  # attr() partial matches, so a request for `label` was being answered by
+  # `labels` and read as header text (#107)
+  d <- data.frame(a = 1:2, b = 3:4)
+  attr(d$a, "labels") <- c(Low = 1, High = 2)
+
+  expect_false(has_labels_(d))
+
+  # A real variable label is still found
+  d2 <- data.frame(v = 1)
+  attr(d2$v, "label") <- "Treatment A||(N=86)"
+  expect_true(has_labels_(d2))
+  expect_equal(nrow(clintable(d2)$header$dataset), 2)
+
+  # And when a column carries both, the real label is the one used
+  d3 <- data.frame(v = 1)
+  attr(d3$v, "labels") <- c(A = 1)
+  attr(d3$v, "label") <- "Real||Label"
+  expect_equal(
+    unname(unlist(clintable(d3)$header$dataset)),
+    c("Real", "Label")
+  )
+})
+
+test_that("use_labels = FALSE really leaves labels alone", {
+  # flextable reads column labels of its own accord, so without being told not
+  # to it put the raw label string, delimiter and all, into the header even
+  # when the caller had asked for labels to be left alone
+  d <- data.frame(lbl = "Male", val = 86)
+  attr(d$val, "label") <- "Treatment A||(N=86)"
+
+  rendered <- function(ct) {
+    flextable:::information_data_chunk(ct)$txt
+  }
+
+  expect_false(any(grepl("Treatment A", rendered(clintable(d, use_labels = FALSE)))))
+  expect_true(any(grepl("Treatment A", rendered(clintable(d)))))
+
+  # Which also gives a way past the flextable side of #107
+  coded <- data.frame(a = 1:2)
+  attr(coded$a, "labels") <- c(Low = 1, High = 2)
+  expect_no_error(clintable(coded, use_labels = FALSE))
+})
+
+test_that("Value labels still reach the cells when labels are wanted", {
+  # Turning labels off must not be the only way to render a table, so the
+  # flextable behaviour clinify relies on has to stay intact
+  d <- data.frame(v = c(1, 2))
+  attr(d$v, "label") <- "Sex"
+  attr(d$v, "labels") <- c(Male = 1, Female = 2)
+
+  txt <- flextable:::information_data_chunk(clintable(d))$txt
+  expect_true(all(c("Male", "Female") %in% txt))
+})

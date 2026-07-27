@@ -1,3 +1,8 @@
+# clinify (development version)
+
+- Fixed `clintable()` erroring on data carrying haven value labels. `attr()` partial matches, so a `labels` attribute of value labels - which `haven::read_xpt()` attaches to coded variables - was answering a request for `label` and being read as header text ([#107](https://github.com/atorus-research/clinify/issues/107))
+- Fixed `use_labels = FALSE` not actually leaving column labels alone. flextable reads labels of its own accord and was never told not to, so the raw label string went into the header, `||` delimiter and all. This also gives a way past the flextable side of #107, since labels can now be turned off ([#107](https://github.com/atorus-research/clinify/issues/107))
+
 # clinify 0.4.0
 
 - `clin_column_headers()` gained a `merge` argument to control the automatic merging of identical, adjacent header cells. Use `merge = "spanners"` to keep the bottom row of the header out of it, `merge = FALSE` to turn merging off entirely, or a vector of header row numbers for finer control. This lets a header row that legitimately repeats a label across adjacent columns keep those cells separate ([#95](https://github.com/atorus-research/clinify/issues/95))
