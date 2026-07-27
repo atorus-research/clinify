@@ -2,6 +2,7 @@
 
 - Fixed `clintable()` erroring on data carrying haven value labels. `attr()` partial matches, so a `labels` attribute of value labels - which `haven::read_xpt()` attaches to coded variables - was answering a request for `label` and being read as header text ([#107](https://github.com/atorus-research/clinify/issues/107))
 - Fixed `use_labels = FALSE` not actually leaving column labels alone. flextable reads labels of its own accord and was never told not to, so the raw label string went into the header, `||` delimiter and all. This also gives a way past the flextable side of #107, since labels can now be turned off ([#107](https://github.com/atorus-research/clinify/issues/107))
+- Fixed the spacing clinify starts a column header with being lost as soon as the headers were set. Setting them rebuilds the header part, which dropped the padding applied at construction, so a table with custom headers or `||` column labels sat on flextable's own default while a plain one kept clinify's. It is applied as a starting point, so a later `flextable::padding()` or `clin_header_pad()` still wins ([#101](https://github.com/atorus-research/clinify/issues/101))
 
 # clinify 0.4.0
 
