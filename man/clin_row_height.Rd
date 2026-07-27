@@ -64,6 +64,11 @@ holding three lines still grows past it. \code{header_leading} is what closes th
 gap \emph{between} those lines, so it is the one to reach for when a wrapped arm
 label sits looser than a reference output. They can be used together.
 
+Called a second time, this refines what the first call set rather than
+replacing it: arguments this call does not name keep their earlier value. So
+a house wide pitch can be set once and a single table can add an exception
+without restating the rest.
+
 The height is applied to whole parts, so it is a pitch for every row of the
 surface rather than a per-row height. Anything already set with
 \code{flextable::height()} or \code{flextable::height_all()} is replaced. Because the

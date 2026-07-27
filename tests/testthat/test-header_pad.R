@@ -284,3 +284,24 @@ test_that("Per row header spacing is validated", {
     "single number of points"
   )
 })
+
+test_that("A second call refines the first rather than replacing it", {
+  # Same silent loss as #119, in the other verb that carries several settings
+  base <- clintable(head(mtcars[, 1:2], 2)) |>
+    clin_column_headers(mpg = c("Sp", "x"), cyl = c("Sp", "y"))
+
+  refined <- base |>
+    clin_header_pad(above = 18, below = 4) |>
+    clin_header_pad(rule_to_body = 6)
+
+  pad <- refined$clinify_config$header_pad
+  expect_equal(pad$above, 18)
+  expect_equal(pad$below, 4)
+  expect_equal(pad$rule_to_body, 6)
+
+  # A value named again is replaced
+  expect_equal(
+    clin_header_pad(clin_header_pad(base, above = 18, below = 4), below = 9)$clinify_config$header_pad$below,
+    9
+  )
+})
