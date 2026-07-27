@@ -160,7 +160,10 @@ clintable <- function(
   }
 
   ct <- as_clintable(
-    flextable::flextable(x, ...),
+    # flextable reads column labels of its own accord, and would otherwise put
+    # the raw label string - "||" delimiter and all - into the header even when
+    # the caller asked for labels to be left alone
+    flextable::flextable(x, use_labels = use_labels, ...),
     page_by = page_by,
     group_by = group_by
   )
