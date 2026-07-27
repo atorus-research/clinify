@@ -301,3 +301,48 @@ test_that("Value labels still reach the cells when labels are wanted", {
   txt <- flextable:::information_data_chunk(clintable(d))$txt
   expect_true(all(c("Male", "Female") %in% txt))
 })
+
+test_that("Setting column headers keeps the spacing clinify starts them with", {
+  # Setting the headers rebuilds the header part, which dropped the padding put
+  # on it at construction and left a custom-header table on flextable's own
+  # default while a plain one kept clinify's (#101)
+  pad <- function(ct) {
+    list(
+      top = unname(ct$header$styles$pars$padding.top$data[, 1]),
+      bottom = unname(ct$header$styles$pars$padding.bottom$data[, 1])
+    )
+  }
+
+  plain <- pad(clintable(mtcars))
+  expect_equal(plain$top, 9)
+  expect_equal(plain$bottom, 9)
+
+  # A two level header carries it on the outside of the block, top of the first
+  # row and bottom of the last
+  custom <- pad(clin_column_headers(clintable(mtcars), mpg = c("A", "B")))
+  expect_equal(custom$top, c(9, 5))
+  expect_equal(custom$bottom, c(5, 9))
+
+  # Same when the header came from column labels, which is the default path
+  labelled <- mtcars
+  attr(labelled$mpg, "label") <- "Miles||per gallon"
+  expect_equal(pad(clintable(labelled))$top, c(9, 5))
+
+  # It is a starting point, so anything the caller does afterwards still wins
+  by_hand <- flextable::padding(
+    clin_column_headers(clintable(mtcars), mpg = c("A", "B")),
+    i = 1,
+    part = "header",
+    padding.top = 21
+  )
+  expect_equal(pad(by_hand)$top, c(21, 5))
+
+  configured <- finish_table_(
+    clin_header_pad(
+      clin_column_headers(clintable(mtcars), mpg = c("A", "B")),
+      above = 18,
+      below = 4
+    )
+  )
+  expect_equal(unique(pad(configured)$top), 18)
+})

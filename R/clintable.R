@@ -49,13 +49,7 @@ as_clintable <- function(x, page_by = NULL, group_by = NULL) {
     padding.bottom = 0.1,
     padding.top = 0.1
   )
-  x <- flextable::padding(x, i = 1, part = "header", padding.top = 9)
-  x <- flextable::padding(
-    x,
-    i = flextable::nrow_part(x, part = "header"),
-    part = "header",
-    padding.bottom = 9
-  )
+  x <- default_header_pad_(x)
 
   class(x) <- c("clintable", "flextable")
   x
@@ -198,4 +192,32 @@ coerce_character_ <- function(x) {
     col
   })
   x
+}
+
+#' The spacing clinify starts a header block with
+#'
+#' Setting the column headers rebuilds the header part from scratch, which
+#' drops the padding put on it at construction, so this is applied again
+#' afterwards rather than only once. Being a starting point it is set before
+#' anything the caller does, so a later `flextable::padding()` or
+#' [clin_header_pad()] still wins.
+#'
+#' @param x A clintable object
+#'
+#' @return A clintable object
+#'
+#' @noRd
+default_header_pad_ <- function(x) {
+  if (flextable::nrow_part(x, part = "header") < 1) {
+    return(x)
+  }
+
+  x <- flextable::padding(x, i = 1, part = "header", padding.top = 9)
+
+  flextable::padding(
+    x,
+    i = flextable::nrow_part(x, part = "header"),
+    part = "header",
+    padding.bottom = 9
+  )
 }
