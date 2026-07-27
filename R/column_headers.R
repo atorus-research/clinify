@@ -386,8 +386,12 @@ headers_from_labels_ <- function(x, merge = TRUE) {
   refdat <- x$body$dataset
   if (has_labels_(refdat)) {
     args <- lapply(refdat, \(x) {
-      if (!is.null(attr(x, "label"))) {
-        unlist(strsplit(attr(x, "label"), "||", fixed = TRUE))
+      # exact = TRUE, or a `labels` attribute of value labels answers a request
+      # for `label` and gets read as header text
+      label <- attr(x, "label", exact = TRUE)
+
+      if (!is.null(label)) {
+        unlist(strsplit(label, "||", fixed = TRUE))
       } else {
         ""
       }
@@ -404,5 +408,8 @@ headers_from_labels_ <- function(x, merge = TRUE) {
 #' Do any of the dataframe variables have labels?
 #' @noRd
 has_labels_ <- function(x) {
-  any(vapply(x, \(y) !is.null(attr(y, "label")), FALSE))
+  # exact = TRUE, because attr() otherwise partial matches - haven attaches a
+  # `labels` attribute of value labels to coded variables, and that would
+  # answer a request for `label` and be mistaken for a variable label
+  any(vapply(x, \(y) !is.null(attr(y, "label", exact = TRUE)), FALSE))
 }
