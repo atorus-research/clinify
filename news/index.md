@@ -1,74 +1,5 @@
 # Changelog
 
-## clinify (development version)
-
-- Fixed a second call to
-  [`clin_row_height()`](https://atorus-research.github.io/clinify/reference/clin_row_height.md),
-  [`clin_header_pad()`](https://atorus-research.github.io/clinify/reference/clin_header_pad.md)
-  or
-  [`clin_spanner_rule()`](https://atorus-research.github.io/clinify/reference/clin_spanner_rule.md)
-  replacing the first instead of refining it. Arguments the later call
-  does not name now keep whatever the earlier one set, so a house wide
-  setting and a per table exception can both be stated without restating
-  the rest. Previously the earlier values reverted to their defaults
-  with no error or warning
-  ([\#119](https://github.com/atorus-research/clinify/issues/119))
-- [`clin_row_height()`](https://atorus-research.github.io/clinify/reference/clin_row_height.md)
-  gained `header` and `header_leading`, completing the vertical pitch
-  controls asked for in
-  [\#97](https://github.com/atorus-research/clinify/issues/97). `header`
-  bounds the column header rows the way `body` bounds the body rows, and
-  `header_leading` closes the gap between the lines *within* a header
-  cell, which is what a wrapped arm label sitting looser than a
-  reference output actually needs. Leading is a multiple of single
-  spacing rather than a length, since that is how flextable and Word
-  express it
-  ([\#117](https://github.com/atorus-research/clinify/issues/117))
-- Fixed
-  [`clintable()`](https://atorus-research.github.io/clinify/reference/clintable.md)
-  erroring on data carrying haven value labels.
-  [`attr()`](https://rdrr.io/r/base/attr.html) partial matches, so a
-  `labels` attribute of value labels - which `haven::read_xpt()`
-  attaches to coded variables - was answering a request for `label` and
-  being read as header text
-  ([\#107](https://github.com/atorus-research/clinify/issues/107))
-- Fixed `use_labels = FALSE` not actually leaving column labels alone.
-  flextable reads labels of its own accord and was never told not to, so
-  the raw label string went into the header, `||` delimiter and all.
-  This also gives a way past the flextable side of
-  [\#107](https://github.com/atorus-research/clinify/issues/107), since
-  labels can now be turned off
-  ([\#107](https://github.com/atorus-research/clinify/issues/107))
-- Fixed the spacing clinify starts a column header with being lost as
-  soon as the headers were set. Setting them rebuilds the header part,
-  which dropped the padding applied at construction, so a table with
-  custom headers or `||` column labels sat on flextable’s own default
-  while a plain one kept clinify’s. It is applied as a starting point,
-  so a later
-  [`flextable::padding()`](https://davidgohel.github.io/flextable/reference/padding.html)
-  or
-  [`clin_header_pad()`](https://atorus-research.github.io/clinify/reference/clin_header_pad.md)
-  still wins
-  ([\#101](https://github.com/atorus-research/clinify/issues/101))
-- The `merge` argument of
-  [`clin_column_headers()`](https://atorus-research.github.io/clinify/reference/clin_column_headers.md)
-  now documents what merging a header row of repeated labels actually
-  looks like: the run renders as one label centred over all of it, so
-  the repeats are no longer there to read. The docs described the
-  mechanism but not the symptom, which made it easy to lose a bottom row
-  of per column labels without noticing that anything had gone
-  ([\#120](https://github.com/atorus-research/clinify/issues/120))
-- [`clin_header_pad()`](https://atorus-research.github.io/clinify/reference/clin_header_pad.md)
-  can now space header rows differently, either by taking a value per
-  row (`above = c(18, 34)`) or by aiming a call at particular rows
-  (`rows = 1`). Because the spacing is applied as the table renders,
-  after anything the caller did, a call covering every row overwrote a
-  per-row
-  [`flextable::padding()`](https://davidgohel.github.io/flextable/reference/padding.html)
-  set beforehand - so a house wide header buffer could not sit alongside
-  the handful of tables needing a different gap on one row
-  ([\#113](https://github.com/atorus-research/clinify/issues/113))
-
 ## clinify 0.4.0
 
 - [`clin_column_headers()`](https://atorus-research.github.io/clinify/reference/clin_column_headers.md)
@@ -111,6 +42,16 @@
   row, so a spanned header keeps the space between its levels, and
   `rule_to_body` is applied to the first row of every page
   ([\#97](https://github.com/atorus-research/clinify/issues/97))
+- [`clin_header_pad()`](https://atorus-research.github.io/clinify/reference/clin_header_pad.md)
+  can now space header rows differently, either by taking a value per
+  row (`above = c(18, 34)`) or by aiming a call at particular rows
+  (`rows = 1`). Because the spacing is applied as the table renders,
+  after anything the caller did, a call covering every row overwrote a
+  per-row
+  [`flextable::padding()`](https://davidgohel.github.io/flextable/reference/padding.html)
+  set beforehand - so a house wide header buffer could not sit alongside
+  the handful of tables needing a different gap on one row
+  ([\#113](https://github.com/atorus-research/clinify/issues/113))
 - Added
   [`clin_row_height()`](https://atorus-research.github.io/clinify/reference/clin_row_height.md)
   to set the row pitch of a table’s body, titles, and footnotes.
@@ -120,6 +61,17 @@
   given in points by default, and the rule defaults to `"atleast"` so a
   cell whose text wraps grows past the pitch instead of being clipped
   ([\#97](https://github.com/atorus-research/clinify/issues/97))
+- [`clin_row_height()`](https://atorus-research.github.io/clinify/reference/clin_row_height.md)
+  gained `header` and `header_leading`, completing the vertical pitch
+  controls asked for in
+  [\#97](https://github.com/atorus-research/clinify/issues/97). `header`
+  bounds the column header rows the way `body` bounds the body rows, and
+  `header_leading` closes the gap between the lines *within* a header
+  cell, which is what a wrapped arm label sitting looser than a
+  reference output actually needs. Leading is a multiple of single
+  spacing rather than a length, since that is how flextable and Word
+  express it
+  ([\#117](https://github.com/atorus-research/clinify/issues/117))
 - Title and footnote row pitch is now reachable from the `ls =` argument
   of
   [`clin_add_titles()`](https://atorus-research.github.io/clinify/reference/add_titles_footnotes.md)
@@ -192,6 +144,43 @@
   its width, its Word accessibility fields and its
   `opts_word`/`opts_html` settings were all quietly reset at render time
   ([\#98](https://github.com/atorus-research/clinify/issues/98))
+- Fixed a second call to
+  [`clin_row_height()`](https://atorus-research.github.io/clinify/reference/clin_row_height.md),
+  [`clin_header_pad()`](https://atorus-research.github.io/clinify/reference/clin_header_pad.md)
+  or
+  [`clin_spanner_rule()`](https://atorus-research.github.io/clinify/reference/clin_spanner_rule.md)
+  replacing the first instead of refining it. Arguments the later call
+  does not name now keep whatever the earlier one set, so a house wide
+  setting and a per table exception can both be stated without restating
+  the rest. Previously the earlier values reverted to their defaults
+  with no error or warning
+  ([\#119](https://github.com/atorus-research/clinify/issues/119))
+- Fixed the spacing clinify starts a column header with being lost as
+  soon as the headers were set. Setting them rebuilds the header part,
+  which dropped the padding applied at construction, so a table with
+  custom headers or `||` column labels sat on flextable’s own default
+  while a plain one kept clinify’s. It is applied as a starting point,
+  so a later
+  [`flextable::padding()`](https://davidgohel.github.io/flextable/reference/padding.html)
+  or
+  [`clin_header_pad()`](https://atorus-research.github.io/clinify/reference/clin_header_pad.md)
+  still wins
+  ([\#101](https://github.com/atorus-research/clinify/issues/101))
+- Fixed
+  [`clintable()`](https://atorus-research.github.io/clinify/reference/clintable.md)
+  erroring on data carrying haven value labels.
+  [`attr()`](https://rdrr.io/r/base/attr.html) partial matches, so a
+  `labels` attribute of value labels - which `haven::read_xpt()`
+  attaches to coded variables - was answering a request for `label` and
+  being read as header text
+  ([\#107](https://github.com/atorus-research/clinify/issues/107))
+- Fixed `use_labels = FALSE` not actually leaving column labels alone.
+  flextable reads labels of its own accord and was never told not to, so
+  the raw label string went into the header, `||` delimiter and all.
+  This also gives a way past the flextable side of
+  [\#107](https://github.com/atorus-research/clinify/issues/107), since
+  labels can now be turned off
+  ([\#107](https://github.com/atorus-research/clinify/issues/107))
 - Fixed merged cells being left in an invalid state when a table is
   paginated column wise with
   [`clin_alt_pages()`](https://atorus-research.github.io/clinify/reference/clin_alt_pages.md).
@@ -224,6 +213,14 @@
   no longer rebuild the table properties either. Organisations that
   copied the template will want to pick up the change
   ([\#98](https://github.com/atorus-research/clinify/issues/98))
+- The `merge` argument of
+  [`clin_column_headers()`](https://atorus-research.github.io/clinify/reference/clin_column_headers.md)
+  now documents what merging a header row of repeated labels actually
+  looks like: the run renders as one label centred over all of it, so
+  the repeats are no longer there to read. The docs described the
+  mechanism but not the symptom, which made it easy to lose a bottom row
+  of per column labels without noticing that anything had gone
+  ([\#120](https://github.com/atorus-research/clinify/issues/120))
 - Because `merge` is now a parameter of
   [`clin_column_headers()`](https://atorus-research.github.io/clinify/reference/clin_column_headers.md),
   a column named `merge` can no longer be given a header through `...`.
