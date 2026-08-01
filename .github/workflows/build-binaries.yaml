@@ -1,0 +1,77 @@
+# Builds installable binaries for attaching to a GitHub release.
+#
+# workflow_dispatch only registers from the default branch, so this file has to
+# live on main. The source it builds is whatever `ref` names, which lets a
+# release tag be built from a workflow definition that landed after the tag.
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Ref to build (tag, branch or SHA), e.g. v0.4.0'
+        required: true
+        default: 'main'
+
+name: build-binaries.yaml
+
+permissions: read-all
+
+jobs:
+  build-binaries:
+    runs-on: ${{ matrix.config.os }}
+
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: windows-latest, r: 'release', ext: 'zip'}
+          - {os: macOS-latest, r: 'release', ext: 'tgz'}
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.config.r }}
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          needs: build
+
+      # Build the source tarball first so the binary carries built vignettes
+      # in inst/doc; R CMD INSTALL --build straight from the source tree
+      # would leave them out.
+      - name: Build source tarball
+        shell: bash
+        run: |
+          R CMD build --no-manual .
+          echo "TARBALL=$(ls clinify_*.tar.gz)" >> $GITHUB_ENV
+
+      - name: Build binary
+        shell: bash
+        run: |
+          mkdir -p binlib out
+          R CMD INSTALL --build --library=binlib "$TARBALL"
+          mv clinify_*.${{ matrix.config.ext }} out/
+
+      - name: Report what was built
+        shell: bash
+        run: |
+          ls -la out/
+          tar -xzOf "$TARBALL" clinify/DESCRIPTION 2>/dev/null | grep -E '^(Package|Version)' || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: clinify-${{ matrix.config.os }}-R${{ matrix.config.r }}
+          path: out/*
+          if-no-files-found: error
