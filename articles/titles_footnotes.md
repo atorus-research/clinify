@@ -54,9 +54,9 @@ clintable(mtcars) |>
 | 15.2 | 8   | 275.8 | 180 | 3.07 | 3.780 | 18.00 | 0   | 0   | 3    | 3    |
 | 10.4 | 8   | 472.0 | 205 | 2.93 | 5.250 | 17.98 | 0   | 0   | 3    | 4    |
 
-|                    |                                 |
-|--------------------|---------------------------------|
-| Here's a footnote. | 20:00 Saturday, August 01, 2026 |
+|                    |                               |
+|--------------------|-------------------------------|
+| Here's a footnote. | 00:05 Sunday, August 02, 2026 |
 
 Both
 [`clin_add_titles()`](https://atorus-research.github.io/clinify/reference/add_titles_footnotes.md)
@@ -243,9 +243,9 @@ clintable(mtcars) |>
 | Four very long footnote full of text  |     |
 | Five very long footnote full of text  |     |
 
-|                    |                                 |
-|--------------------|---------------------------------|
-| Here's a footnote. | 20:00 Saturday, August 01, 2026 |
+|                    |                               |
+|--------------------|-------------------------------|
+| Here's a footnote. | 00:05 Sunday, August 02, 2026 |
 
 |                 |     |
 |-----------------|-----|
@@ -270,9 +270,9 @@ clintable(mtcars) |>
 | 15.2 | 8   | 275.8 | 180 | 3.07 | 3.780 | 18.00 | 0   | 0   | 3    | 3    |
 | 10.4 | 8   | 472.0 | 205 | 2.93 | 5.250 | 17.98 | 0   | 0   | 3    | 4    |
 
-|                    |                                 |
-|--------------------|---------------------------------|
-| Here's a footnote. | 20:00 Saturday, August 01, 2026 |
+|                    |                               |
+|--------------------|-------------------------------|
+| Here's a footnote. | 00:05 Sunday, August 02, 2026 |
 
 1
 

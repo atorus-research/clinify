@@ -2,6 +2,8 @@
 
 ## clinify 0.4.0
 
+CRAN release: 2026-08-01
+
 - [`clin_column_headers()`](https://atorus-research.github.io/clinify/reference/clin_column_headers.md)
   gained a `merge` argument to control the automatic merging of
   identical, adjacent header cells. Use `merge = "spanners"` to keep the
