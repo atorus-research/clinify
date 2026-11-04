@@ -44,6 +44,12 @@ jobs:
           r-version: ${{ matrix.config.r }}
           use-public-rspm: true
 
+      # The macos-26 runner image no longer ships XQuartz, and the CRAN
+      # binary of gdtools (via flextable) links against its libXrender
+      - name: Install XQuartz
+        if: runner.os == 'macOS'
+        run: brew install --cask xquartz
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           needs: build
