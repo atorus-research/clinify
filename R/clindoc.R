@@ -42,21 +42,7 @@ clindoc <- function(...) {
   if (length(tabs) == 1) {
     doc <- as_clindoc(tabs[[1]])
   } else {
-    doc <- new_clindoc()
-
-    # Tables with page breaks separating
-    for (x in tabs[-length(tabs)]) {
-      doc <- add_clintable_(doc, x)
-      ctx <- officer::body_append_start_context(doc)
-      officer::write_elements_to_context(
-        context = ctx,
-        officer::fpar(officer::run_pagebreak())
-      )
-      doc <- officer::body_append_stop_context(ctx)
-    }
-
-    # Add last so no page break follows
-    doc <- add_clintable_(doc, tabs[[length(tabs)]])
+    doc <- add_clintables_(new_clindoc(), tabs)
   }
 
   doc
@@ -100,6 +86,63 @@ as_clindoc <- function(x) {
 #' @param x a clintable object
 #' @noRd
 add_clintable_ <- function(doc, x) {
+  add_clintables_(doc, list(x))
+}
+
+#' Add clintables into a clindoc object, separated by page breaks
+#'
+#' officer's append context serializes the whole document body on start and
+#' re-parses it on stop, so each round trip costs the size of the document so
+#' far. Opening one per table made building a document quadratic in the number
+#' of tables. Instead, buffer everything and write it through a single context,
+#' only flushing when a table has to go through `body_add_flextable()`.
+#'
+#' @param doc a clindoc object
+#' @param tabs a list of clintable objects
+#' @noRd
+add_clintables_ <- function(doc, tabs) {
+  pending <- list()
+
+  flush <- function(doc) {
+    if (length(pending) == 0) {
+      return(doc)
+    }
+    ctx <- officer::body_append_start_context(doc)
+    for (el in pending) {
+      officer::write_elements_to_context(context = ctx, el)
+    }
+    pending <<- list()
+    officer::body_append_stop_context(ctx)
+  }
+
+  for (i in seq_along(tabs)) {
+    x <- tabs[[i]]
+    pg_method <- x$clinify_config$pagination_method
+    x <- prep_clintable_(x)
+    last <- i == length(tabs)
+
+    if (pg_method == "default") {
+      doc <- flush(doc)
+      doc <- flextable::body_add_flextable(doc, x)
+      if (!last) {
+        doc <- officer::body_add_fpar(doc, page_break_())
+      }
+    } else if (pg_method == "custom") {
+      pending <- c(pending, page_elements_(x))
+      if (!last) {
+        pending <- c(pending, list(page_break_()))
+      }
+    }
+  }
+
+  flush(doc)
+}
+
+#' Style a clintable and compute its pagination ahead of writing
+#'
+#' @param x a clintable object
+#' @noRd
+prep_clintable_ <- function(x) {
   pg_method <- x$clinify_config$pagination_method
   x <- getOption("clinify_table_default")(x)
   # After the styling function, so that what the table itself was configured
@@ -111,38 +154,30 @@ add_clintable_ <- function(doc, x) {
     x <- auto_page_(x)
   }
 
-  # This point down from print method directly ----
-  if (pg_method == "default") {
-    doc <- flextable::body_add_flextable(doc, x)
-  } else if (pg_method == "custom") {
+  if (pg_method == "custom") {
     x <- prep_pagination_(x)
-    doc <- doc_alternating_(doc, x)
   }
+  x
 }
 
-#' Method for printing alternating pages
+#' Page sliced tables separated by page breaks, with none after the last
 #'
-#' @param x a clintable object
+#' @param x a clintable object with pagination prepped
 #' @noRd
-doc_alternating_ <- function(doc, x) {
-  pag_idx <- x$clinify_config$pagination_idx
-
-  # Page breaks up to last page
+page_elements_ <- function(x) {
   tbs <- unlist(
     lapply(
-      pag_idx,
-      \(p, x) list(get_table_(x, p), officer::fpar(officer::run_pagebreak())),
-      x = x
+      x$clinify_config$pagination_idx,
+      \(p) list(get_table_(x, p), page_break_())
     ),
     recursive = FALSE
   )
+  tbs[-length(tbs)]
+}
 
-  ctx <- officer::body_append_start_context(doc)
-  for (t in tbs[-length(tbs)]) {
-    officer::write_elements_to_context(context = ctx, t)
-  }
-  doc <- officer::body_append_stop_context(ctx)
-  doc
+#' @noRd
+page_break_ <- function() {
+  officer::fpar(officer::run_pagebreak())
 }
 
 
