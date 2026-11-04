@@ -1,24 +1,12 @@
 ## Submission notes
 
-This is a minor release (0.4.0). It adds control over parts of a table's
-appearance that previously had to be reached by replacing clinify's styling
-functions or by editing data before it was handed over: which rows of a column
-header have their identical adjacent cells merged, the rule under a spanner
-label, the row pitch and header spacing, how a table sits across the page, how
-each title and footnote line is placed, and whether pre-formatted values are
-rendered verbatim rather than reformatted. Titles and footnotes can also be
-supplied as a data frame. See NEWS.md for the full list.
-
-It also fixes several rendering faults, the most significant being that cell
-merges were left in an invalid state when a table was paginated column wise,
-which could drop header text from later pages or fail the write outright.
-
-One narrow breaking change is documented in NEWS.md: because `merge` is now a
-parameter of `clin_column_headers()`, a column named `merge` can no longer be
-given a header through `...`. Column labels still work for such a column.
-
-Organisations that copied `defaults_template.R` will want to pick up two
-changes to it, both noted in NEWS.md.
+This is a patch release (0.4.1). It fixes a performance fault in `clindoc()`:
+when a document was built from several tables, each table and page break was
+written through its own {officer} append context, and every context serializes
+and re-parses the whole document built so far. Build time therefore grew
+quadratically with the number of tables, making documents of a few hundred
+tables impractical to produce. All content is now written through a single
+context. The document produced is unchanged. There are no API changes.
 
 ## Test environments
 
