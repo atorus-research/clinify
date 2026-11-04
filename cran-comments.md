@@ -10,16 +10,22 @@ context. The document produced is unchanged. There are no API changes.
 
 ## Test environments
 
-* local: macOS, R 4.5.1
+* local: macOS (arm64), R 4.5.1
 * GitHub Actions: Ubuntu 22.04 and ubuntu-latest (R-release and R-devel),
-  macOS-latest (R-release), windows-latest (R-release)
+  windows-latest (R-release)
 
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
 
-Checked locally on macOS with R 4.5.1. The GitHub Actions environments listed
-above are checked on every push; confirm they are green before submitting.
+Checked locally on macOS with R 4.5.1, and on every GitHub Actions
+environment listed above.
+
+The GitHub Actions macOS-latest job did not complete. Its new runner image
+(macos-26-arm64) does not ship XQuartz, so the CRAN binary of the dependency
+{gdtools} fails to load `/opt/X11/lib/libXrender.1.dylib` before clinify is
+installed. This is a property of the runner, not of the package; the local
+macOS check above passes.
 
 ## Reverse dependencies
 
