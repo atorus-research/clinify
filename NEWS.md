@@ -1,3 +1,7 @@
+# clinify 0.4.1
+
+- `clindoc()` no longer slows down as more tables are added. Each table and page break was written through its own {officer} append context, and every context serializes and re-parses the entire document so far, so build time grew quadratically with the number of tables. All tables are now written through a single context: 80 tables went from 150 seconds to 4, and a 273 table document now builds in about 15 seconds, with byte-identical output.
+
 # clinify 0.4.0
 
 - `clin_column_headers()` gained a `merge` argument to control the automatic merging of identical, adjacent header cells. Use `merge = "spanners"` to keep the bottom row of the header out of it, `merge = FALSE` to turn merging off entirely, or a vector of header row numbers for finer control. This lets a header row that legitimately repeats a label across adjacent columns keep those cells separate ([#95](https://github.com/atorus-research/clinify/issues/95))
