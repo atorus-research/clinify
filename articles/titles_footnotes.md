@@ -56,7 +56,7 @@ clintable(mtcars) |>
 
 |                    |                                    |
 |--------------------|------------------------------------|
-| Here's a footnote. | 19:54 Wednesday, November 04, 2026 |
+| Here's a footnote. | 19:57 Wednesday, November 04, 2026 |
 
 Both
 [`clin_add_titles()`](https://atorus-research.github.io/clinify/reference/add_titles_footnotes.md)
@@ -245,7 +245,7 @@ clintable(mtcars) |>
 
 |                    |                                    |
 |--------------------|------------------------------------|
-| Here's a footnote. | 19:54 Wednesday, November 04, 2026 |
+| Here's a footnote. | 19:57 Wednesday, November 04, 2026 |
 
 |                 |     |
 |-----------------|-----|
@@ -272,7 +272,7 @@ clintable(mtcars) |>
 
 |                    |                                    |
 |--------------------|------------------------------------|
-| Here's a footnote. | 19:54 Wednesday, November 04, 2026 |
+| Here's a footnote. | 19:57 Wednesday, November 04, 2026 |
 
 1
 

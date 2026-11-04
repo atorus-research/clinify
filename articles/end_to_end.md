@@ -192,7 +192,7 @@ print(ct)
 
 |                         |                                    |
 |-------------------------|------------------------------------|
-| Source: /my/file/path.R | 19:54 Wednesday, November 04, 2026 |
+| Source: /my/file/path.R | 19:57 Wednesday, November 04, 2026 |
 
 With everything ready to go, we can write our table out to its
 destination using
