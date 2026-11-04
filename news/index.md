@@ -1,5 +1,18 @@
 # Changelog
 
+## clinify 0.4.1
+
+CRAN release: 2026-11-04
+
+- [`clindoc()`](https://atorus-research.github.io/clinify/reference/clindoc.md)
+  no longer slows down as more tables are added. Each table and page
+  break was written through its own {officer} append context, and every
+  context serializes and re-parses the entire document so far, so build
+  time grew quadratically with the number of tables. All tables are now
+  written through a single context: 80 tables went from 150 seconds to
+  4, and a 273 table document now builds in about 15 seconds, with
+  byte-identical output.
+
 ## clinify 0.4.0
 
 CRAN release: 2026-08-01
