@@ -6,11 +6,13 @@ on:
         - main
         - master
         - dev
+        - development
     pull_request:
       branches:
         - main
         - master
         - dev
+        - development
 
 name: R-CMD-check.yaml
 
@@ -48,6 +50,12 @@ jobs:
             http-user-agent: ${{ matrix.config.http-user-agent }}
             use-public-rspm: true
   
+        # The macos-26 runner image no longer ships XQuartz, and the CRAN
+        # binary of gdtools (via flextable) links against its libXrender
+        - name: Install XQuartz
+          if: runner.os == 'macOS'
+          run: brew install --cask xquartz
+
         - uses: r-lib/actions/setup-r-dependencies@v2
           with:
             extra-packages: any::rcmdcheck
